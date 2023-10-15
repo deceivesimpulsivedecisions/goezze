@@ -1,0 +1,52 @@
+{% extends ('@EasyAdmin/page/content.html.twig') %}
+{% block body_class 'dashboard' %}
+{% block page_title %} Dashboard {% endblock %}
+{% block content_header_wrapper %}{% endblock %}
+
+{% block content %}
+
+    <div class="content content-dashboard">
+        <section class="content-header d-block mb-5 mt-n5 px-sm-3">
+            <div class="d-flex">
+                <div class="content-header-title">
+                    <h4 class="text-uppercase font-weight-bold">Dashboard</h4>
+                </div>
+            </div>
+            <div class="header pt-4 pb-5">
+                <div class="container-fluid">
+                    <div class="header-body">
+                        <div class="row gap-3">
+                            {% set colorClass = ['bg-primary', 'bg-success', 'bg-warning', 'bg-info', 'bg-danger'] %}
+                            {% set idx = 0 %}
+                            {% for menu in ea.mainMenu.items %}
+                                {% for item in menu.subItems %}
+                                    {% if count[item.label|lower] is defined %}
+                                        <div class="col-sm-6 col-lg-4 mb-3 p-0">
+                                            <div class="card">
+                                                <a href="{{ item.linkUrl }}" class="text-center">
+                                                    <div class="menu p-4 rounded">
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <div>
+                                                                <div class="text-left h2 font-weight-bold mb-0 fa-3x" style="line-height: 1">{{ count[item.label|lower] | number_format }}</div>
+                                                                <div class="card-title text-uppercase text-muted mb-0 font-weight-bold" style="line-height: 1">{{ item.label }}</div>
+                                                            </div>
+                                                            <div class="icon icon-shape {{ colorClass[idx] is defined ? colorClass[idx] : 'bg-primary' }} text-white rounded-circle shadow p-2">
+                                                                <i class="fa {{ item.icon ? item.icon }} fa-2x"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        {% set idx = idx + 1 %}
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+{% endblock %}
