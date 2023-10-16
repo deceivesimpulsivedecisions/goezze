@@ -3,7 +3,9 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Admin;
+use App\Entity\Package;
 use App\Entity\PackageCategory;
+use App\Entity\PackageItenary;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
@@ -58,6 +60,8 @@ class DashboardController extends AbstractDashboardController
 
             MenuItem::subMenu('Packages', 'fa fa-tags')->setSubItems([
                 MenuItem::linkToCrud('Categories', 'fa fa-table-cells', PackageCategory::class),
+                MenuItem::linkToCrud('Package', 'fa fa-table-cells', Package::class),
+                MenuItem::linkToCrud('Itinerary', 'fa fa-table-cells', PackageItenary::class),
             ]),
 
 
