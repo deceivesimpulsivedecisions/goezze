@@ -44,9 +44,13 @@ class Package
     #[ORM\OneToMany(mappedBy: 'package', targetEntity: PackageItenary::class, orphanRemoval: true, cascade: ['persist'])]
     private Collection $packageItinerary;
 
+    #[ORM\OneToMany(mappedBy: 'package', targetEntity: PackageMedia::class, orphanRemoval: true, cascade: ['persist'])]
+    private Collection $packageMedia;
+
     public function __construct()
     {
         $this->packageItinerary = new ArrayCollection();
+        $this->packageMedia = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -174,6 +178,36 @@ class Package
             // set the owning side to null (unless already changed)
             if ($packageItinerary->getPackage() === $this) {
                 $packageItinerary->setPackage(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PackageMedia>
+     */
+    public function getPackageMedia(): Collection
+    {
+        return $this->packageMedia;
+    }
+
+    public function addPackageMedium(PackageMedia $packageMedium): static
+    {
+        if (!$this->packageMedia->contains($packageMedium)) {
+            $this->packageMedia->add($packageMedium);
+            $packageMedium->setPackage($this);
+        }
+
+        return $this;
+    }
+
+    public function removePackageMedium(PackageMedia $packageMedium): static
+    {
+        if ($this->packageMedia->removeElement($packageMedium)) {
+            // set the owning side to null (unless already changed)
+            if ($packageMedium->getPackage() === $this) {
+                $packageMedium->setPackage(null);
             }
         }
 

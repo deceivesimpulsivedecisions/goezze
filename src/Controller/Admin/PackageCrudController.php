@@ -12,9 +12,18 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use Stof\DoctrineExtensionsBundle\Uploadable\UploadableManager;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class PackageCrudController extends AbstractCrudController
 {
+
+    private $uploadableManager;
+
+    public function __construct(UploadableManager $uploadableManager)
+    {
+        $this->uploadableManager = $uploadableManager;
+    }
     public static function getEntityFqcn(): string
     {
         return Package::class;
@@ -37,8 +46,33 @@ class PackageCrudController extends AbstractCrudController
             NumberField::new('amount'),
             AssociationField::new('category'),
             CollectionField::new('packageItinerary')->allowAdd(true)->allowDelete(true)
-            ->setEntryType('App\Form\PackageItinerary')
+            ->setEntryType('App\Form\PackageItinerary')->hideOnIndex(),
+            CollectionField::new('packageMedia')->setEntryType('App\Form\PackageImages')
+                ->setFormTypeOptions(['by_reference' => false])
+                ->setTemplatePath('admin/preview_image.html.twig')->hideOnIndex(),
         ];
+    }
+
+    public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        $this->attachFiles($entityInstance);
+        parent::updateEntity($entityManager, $entityInstance);
+    }
+
+    public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        $this->attachFiles($entityInstance);
+        parent::persistEntity($entityManager, $entityInstance);
+    }
+
+    private function attachFiles($object){
+        foreach($object->getPackageMedia() as $image) {
+            if($image->getImageFile() instanceof UploadedFile){
+                $image->setOriginalName($image->getImageFile()->getClientOriginalName());
+                $image->setEncodedName($image->getImageFile()->getClientOriginalName());
+                $this->uploadableManager->markEntityToUpload($image, $image->getImageFile());
+            }
+        }
     }
 
 }

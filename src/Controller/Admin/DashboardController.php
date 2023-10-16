@@ -35,10 +35,12 @@ class DashboardController extends AbstractDashboardController
     #[Route('/dashboard', name: 'dashboard')]
     public function index(): Response
     {
-        $sql = "SELECT * FROM package_category";
+        $sql = "SELECT count(*) FROM package_category";
         $count['categories'] = $this->connection->fetchOne($sql);
-        $sql = "SELECT * FROM admin";
+        $sql = "SELECT count(*) FROM admin";
         $count['admin'] = $this->connection->fetchOne($sql);
+        $sql = "SELECT count(*) FROM package";
+        $count['package'] = $this->connection->fetchOne($sql);
         return $this->render('admin/dashboard.html.twig', [
             'count' => $count
         ]);

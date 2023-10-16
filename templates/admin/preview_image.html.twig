@@ -1,0 +1,7 @@
+{% block preview_image_widget %}
+    {% if value is not null %}
+        <div class="package-media-preview">
+            <img src="{{ value.getWebPath() }}" alt="Image">
+        </div>
+    {% endif %}
+{% endblock %}

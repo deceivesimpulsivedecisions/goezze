@@ -15,13 +15,13 @@
             <div class="header pt-4 pb-5">
                 <div class="container-fluid">
                     <div class="header-body">
-                        <div class="row gap-3">
+                        <div class="row">
                             {% set colorClass = ['bg-primary', 'bg-success', 'bg-warning', 'bg-info', 'bg-danger'] %}
                             {% set idx = 0 %}
                             {% for menu in ea.mainMenu.items %}
                                 {% for item in menu.subItems %}
                                     {% if count[item.label|lower] is defined %}
-                                        <div class="col-sm-6 col-lg-4 mb-3 p-0">
+                                        <div class="col-sm-6 col-lg-4 mb-3">
                                             <div class="card">
                                                 <a href="{{ item.linkUrl }}" class="text-center">
                                                     <div class="menu p-4 rounded">
