@@ -9,6 +9,7 @@ use App\Entity\PackageItenary;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -70,5 +71,14 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToLogout('Logout', 'fa fa-sign-out'),
 
         ];
+    }
+
+    public function configureAssets(): Assets
+    {
+        return Assets::new()
+//            ->addCssFile('css/admin.css')
+            ->addJsFile('js/admin.js')
+//            ->addJsFile('js/jquery-ui.js')
+            ;
     }
 }

@@ -8,9 +8,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: PackageMediaRepository::class)]
-#[Gedmo\Uploadable(pathMethod: "getDir", filenameGenerator: "SHA1")]
+#[Vich\Uploadable()]
 class PackageMedia
 {
     #[ORM\Id]
@@ -27,16 +28,10 @@ class PackageMedia
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $terms = null;
 
-    #[Assert\File(
-        maxSize: "1M",
-        mimeTypes: ["image/jpeg", "image/png"],
-        maxSizeMessage: "The maximum allowed file size is 1MB.",
-        mimeTypesMessage: "Only image files are allowed."
-    )]
+    #[Vich\UploadableField(mapping: 'packageMedia', fileNameProperty: 'image')]
     private $imageFile;
 
     #[ORM\Column(length: 63, nullable: true)]
-    #[Gedmo\UploadableFileName]
     private $image;
 
     #[ORM\ManyToOne(inversedBy: 'packageMedia')]
@@ -75,7 +70,7 @@ class PackageMedia
 
     public function __toString()
     {
-        return $this->originalName;
+        return $this->image;
     }
 
     public function getId(): ?int

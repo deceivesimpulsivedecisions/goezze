@@ -6,6 +6,8 @@ use App\Repository\PackageCategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: PackageCategoryRepository::class)]
 class PackageCategory
@@ -23,6 +25,49 @@ class PackageCategory
 
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Package::class)]
     private Collection $packages;
+
+    #[ORM\Column(type: 'string', length: 100)]
+    private $thumbnail;
+
+    #[Assert\File(
+        maxSize: '1M',
+        mimeTypes: ['image/jpeg', 'image/png'],
+        maxSizeMessage: 'The maximum allowed file size is 1MB.',
+        mimeTypesMessage: 'Only image files are allowed.'
+    )]
+    private $thumbnailFile;
+
+    /**
+     * @return mixed
+     */
+    public function getThumbnailFile()
+    {
+        return $this->thumbnailFile;
+    }
+
+    /**
+     * @param mixed $thumbnailFile
+     */
+    public function setThumbnailFile($thumbnailFile): void
+    {
+        $this->thumbnailFile = $thumbnailFile;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getThumbnail()
+    {
+        return $this->thumbnail;
+    }
+
+    /**
+     * @param mixed $thumbnail
+     */
+    public function setThumbnail($thumbnail): void
+    {
+        $this->thumbnail = $thumbnail;
+    }
 
     public function __toString()
     {

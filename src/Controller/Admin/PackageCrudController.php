@@ -4,7 +4,11 @@ namespace App\Controller\Admin;
 
 use App\Entity\Package;
 use App\Entity\PackageCategory;
+use App\Form\PackageImages;
 use Doctrine\ORM\EntityManagerInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
@@ -18,12 +22,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class PackageCrudController extends AbstractCrudController
 {
 
-    private $uploadableManager;
-
-    public function __construct(UploadableManager $uploadableManager)
-    {
-        $this->uploadableManager = $uploadableManager;
-    }
     public static function getEntityFqcn(): string
     {
         return Package::class;
@@ -47,9 +45,10 @@ class PackageCrudController extends AbstractCrudController
             AssociationField::new('category'),
             CollectionField::new('packageItinerary')->allowAdd(true)->allowDelete(true)
             ->setEntryType('App\Form\PackageItinerary')->hideOnIndex(),
-            CollectionField::new('packageMedia')->setEntryType('App\Form\PackageImages')
+            CollectionField::new('packageMedia')->setEntryType(PackageImages::class)
                 ->setFormTypeOptions(['by_reference' => false])
-                ->setTemplatePath('admin/preview_image.html.twig')->hideOnIndex(),
+                ->onlyOnForms(),
+            CollectionField::new('packageMedia')->onlyOnDetail()->setTemplatePath('admin/preview_image.html.twig')
         ];
     }
 
@@ -70,9 +69,15 @@ class PackageCrudController extends AbstractCrudController
             if($image->getImageFile() instanceof UploadedFile){
                 $image->setOriginalName($image->getImageFile()->getClientOriginalName());
                 $image->setEncodedName($image->getImageFile()->getClientOriginalName());
-                $this->uploadableManager->markEntityToUpload($image, $image->getImageFile());
             }
         }
+    }
+
+    public function configureActions(Actions $actions): Actions {
+
+        return $actions
+            ->add(Crud::PAGE_INDEX, Action::DETAIL )
+            ;
     }
 
 }
