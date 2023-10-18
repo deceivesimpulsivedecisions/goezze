@@ -1,7 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const thumbnails = document.querySelectorAll('.ea-lightbox-thumbnail');
+    const thumbnails = document.querySelectorAll('.preview.ea-lightbox-thumbnail');
 
     if(thumbnails.length) {
+        console.log(thumbnails);
         thumbnails.forEach(function (thumbnail) {
             thumbnail.addEventListener('click', function (event) {
                 event.preventDefault();

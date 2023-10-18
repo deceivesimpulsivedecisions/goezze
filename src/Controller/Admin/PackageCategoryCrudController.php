@@ -8,6 +8,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use Stof\DoctrineExtensionsBundle\Uploadable\UploadableManager;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Vich\UploaderBundle\Form\Type\VichFileType;
@@ -15,6 +16,12 @@ use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class PackageCategoryCrudController extends AbstractCrudController
 {
+    private $uploadableManager;
+
+    public function __construct(UploadableManager $uploadableManager)
+    {
+        $this->uploadableManager = $uploadableManager;
+    }
     public static function getEntityFqcn(): string
     {
         return PackageCategory::class;
@@ -34,32 +41,13 @@ class PackageCategoryCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
+            ImageField::new('image','Category Image')->setBasePath('uploads/category')->onlyOnIndex()->setCssClass('image-small-preview'),
             TextField::new('name'),
             TextField::new('slug'),
-            ImageField::new('thumbnail')->setBasePath('uploads/thumbnails/')->onlyOnIndex(),
-            ImageField::new('thumbnailFile')->setUploadDir('public/uploads/thumbnails')->setUploadedFileNamePattern('[year]/[month]/[day]/[slug]-[contenthash].[extension]')->onlyOnForms()
+            ImageField::new('image','Category Image')
+                ->setBasePath('uploads/category')
+                ->setUploadDir('public/uploads/category')
+                ->setUploadedFileNamePattern('[randomhash].[extension]')->onlyOnForms()
         ];
     }
-
-    public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
-    {
-        $this->attachFiles($entityInstance);
-        parent::updateEntity($entityManager, $entityInstance);
-    }
-
-    public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
-    {
-        $this->attachFiles($entityInstance);
-        parent::persistEntity($entityManager, $entityInstance);
-    }
-
-    private function attachFiles($object){
-//        foreach($object->getPackageMedia() as $image) {
-//            if($image->getImageFile() instanceof UploadedFile){
-////                $image->setOriginalName($image->getImageFile()->getClientOriginalName());
-////                $image->$imagesetEncodedName($image->getImageFile()->getClientOriginalName());
-//            }
-//        }
-    }
-
 }

@@ -6,7 +6,11 @@ use App\Repository\PackageCategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\HttpFoundation\File\File;
+
 
 
 #[ORM\Entity(repositoryClass: PackageCategoryRepository::class)]
@@ -21,52 +25,29 @@ class PackageCategory
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
+    #[Gedmo\Slug(fields: ['name'])]
     private ?string $slug = null;
 
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Package::class)]
     private Collection $packages;
 
-    #[ORM\Column(type: 'string', length: 100)]
-    private $thumbnail;
-
-    #[Assert\File(
-        maxSize: '1M',
-        mimeTypes: ['image/jpeg', 'image/png'],
-        maxSizeMessage: 'The maximum allowed file size is 1MB.',
-        mimeTypesMessage: 'Only image files are allowed.'
-    )]
-    private $thumbnailFile;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $image;
 
     /**
-     * @return mixed
+     * @return string|null
      */
-    public function getThumbnailFile()
+    public function getImage() : ?string
     {
-        return $this->thumbnailFile;
+        return $this->image;
     }
 
     /**
-     * @param mixed $thumbnailFile
+     * @param string $image
      */
-    public function setThumbnailFile($thumbnailFile): void
+    public function setImage($image) : void
     {
-        $this->thumbnailFile = $thumbnailFile;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getThumbnail()
-    {
-        return $this->thumbnail;
-    }
-
-    /**
-     * @param mixed $thumbnail
-     */
-    public function setThumbnail($thumbnail): void
-    {
-        $this->thumbnail = $thumbnail;
+        $this->image = $image;
     }
 
     public function __toString()
