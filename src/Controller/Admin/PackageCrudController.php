@@ -11,12 +11,13 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use Stof\DoctrineExtensionsBundle\Uploadable\UploadableManager;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class PackageCrudController extends AbstractCrudController
@@ -36,6 +37,15 @@ class PackageCrudController extends AbstractCrudController
         return $package;
     }
 
+    public function configureFilters(Filters $filters): Filters
+    {
+        return $filters
+            ->add('title')
+            ->add('category')
+            ->add('type')
+            ;
+    }
+
     public function configureFields(string $pageName): iterable
     {
         return [
@@ -48,7 +58,12 @@ class PackageCrudController extends AbstractCrudController
             CollectionField::new('packageMedia')->setEntryType(PackageImages::class)
                 ->setFormTypeOptions(['by_reference' => false])
                 ->onlyOnForms(),
-            CollectionField::new('packageMedia')->onlyOnDetail()->setTemplatePath('admin/preview_image.html.twig')
+            CollectionField::new('packageMedia')->onlyOnDetail()->setTemplatePath('admin/preview_image.html.twig'),
+            ChoiceField::new('type', 'Package Type')->setChoices([
+                'Domestic' => 'domestic',
+                'International' => 'international',
+            ]),
+            AssociationField::new('destination'),
         ];
     }
 

@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Category Listing{% endblock %}
+
+{% block body %}
+
+    {{ dump(category) }}
+    {% for package in packages %}
+        {{ dump(package) }}
+    {% endfor %}
+
+{% endblock %}

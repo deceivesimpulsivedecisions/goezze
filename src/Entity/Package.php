@@ -48,6 +48,9 @@ class Package
     #[ORM\OneToMany(mappedBy: 'package', targetEntity: PackageMedia::class, orphanRemoval: true, cascade: ['persist'])]
     private Collection $packageMedia;
 
+    #[ORM\Column(length: 255)]
+    private ?string $type = null;
+
     public function __construct()
     {
         $this->packageItinerary = new ArrayCollection();
@@ -211,6 +214,18 @@ class Package
                 $packageMedium->setPackage(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): static
+    {
+        $this->type = $type;
 
         return $this;
     }

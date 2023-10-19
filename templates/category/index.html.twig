@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Category Listing{% endblock %}
+
+{% block body %}
+    <div class="category-body">
+        <div class="category-wrapper">
+            <div class="d-flex justify-content-center align-items-center mb-5 page-title">
+                <h1>Our <span class="text-primary">Categories</span></h1>
+            </div>
+            <div class="container d-flex flex-wrap justify-content-around align-items-center gap-4">
+                {% for category in categories %}
+                    <a href="{{ path('app_category_categoryPackages', {slug : category.slug}) }}">
+                        <div class="card category-card overflow-hidden position-relative text-center ">
+                            <img src="/uploads/category/{{ asset(category.image) }}" />
+                            <h2 class="centered">{{ category.name | capitalize }}</h2>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
