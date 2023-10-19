@@ -48,12 +48,13 @@ class Package
     #[ORM\OneToMany(mappedBy: 'package', targetEntity: PackageMedia::class, orphanRemoval: true, cascade: ['persist'])]
     private Collection $packageMedia;
 
-    #[ORM\Column(length: 255)]
-    private ?string $type = null;
-
     #[ORM\ManyToOne(inversedBy: 'packages')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Destination $destination = null;
+
+    #[ORM\ManyToOne(inversedBy: 'packages')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?PackageType $type = null;
 
     public function __construct()
     {
@@ -222,18 +223,6 @@ class Package
         return $this;
     }
 
-    public function getType(): ?string
-    {
-        return $this->type;
-    }
-
-    public function setType(string $type): static
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
     public function getDestination(): ?Destination
     {
         return $this->destination;
@@ -242,6 +231,18 @@ class Package
     public function setDestination(?Destination $destination): static
     {
         $this->destination = $destination;
+
+        return $this;
+    }
+
+    public function getType(): ?PackageType
+    {
+        return $this->type;
+    }
+
+    public function setType(?PackageType $type): static
+    {
+        $this->type = $type;
 
         return $this;
     }
