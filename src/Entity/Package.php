@@ -51,6 +51,10 @@ class Package
     #[ORM\Column(length: 255)]
     private ?string $type = null;
 
+    #[ORM\ManyToOne(inversedBy: 'packages')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Destination $destination = null;
+
     public function __construct()
     {
         $this->packageItinerary = new ArrayCollection();
@@ -226,6 +230,18 @@ class Package
     public function setType(string $type): static
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getDestination(): ?Destination
+    {
+        return $this->destination;
+    }
+
+    public function setDestination(?Destination $destination): static
+    {
+        $this->destination = $destination;
 
         return $this;
     }

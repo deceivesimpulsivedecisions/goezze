@@ -18,6 +18,18 @@ class Destination
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[ORM\OneToMany(mappedBy: 'destination', targetEntity: Package::class)]
+    private Collection $packages;
+
+    public function __toString()
+    {
+        return $this->name;
+    }
+    public function __construct()
+    {
+        $this->packages = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -31,6 +43,36 @@ class Destination
     public function setName(string $name): static
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Package>
+     */
+    public function getPackages(): Collection
+    {
+        return $this->packages;
+    }
+
+    public function addPackage(Package $package): static
+    {
+        if (!$this->packages->contains($package)) {
+            $this->packages->add($package);
+            $package->setDestination($this);
+        }
+
+        return $this;
+    }
+
+    public function removePackage(Package $package): static
+    {
+        if ($this->packages->removeElement($package)) {
+            // set the owning side to null (unless already changed)
+            if ($package->getDestination() === $this) {
+                $package->setDestination(null);
+            }
+        }
 
         return $this;
     }
