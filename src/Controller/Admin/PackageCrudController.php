@@ -51,15 +51,19 @@ class PackageCrudController extends AbstractCrudController
     {
         return [
             TextField::new('title'),
-            TextEditorField::new('description'),
+            TextEditorField::new('description')->onlyOnForms(),
+            TextEditorField::new('inclusions')->onlyOnForms(),
+            TextEditorField::new('exclusions')->onlyOnForms(),
+            TextEditorField::new('description')->onlyOnDetail()->setTemplatePath('admin/packages/preview_description.html.twig'),
             MoneyField::new('amount')->setCurrency('INR'),
             AssociationField::new('category'),
             CollectionField::new('packageItinerary')->allowAdd(true)->allowDelete(true)
-            ->setEntryType('App\Form\PackageItinerary')->hideOnIndex(),
+            ->setEntryType('App\Form\PackageItinerary')->onlyOnForms(),
+            CollectionField::new('packageItinerary')->onlyOnDetail()->setTemplatePath('admin/packages/preview_itinerary.html.twig'),
             CollectionField::new('packageMedia')->setEntryType(PackageImages::class)
                 ->setFormTypeOptions(['by_reference' => false])
                 ->onlyOnForms(),
-            CollectionField::new('packageMedia')->onlyOnDetail()->setTemplatePath('admin/preview_image.html.twig'),
+            CollectionField::new('packageMedia')->onlyOnDetail()->setTemplatePath('admin/packages/preview_image.html.twig'),
             AssociationField::new('type', 'Package Type'),
             AssociationField::new('destination'),
         ];

@@ -56,6 +56,12 @@ class Package
     #[ORM\JoinColumn(nullable: false)]
     private ?PackageType $type = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $inclusions = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $exclusions = null;
+
     public function __construct()
     {
         $this->packageItinerary = new ArrayCollection();
@@ -243,6 +249,30 @@ class Package
     public function setType(?PackageType $type): static
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getInclusions(): ?string
+    {
+        return $this->inclusions;
+    }
+
+    public function setInclusions(?string $inclusions): static
+    {
+        $this->inclusions = $inclusions;
+
+        return $this;
+    }
+
+    public function getExclusions(): ?string
+    {
+        return $this->exclusions;
+    }
+
+    public function setExclusions(?string $exclusions): static
+    {
+        $this->exclusions = $exclusions;
 
         return $this;
     }

@@ -52,7 +52,11 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('Goezze');
+            ->setTitle('<div class="d-flex align-items-center gap-3">
+                                <img width="30" src="/images/logo.png" alt="Logo">
+                                        <h5 class="m-0">GoEzze</h5>
+                                </div>'
+            );
     }
 
     public function configureMenuItems(): iterable
