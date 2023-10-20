@@ -10,10 +10,15 @@
             </div>
             <div class="container d-flex flex-wrap justify-content-around align-items-center gap-4 mb-5">
                 {% for category in categories %}
-                    <a href="{{ path('app_category_categoryPackages', {slug : category.slug}) }}">
-                        <div class="card category-card overflow-hidden position-relative text-center ">
-                            <img src="/uploads/category/{{ asset(category.image) }}" />
-                            <h2 class="centered">{{ category.name | capitalize }}</h2>
+                    <a href="{{ path('app_category_categoryPackages', {slug : category.slug}) }}" class="text-decoration-none">
+                        <div class="category-card">
+                            <div>
+                                <img class="rounded" src="/uploads/category/{{ asset(category.image) }}" />
+                            </div>
+                            <div class="details">
+                                <h5 class="m-0">{{ category.name | capitalize }}</h5>
+                                <p class="m-0">{{ category.packages | length }} packages</p>
+                            </div>
                         </div>
                     </a>
                 {% endfor %}
