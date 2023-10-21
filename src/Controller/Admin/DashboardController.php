@@ -8,6 +8,7 @@ use App\Entity\Package;
 use App\Entity\PackageCategory;
 use App\Entity\PackageItenary;
 use App\Entity\PackageType;
+use App\Entity\User;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
@@ -64,7 +65,8 @@ class DashboardController extends AbstractDashboardController
         return [
             MenuItem::linkToDashboard('Dashboard', 'fa fa-home'),
             MenuItem::subMenu('Users', 'fa fa-tags')->setSubItems([
-                MenuItem::linkToCrud('Admin', 'fa fa-user', Admin::class),
+                MenuItem::linkToCrud('Admin', 'fa fa-user-tie', Admin::class),
+                MenuItem::linkToCrud('User', 'fa fa-users', User::class)
             ]),
 
             MenuItem::subMenu('Packages', 'fa fa-tags')->setSubItems([
