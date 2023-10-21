@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Admin;
 use Doctrine\ORM\EntityManagerInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Config\KeyValueStore;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
@@ -27,11 +28,18 @@ class AdminCrudController extends AbstractCrudController
         return Admin::class;
     }
 
+    public function configureFilters(Filters $filters): Filters
+    {
+        return $filters
+            ->add('roles')
+            ;
+    }
+
     public function configureFields(string $pageName): iterable
     {
         return [
             TextField::new('email'),
-            TextField::new('password')->setFormType(PasswordType::class),
+            TextField::new('password')->setFormType(PasswordType::class)->onlyOnForms(),
             TextField::new('firstName'),
             TextField::new('lastName'),
             ChoiceField::new('roles')->setChoices([
