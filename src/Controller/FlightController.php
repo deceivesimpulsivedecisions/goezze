@@ -52,4 +52,48 @@ class FlightController extends AbstractController
         return new JsonResponse($iataCode);
     }
 
+    #[Route('/search/flights', name: 'search_flights')]
+    public function searchFlights(HttpRequest $request){
+        $from = $request->query->get('flight-from');
+        $to = $request->query->get('flight-to');
+        $date = $request->query->get('datepicker');
+
+//        dd($from, $to, $date);
+
+        $client = new Client();
+        $headers = [
+            'x-Password' => $_ENV['PROVAB_PASSWORD'],
+            'x-DomainKey' => $_ENV['PROVAB_DOMAIN_KEY'],
+            'x-Username' => $_ENV['PROVAB_USERNAME'],
+            'x-system' => 'test',
+            'Content-Type' => 'application/json'
+        ];
+
+
+        $body = '{
+                      "AdultCount": "1",
+                      "ChildCount": "0",
+                      "InfantCount": "0",
+                      "JourneyType": "OneWay",
+                      "PreferredAirlines": [
+                        ""
+                      ],
+                      "CabinClass": "Economy",
+                      "Segments": [
+                        {
+                          "Origin": "' . $from .'",
+                          "Destination": "' . $to .'",
+                          "DepartureDate": "' . $date .'T00:00:00"
+                        }
+                      ]
+                    }';
+        $request = new Request('POST', 'http://test.services.travelomatix.com/webservices/index.php/flight/service/Search', $headers, $body);
+        $res = $client->sendAsync($request)->wait();
+        $result = json_decode($res->getBody(), true);
+        return $this->render('flight/list.html.twig', [
+            'flights' => $result['Search']['FlightDataList']['JourneyList'][0],
+        ]);
+//        return new JsonResponse($res->getBody());
+    }
+
 }

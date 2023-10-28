@@ -62,13 +62,13 @@ $(document).ready(function() {
             }
         });
 
-        $('.search-flight').on('submit', function (e) {
-            console.log('submit');
-            e.preventDefault();
-            var airportFrom = $('#flight-from').val();
-            var airportTo = $('#flight-to').val();
-            var _date = $('#datepicker').val();
-            console.log(airportFrom, airportTo, _date);
-        });
+        // $('.search-flight').on('submit', function (e) {
+        //     console.log('submit');
+        //     e.preventDefault();
+        //     var airportFrom = $('#flight-from').val();
+        //     var airportTo = $('#flight-to').val();
+        //     var _date = $('#datepicker').val();
+        //     console.log(airportFrom, airportTo, _date);
+        // });
     }
 });
