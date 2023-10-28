@@ -62,6 +62,9 @@ class Package
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $exclusions = null;
 
+    #[ORM\Column]
+    private ?bool $isActive = true;
+
     public function __construct()
     {
         $this->packageItinerary = new ArrayCollection();
@@ -273,6 +276,18 @@ class Package
     public function setExclusions(?string $exclusions): static
     {
         $this->exclusions = $exclusions;
+
+        return $this;
+    }
+
+    public function isIsActive(): ?bool
+    {
+        return $this->isActive;
+    }
+
+    public function setIsActive(bool $isActive): static
+    {
+        $this->isActive = $isActive;
 
         return $this;
     }

@@ -11,6 +11,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
@@ -66,6 +67,7 @@ class PackageCrudController extends AbstractCrudController
             CollectionField::new('packageMedia')->onlyOnDetail()->setTemplatePath('admin/packages/preview_image.html.twig'),
             AssociationField::new('type', 'Package Type'),
             AssociationField::new('destination'),
+            BooleanField::new('isActive')
         ];
     }
 
