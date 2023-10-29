@@ -54,6 +54,11 @@ class FlightController extends AbstractController
 
     #[Route('/search/flights', name: 'search_flights')]
     public function searchFlights(HttpRequest $request){
+        return $this->render('flight/list.html.twig');
+    }
+
+    #[Route('/search/flights/results', name: 'search_flights_result')]
+    public function searchFlightsResult(HttpRequest $request){
         $from = $request->query->get('flight-from');
         $to = $request->query->get('flight-to');
         $date = $request->query->get('datepicker');
@@ -90,10 +95,9 @@ class FlightController extends AbstractController
         $request = new Request('POST', 'http://test.services.travelomatix.com/webservices/index.php/flight/service/Search', $headers, $body);
         $res = $client->sendAsync($request)->wait();
         $result = json_decode($res->getBody(), true);
-        return $this->render('flight/list.html.twig', [
+        return $this->render('flight/list_flights.html.twig', [
             'flights' => $result['Search']['FlightDataList']['JourneyList'][0],
         ]);
-//        return new JsonResponse($res->getBody());
     }
 
 }

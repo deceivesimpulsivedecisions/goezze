@@ -5,9 +5,13 @@ $secondary: #a87953;
 
 body{
   font-family: 'Poppins', sans-serif;
+  background: #fbf4f0;
 }
 .nav-item.active {
   font-weight: 600;
+}
+.navbar.bg-body-tertiary{
+  background: #e0e8f8 !important;
 }
 .category-wrapper{
   position: relative;
@@ -39,6 +43,12 @@ body{
 }
 
 .flight-list-container{
+  .card-header, .card-footer{
+    background: #e0e8f8;
+  }
+  .card-body{
+    background: #fbf4f0;
+  }
   .flight-name{
     color: rgb(51, 51, 51);
     font-size: 13px;
@@ -48,6 +58,8 @@ body{
     color: rgb(153, 153, 153);
     font-size: 10px;
     font-weight: 400;
+    text-align: center;
+    min-width: 110px;
   }
   .flight-from-time, .flight-pack{
     color: rgb(51, 51, 51);

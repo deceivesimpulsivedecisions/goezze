@@ -9,128 +9,17 @@
 {#    {{ dump(flight) }}#}
 {#{% endfor %}#}
 
-<div class="container flight-list-container">
+<div class="container flight-list-container" data-url="{{ path('flight_search_flights_result') }}">
 
-    {% for flight in flights %}
-        {{ dump(flight['FlightDetails']['Details'][0] | length) }}
-        {% set flightDetails = flight['FlightDetails']['Details'][0] %}
-        {% set flightPrice = flight['Price'] %}
-        {% set flightAttr = flight['Attr'] %}
-        {% set timeFormat = "Y-m-d H:i:s" %}
-        {% set timeOrigin = flightDetails[0]['Origin']['DateTime'] | date("H:i") %}
-        {% set timeDestination = flightDetails[0]['Destination']['DateTime'] | date("H:i") %}
-
-        {% set diffInSeconds = timeDestination|date('U') - timeOrigin|date('U') %}
-        {% set hoursDiff = (diffInSeconds / 3600)|round(0, 'floor') %}
-        {% set minutesDiff = ((diffInSeconds % 3600) / 60)|round(0, 'floor') %}
-
-        {% set timeDuration = hoursDiff ~ 'h ' ~ (minutesDiff < 10 ? '0' ~ minutesDiff : minutesDiff) ~ 'm' %}
-
-
-        {{ dump(flight) }}
-
-        <div class="card my-2">
-            <div class="card-header px-5 flight-pack">
-                {{ flightAttr['AirlineRemark'] }}
-            </div>
-            <div class="row px-5 py-3">
-                <div class="col-md-6">
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="d-flex gap-3 justify-content-start align-items-center">
-                                <img src="{{ asset('images/logo.png') }}" width="60" />
-                                <div >
-                                    <h5 class="flight-name">
-
-                                            {% for details in flightDetails %}
-                                                {{ details['OperatorName'] }} |
-                                            {% endfor %}
-
-
-                                    </h5>
-                                    <h5 class="flight-number">
-
-                                            {% for details in flightDetails %}
-                                                {{ details['DisplayOperatorCode'] }} - {{ details['FlightNumber'] }} |
-                                            {% endfor %}
-
-                                    </h5>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 d-flex justify-content-between align-items-center">
-                            <div class="d-flex flex-column align-items-center justify-content-start">
-                                <span class="flight-from-time">
-
-                                       {% for details in flightDetails %}
-                                           {{ details['Origin']['DateTime'] | date("H:i") }} |
-                                       {% endfor %}
-
-                                </span>
-                                <span class="flight-from">
-
-                                        {% for details in flightDetails %}
-                                            {{ details['Origin']['CityName'] }} |
-                                        {% endfor %}
-
-                                </span>
-                            </div>
-
-                            <div class="seperator"></div>
-
-                            <div class="d-flex flex-column align-items-center justify-content-start">
-                                <span class="flight-from-time">
-
-                                        {% for details in flightDetails %}
-                                            {{ details['Destination']['DateTime'] | date("H:i") }} |
-                                        {% endfor %}
-
-                                </span>
-                                <span class="flight-from">
-
-                                        {% for details in flightDetails %}
-                                            {{ details['Destination']['CityName'] }} |
-                                        {% endfor %}
-
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 m-auto">
-                    <div class="row">
-                        <div class="col-6 d-flex flex-column align-items-center justify-content-start">
-                            <span class="flight-duration">{{ timeDuration }}</span>
-                            <span class="flight-stops">Non stop</span>
-                        </div>
-                        <div class="col-6 d-flex gap-3 justify-content-end align-items-center">
-                            <span class="flight-price">₹ {{ flightPrice['TotalDisplayFare'] }}</span>
-                            <button class="btn btn-outline-secondary">Book</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card-footer px-5 flight-attr d-flex justify-content-between flex-wrap">
-                <div>
-                    {{ flightAttr['IsRefundable'] ? 'Refundable' : 'Non-refundable' }}
-                </div>
-                <div>
-                    Baggage:
-                    {% for details in flightDetails %}
-                        {{ details['Attr']['Baggage'] }} |
-                    {% endfor %}
-
-                </div>
-                <div>
-                    Cabin Baggage: {% for details in flightDetails %}
-                        {{ details['Attr']['CabinBaggage'] }} |
-                    {% endfor %}
-
-                </div>
-
+    <div class="m-5 p-5 loader">
+        <div class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
             </div>
         </div>
-    {% endfor %}
+    </div>
+
+
+    <div id="result"></div>
 
 </div>
 

@@ -1,0 +1,103 @@
+{% for flight in flights %}
+    {#        {{ dump(flight['FlightDetails']['Details'][0] | length) }}#}
+    {% set flightDetails = flight['FlightDetails']['Details'][0] %}
+    {% set flightPrice = flight['Price'] %}
+    {% set flightAttr = flight['Attr'] %}
+    {% set timeFormat = "Y-m-d H:i:s" %}
+    {% set timeOrigin = flightDetails[0]['Origin']['DateTime'] | date("H:i") %}
+    {% set timeDestination = flightDetails[flightDetails | length - 1]['Destination']['DateTime'] | date("H:i") %}
+
+    {% set diffInSeconds = timeDestination|date('U') - timeOrigin|date('U') %}
+    {% set hoursDiff = (diffInSeconds / 3600)|round(0, 'floor') %}
+    {% set minutesDiff = ((diffInSeconds % 3600) / 60)|round(0, 'floor') %}
+
+    {% set timeDuration = hoursDiff ~ 'h ' ~ (minutesDiff < 10 ? '0' ~ minutesDiff : minutesDiff) ~ 'm' %}
+
+    <div class="card my-4 border-0 shadow">
+        <div class="card-header border-0 px-5 flight-pack">
+            {{ flightAttr['AirlineRemark'] }}
+        </div>
+        <div class="px-5 py-3 card-body border-0">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="d-flex gap-3 justify-content-start align-items-center h-100">
+                                <img src="https://assets.duffel.com/img/airlines/for-light-background/full-color-logo/{{ flightDetails[0]['OperatorCode'] }}.svg" width="40" />
+                                <div>
+                                    <h5 class="flight-name">
+                                        {% for details in flightDetails %}
+                                            {{ details['OperatorName'] }} {{ loop.index != flightDetails | length ? '|' }}
+                                        {% endfor %}
+                                    </h5>
+                                    <h5 class="flight-number text-start m-0">
+                                        {% for details in flightDetails %}
+                                            {{ details['DisplayOperatorCode'] }} - {{ details['FlightNumber'] }} {{ loop.index != flightDetails | length ? '|' }}
+                                        {% endfor %}
+                                    </h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 m-auto">
+                            {% for details in flightDetails %}
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="d-flex flex-column align-items-center justify-content-start">
+                                        <span class="flight-from-time">
+                                           {{ details['Origin']['DateTime'] | date("H:i") }}
+                                        </span>
+                                        <span class="flight-from">
+                                            {{ details['Origin']['CityName'] }}
+                                        </span>
+                                    </div>
+
+                                    <div class="seperator"></div>
+
+                                    <div class="d-flex flex-column align-items-center justify-content-start">
+                                        <span class="flight-from-time">
+                                            {{ details['Destination']['DateTime'] | date("H:i") }}
+                                        </span>
+                                        <span class="flight-from">
+                                            {{ details['Destination']['CityName'] }}
+                                        </span>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 m-auto">
+                    <div class="row">
+                        <div class="col-6 d-flex flex-column align-items-center justify-content-start">
+                            <span class="flight-duration">{{ timeDuration }}</span>
+                            <span class="flight-stops">{{ flightDetails | length > 1 ? flightDetails | length - 1 : 'Non' }} stop</span>
+                        </div>
+                        <div class="col-6 d-flex gap-3 justify-content-end align-items-center">
+                            <span class="flight-price">₹ {{ flightPrice['TotalDisplayFare'] }}</span>
+                            <button class="btn btn-outline-secondary">Book</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="card-footer border-0 px-5 flight-attr d-flex justify-content-between flex-wrap">
+            <div>
+                {{ flightAttr['IsRefundable'] ? 'Refundable' : 'Non-refundable' }}
+            </div>
+            <div>
+                Baggage:
+                {% for details in flightDetails %}
+                    {{ details['Attr']['Baggage'] }} {{ loop.index != flightDetails | length ? '|' }}
+                {% endfor %}
+
+            </div>
+            <div>
+                Cabin Baggage: {% for details in flightDetails %}
+                    {{ details['Attr']['CabinBaggage'] }} {{ loop.index != flightDetails | length ? '|' }}
+                {% endfor %}
+
+            </div>
+
+        </div>
+    </div>
+{% endfor %}

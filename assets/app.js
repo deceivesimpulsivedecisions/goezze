@@ -71,4 +71,25 @@ $(document).ready(function() {
         //     console.log(airportFrom, airportTo, _date);
         // });
     }
+
+    if($('.flight-list-container').length){
+        console.log("found it");
+        $('.flight-list-container').find('.loader').removeClass('d-none');
+        var urlParams = new URLSearchParams(window.location.search);
+        var searchUrl = $('.flight-list-container').data('url') + '?' + urlParams
+
+        $.ajax({
+            url: searchUrl,
+            type: 'GET',
+            success: function(response) {
+                // On success, display the response
+                $('.flight-list-container').find('.loader').addClass('d-none');
+                $('#result').html(response);
+            },
+            error: function(xhr, status, error) {
+                // On error, display the error details
+                $('#result').text('Error: ' + error);
+            }
+        });
+    }
 });
