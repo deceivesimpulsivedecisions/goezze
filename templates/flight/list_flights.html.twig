@@ -1,3 +1,149 @@
+{% for flights in groupedFlights %}
+{#    {{ dump(flight[0]) }}#}
+    {% set flightDetails = flights[0]['FlightDetails']['Details'][0] %}
+    {% set flightPrice = flights[0]['Price'] %}
+    {% set flightAttr = flights[0]['Attr'] %}
+    {% set timeFormat = "Y-m-d H:i:s" %}
+    {% set timeOrigin = flightDetails[0]['Origin']['DateTime'] | date("H:i") %}
+    {% set timeDestination = flightDetails[flightDetails | length - 1]['Destination']['DateTime'] | date("H:i") %}
+
+    {% set diffInSeconds = timeDestination|date('U') - timeOrigin|date('U') %}
+    {% set hoursDiff = (diffInSeconds / 3600)|round(0, 'floor') %}
+    {% set minutesDiff = ((diffInSeconds % 3600) / 60)|round(0, 'floor') %}
+
+    {% set timeDuration = hoursDiff ~ 'h ' ~ (minutesDiff < 10 ? '0' ~ minutesDiff : minutesDiff) ~ 'm' %}
+    <div class="card my-4 border-0 shadow">
+        <div class="card-header border-0 px-5 flight-pack">
+{#            {{ flightAttr['AirlineRemark'] }}#}
+            <div class="d-flex gap-3 align-items-center">
+                <h5 class="flight-name m-0">
+                    {% for details in flightDetails %}
+                        {{ details['OperatorName'] }} {{ loop.index != flightDetails | length ? '|' }}
+                    {% endfor %}
+                </h5>
+                <h5 class="flight-number text-start m-0">
+                    {% for details in flightDetails %}
+                        {{ details['DisplayOperatorCode'] }} - {{ details['FlightNumber'] }} {{ loop.index != flightDetails | length ? '|' }}
+                    {% endfor %}
+                </h5>
+            </div>
+        </div>
+
+        <div class="px-5 py-3 card-body border-0">
+
+            <div class="row" {% if flights | length > 1 %} data-bs-toggle="collapse" data-bs-target="#flush-collapseOne-{{ loop.index }}" {% endif %}>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="d-flex gap-3 justify-content-start align-items-center h-100">
+                                <img src="https://assets.duffel.com/img/airlines/for-light-background/full-color-logo/{{ flightDetails[0]['OperatorCode'] }}.svg" width="40" />
+                                <div>
+                                    <h5 class="flight-name">
+                                        {% for details in flightDetails %}
+                                            {{ details['OperatorName'] }} {{ loop.index != flightDetails | length ? '|' }}
+                                        {% endfor %}
+                                    </h5>
+                                    <h5 class="flight-number text-start m-0">
+                                        {% for details in flightDetails %}
+                                            {{ details['DisplayOperatorCode'] }} - {{ details['FlightNumber'] }} {{ loop.index != flightDetails | length ? '|' }}
+                                        {% endfor %}
+                                    </h5>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-6 m-auto">
+                            {% for details in flightDetails %}
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="d-flex flex-column align-items-center justify-content-start">
+                                        <span class="flight-from-time">
+                                           {{ details['Origin']['DateTime'] | date("H:i") }}
+                                        </span>
+                                        <span class="flight-from">
+                                            {{ details['Origin']['CityName'] }}
+                                        </span>
+                                    </div>
+
+                                    <div class="seperator"></div>
+
+                                    <div class="d-flex flex-column align-items-center justify-content-start">
+                                        <span class="flight-from-time">
+                                            {{ details['Destination']['DateTime'] | date("H:i") }}
+                                        </span>
+                                        <span class="flight-from">
+                                            {{ details['Destination']['CityName'] }}
+                                        </span>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 m-auto">
+                    <div class="row">
+                        <div class="col-6 d-flex flex-column align-items-center justify-content-start">
+                            <span class="flight-duration">{{ timeDuration }}</span>
+                            <span class="flight-stops">{{ flightDetails | length > 1 ? flightDetails | length - 1 : 'Non' }} stop</span>
+                        </div>
+                        <div class="col-6 d-flex gap-3 justify-content-end align-items-center">
+                            <span class="flight-price">₹ {{ flightPrice['TotalDisplayFare'] }}</span>
+                            <button class="btn btn-outline-secondary">{% if flights | length > 1 %} View Prices {% else %} Book {% endif %}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="flush-collapseOne-{{ loop.index }}" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+
+                <table class="table multiple-flights my-3 mx-5">
+                    <thead>
+                    <tr>
+                        <th scope="col flight-price">Services</th>
+                        <th scope="col flight-price">Refundable</th>
+                        <th scope="col flight-price">Price</th>
+                        <th scope="col flight-price"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for flight in flights %}
+                        {% set price = flight['Price']['TotalDisplayFare'] %}
+                        {% set service = flight['Attr']['AirlineRemark'] %}
+                        {% set isRefundable = flight['Attr']['IsRefundable'] %}
+                    <tr>
+                        <th class="flight-price" scope="row">{{ service | replace({'TTMX ': '', '_': ' '}) }}</th>
+                        <td class="flight-price">{{ isRefundable ? 'Yes' : 'No' }}</td>
+                        <td class="flight-price">₹ {{ price }}</td>
+                        <td class="text-center"><button class="btn btn-outline-secondary">Book</button> </td>
+                    </tr>
+
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+        <div class="card-footer border-0 px-5 flight-attr d-flex justify-content-between flex-wrap">
+            <div>
+                {{ flightAttr['IsRefundable'] ? 'Refundable' : 'Non-refundable' }}
+            </div>
+            <div>
+                Baggage:
+                {% for details in flightDetails %}
+                    {{ details['Attr']['Baggage'] }} {{ loop.index != flightDetails | length ? '|' }}
+                {% endfor %}
+
+            </div>
+            <div>
+                Cabin Baggage: {% for details in flightDetails %}
+                    {{ details['Attr']['CabinBaggage'] }} {{ loop.index != flightDetails | length ? '|' }}
+                {% endfor %}
+
+            </div>
+
+        </div>
+    </div>
+{% endfor %}
+
 {% for flight in flights %}
     {#        {{ dump(flight['FlightDetails']['Details'][0] | length) }}#}
     {% set flightDetails = flight['FlightDetails']['Details'][0] %}
@@ -18,7 +164,8 @@
             {{ flightAttr['AirlineRemark'] }}
         </div>
         <div class="px-5 py-3 card-body border-0">
-            <div class="row">
+
+            <div class="row" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne-{{ loop.index }}">
                 <div class="col-md-6">
                     <div class="row">
                         <div class="col-6">
@@ -77,6 +224,10 @@
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <div id="flush-collapseOne-{{ loop.index }}" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the first item's accordion body.</div>
             </div>
 
         </div>

@@ -81,7 +81,7 @@ class FlightController extends AbstractController
                       "InfantCount": "0",
                       "JourneyType": "OneWay",
                       "PreferredAirlines": [
-                        ""
+                        "I5", "AI"
                       ],
                       "CabinClass": "Economy",
                       "Segments": [
@@ -95,8 +95,45 @@ class FlightController extends AbstractController
         $request = new Request('POST', 'http://test.services.travelomatix.com/webservices/index.php/flight/service/Search', $headers, $body);
         $res = $client->sendAsync($request)->wait();
         $result = json_decode($res->getBody(), true);
+
+        $groupedFlights = [];
+        // Iterate through the flights and group them by FlightNumber
+        foreach ($result['Search']['FlightDataList']['JourneyList'][0] as $flight) {
+            $flightNumbers = [];
+            if(count($flight['FlightDetails']['Details'][0]) > 1){
+                foreach ($flight['FlightDetails']['Details'][0] as $detail){
+                    $flightNumbers[] = $detail['OperatorCode'] . $detail['FlightNumber'];
+                }
+                $flightNumber = implode('-', $flightNumbers);
+            } else {
+                $flightNumber = $flight['FlightDetails']['Details'][0][0]['OperatorCode'] . $flight['FlightDetails']['Details'][0][0]['FlightNumber'];
+            }
+
+            if (!isset($groupedFlights[$flightNumber])) {
+                // If the FlightNumber is not in the groupedFlights array, create a new entry
+                $groupedFlights[$flightNumber] = [];
+            }
+
+            // Add the flight to the corresponding group
+            $groupedFlights[$flightNumber][] = $flight;
+        }
+
+        foreach ($groupedFlights as &$group) {
+            usort($group, function($a, $b) {
+                $priceA = $a['Price']['TotalDisplayFare'];
+                $priceB = $b['Price']['TotalDisplayFare'];
+
+                if ($priceA == $priceB) {
+                    return 0;
+                }
+
+                return ($priceA < $priceB) ? -1 : 1;
+            });
+        }
+
         return $this->render('flight/list_flights.html.twig', [
             'flights' => $result['Search']['FlightDataList']['JourneyList'][0],
+            'groupedFlights' => $groupedFlights
         ]);
     }
 
