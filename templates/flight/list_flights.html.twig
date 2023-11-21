@@ -12,7 +12,7 @@
     {% set minutesDiff = ((diffInSeconds % 3600) / 60)|round(0, 'floor') %}
 
     {% set timeDuration = hoursDiff ~ 'h ' ~ (minutesDiff < 10 ? '0' ~ minutesDiff : minutesDiff) ~ 'm' %}
-    <div class="card my-4 border-0 shadow">
+    <div class="card my-4 border-0 shadow flight-list-wrapper">
         <div class="card-header border-0 px-5 flight-pack">
 {#            {{ flightAttr['AirlineRemark'] }}#}
             <div class="d-flex gap-3 align-items-center">
@@ -81,25 +81,35 @@
                 </div>
                 <div class="col-md-6 m-auto">
                     <div class="row">
-                        <div class="col-6 d-flex flex-column align-items-center justify-content-start">
+                        <div class="col-6 d-flex flex-column align-items-center justify-content-start m-auto">
                             <span class="flight-duration">{{ timeDuration }}</span>
                             <span class="flight-stops">{{ flightDetails | length > 1 ? flightDetails | length - 1 : 'Non' }} stop</span>
                         </div>
                         <div class="col-6 d-flex gap-3 justify-content-end align-items-center">
                             <span class="flight-price">₹ {{ flightPrice['TotalDisplayFare'] }}</span>
-                            <button class="btn btn-outline-secondary">{% if flights | length > 1 %} View Prices {% else %} Book {% endif %}</button>
+
+                            {% if flights | length > 1 %}
+                            <button class="btn btn-outline-secondary">
+                                View Prices
+                            </button>
+                            {% else %}
+                            <a href="{{ path('flight_reviewDetails', {itineraryId : flights[0]['ResultToken'] }) }}" class="btn btn-outline-secondary">
+                                Book
+                            </a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
             </div>
-            <div id="flush-collapseOne-{{ loop.index }}" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+            <div id="flush-collapseOne-{{ loop.index }}" class="accordion-collapse collapse mx-5" data-bs-parent="#accordionFlushExample">
 
-                <table class="table multiple-flights my-3 mx-5">
+                <table class="table multiple-flights my-3">
                     <thead>
                     <tr>
                         <th scope="col flight-price">Services</th>
                         <th scope="col flight-price">Refundable</th>
                         <th scope="col flight-price">Price</th>
+                        <th scope="col flight-price">Fare Rule</th>
                         <th scope="col flight-price"></th>
                     </tr>
                     </thead>
@@ -112,7 +122,13 @@
                         <th class="flight-price" scope="row">{{ service | replace({'TTMX ': '', '_': ' '}) }}</th>
                         <td class="flight-price">{{ isRefundable ? 'Yes' : 'No' }}</td>
                         <td class="flight-price">₹ {{ price }}</td>
-                        <td class="text-center"><button class="btn btn-outline-secondary">Book</button> </td>
+                        <td class="flight-price">
+                            <p class="text-decoration-underline text-primary m-0 cursor-pointer fare-rule-pointer" data-bs-toggle="modal" data-bs-target="#fareModal" data-url="{{ path('flight_fetchFareDetails') }}" data-token="{{ flight['ResultToken'] }}">
+                                Fare rule
+                            </p>
+
+                        </td>
+                        <td class="text-center"><a class="btn btn-outline-secondary" href="{{ path('flight_reviewDetails', {itineraryId : flight['ResultToken'] }) }}">Book</a> </td>
                     </tr>
 
                     {% endfor %}
@@ -144,111 +160,59 @@
     </div>
 {% endfor %}
 
-{% for flight in flights %}
-    {#        {{ dump(flight['FlightDetails']['Details'][0] | length) }}#}
-    {% set flightDetails = flight['FlightDetails']['Details'][0] %}
-    {% set flightPrice = flight['Price'] %}
-    {% set flightAttr = flight['Attr'] %}
-    {% set timeFormat = "Y-m-d H:i:s" %}
-    {% set timeOrigin = flightDetails[0]['Origin']['DateTime'] | date("H:i") %}
-    {% set timeDestination = flightDetails[flightDetails | length - 1]['Destination']['DateTime'] | date("H:i") %}
-
-    {% set diffInSeconds = timeDestination|date('U') - timeOrigin|date('U') %}
-    {% set hoursDiff = (diffInSeconds / 3600)|round(0, 'floor') %}
-    {% set minutesDiff = ((diffInSeconds % 3600) / 60)|round(0, 'floor') %}
-
-    {% set timeDuration = hoursDiff ~ 'h ' ~ (minutesDiff < 10 ? '0' ~ minutesDiff : minutesDiff) ~ 'm' %}
-
-    <div class="card my-4 border-0 shadow">
-        <div class="card-header border-0 px-5 flight-pack">
-            {{ flightAttr['AirlineRemark'] }}
-        </div>
-        <div class="px-5 py-3 card-body border-0">
-
-            <div class="row" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne-{{ loop.index }}">
-                <div class="col-md-6">
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="d-flex gap-3 justify-content-start align-items-center h-100">
-                                <img src="https://assets.duffel.com/img/airlines/for-light-background/full-color-logo/{{ flightDetails[0]['OperatorCode'] }}.svg" width="40" />
-                                <div>
-                                    <h5 class="flight-name">
-                                        {% for details in flightDetails %}
-                                            {{ details['OperatorName'] }} {{ loop.index != flightDetails | length ? '|' }}
-                                        {% endfor %}
-                                    </h5>
-                                    <h5 class="flight-number text-start m-0">
-                                        {% for details in flightDetails %}
-                                            {{ details['DisplayOperatorCode'] }} - {{ details['FlightNumber'] }} {{ loop.index != flightDetails | length ? '|' }}
-                                        {% endfor %}
-                                    </h5>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 m-auto">
-                            {% for details in flightDetails %}
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="d-flex flex-column align-items-center justify-content-start">
-                                        <span class="flight-from-time">
-                                           {{ details['Origin']['DateTime'] | date("H:i") }}
-                                        </span>
-                                        <span class="flight-from">
-                                            {{ details['Origin']['CityName'] }}
-                                        </span>
-                                    </div>
-
-                                    <div class="seperator"></div>
-
-                                    <div class="d-flex flex-column align-items-center justify-content-start">
-                                        <span class="flight-from-time">
-                                            {{ details['Destination']['DateTime'] | date("H:i") }}
-                                        </span>
-                                        <span class="flight-from">
-                                            {{ details['Destination']['CityName'] }}
-                                        </span>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </div>
+<div class="modal fade fare-rule-body" id="fareModal" tabindex="-1" aria-labelledby="fareModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Fare Rules</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex justify-content-center loader">
+                    <div class="spinner-border" role="status">
                     </div>
                 </div>
-                <div class="col-md-6 m-auto">
-                    <div class="row">
-                        <div class="col-6 d-flex flex-column align-items-center justify-content-start">
-                            <span class="flight-duration">{{ timeDuration }}</span>
-                            <span class="flight-stops">{{ flightDetails | length > 1 ? flightDetails | length - 1 : 'Non' }} stop</span>
-                        </div>
-                        <div class="col-6 d-flex gap-3 justify-content-end align-items-center">
-                            <span class="flight-price">₹ {{ flightPrice['TotalDisplayFare'] }}</span>
-                            <button class="btn btn-outline-secondary">Book</button>
-                        </div>
-                    </div>
-                </div>
+                <div class="fare-result"></div>
             </div>
-
-            <div id="flush-collapseOne-{{ loop.index }}" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-                <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the first item's accordion body.</div>
-            </div>
-
-        </div>
-        <div class="card-footer border-0 px-5 flight-attr d-flex justify-content-between flex-wrap">
-            <div>
-                {{ flightAttr['IsRefundable'] ? 'Refundable' : 'Non-refundable' }}
-            </div>
-            <div>
-                Baggage:
-                {% for details in flightDetails %}
-                    {{ details['Attr']['Baggage'] }} {{ loop.index != flightDetails | length ? '|' }}
-                {% endfor %}
-
-            </div>
-            <div>
-                Cabin Baggage: {% for details in flightDetails %}
-                    {{ details['Attr']['CabinBaggage'] }} {{ loop.index != flightDetails | length ? '|' }}
-                {% endfor %}
-
-            </div>
-
         </div>
     </div>
-{% endfor %}
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('[data-bs-toggle="popover"]').popover();
+
+        var searchUrl;
+        $('.flight-list-wrapper').on('click', '.fare-rule-pointer', function() {
+            var $clickedElement = $(this); // Store the clicked element
+
+            searchUrl = $clickedElement.data('url');
+            var updatedContent = "<div>New Content</div>";
+            $('#fareModal').find('.loader').removeClass('d-none');
+            $('#fareModal').find('.fare-result').html('');
+            $.ajax({
+                url: searchUrl,
+                type: 'POST',
+                data: {
+                    token: $clickedElement.data('token'),
+                },
+                success: function(response) {
+                    console.log(response, $clickedElement, $clickedElement.data('bs-content'));
+                    $clickedElement.data('bs-content', updatedContent);
+                    $('#fareModal').find('.loader').addClass('d-none');
+                    $('#fareModal').find('.fare-result').html(response['FareRule']['FareRuleDetail'][0]['FareRules']);
+
+                },
+                error: function(xhr, status, error) {
+                    // On error, display the error details
+                    $('#result').text('Error: ' + error);
+                }
+            });
+        });
+
+
+        // const popover = new bootstrap.Popover('.popover-dismiss', {
+        //     trigger: 'focus'
+        // })
+    });
+</script>

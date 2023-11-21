@@ -53,8 +53,61 @@ class FlightController extends AbstractController
     }
 
     #[Route('/search/flights', name: 'search_flights')]
-    public function searchFlights(HttpRequest $request){
+    public function searchFlights(HttpRequest $httpRequest){
         return $this->render('flight/list.html.twig');
+    }
+
+    #[Route('/get/fare-details', name: 'fetchFareDetails')]
+    public function fetchFareDetails(HttpRequest $request){
+        $token = $request->request->get('itineraryId');
+
+        $client = new Client();
+        $headers = [
+            'x-Password' => $_ENV['PROVAB_PASSWORD'],
+            'x-DomainKey' => $_ENV['PROVAB_DOMAIN_KEY'],
+            'x-Username' => $_ENV['PROVAB_USERNAME'],
+            'x-system' => 'test',
+            'Content-Type' => 'application/json'
+        ];
+        $body = '{
+            "ResultToken": "'. $token .'"
+        }';
+        $request = new Request('POST', 'http://test.services.travelomatix.com/webservices/index.php/flight/service/FareRule', $headers, $body);
+        $res = $client->sendAsync($request)->wait();
+        $data = json_decode($res->getBody(), true);
+
+        return $this->json($data);
+    }
+
+    #[Route('/flight/review-details', name: 'reviewDetails')]
+    public function updatedFareQuote(HttpRequest $request){
+        $token = $request->query->get('itineraryId');
+
+        $client = new Client();
+        $headers = [
+            'x-Password' => $_ENV['PROVAB_PASSWORD'],
+            'x-DomainKey' => $_ENV['PROVAB_DOMAIN_KEY'],
+            'x-Username' => $_ENV['PROVAB_USERNAME'],
+            'x-system' => 'test',
+            'Content-Type' => 'application/json'
+        ];
+        $body = '{
+            "ResultToken": "'. $token .'"
+        }';
+        $request = new Request('POST', 'http://test.services.travelomatix.com/webservices/index.php/flight/service/UpdateFareQuote', $headers, $body);
+        $res = $client->sendAsync($request)->wait();
+
+        $requestExtra = new Request('POST', 'http://test.services.travelomatix.com/webservices/index.php/flight/service/ExtraServices', $headers, $body);
+        $resExtra = $client->sendAsync($requestExtra)->wait();
+
+
+        $data = json_decode($res->getBody(), true);
+        $dataExtra = json_decode($resExtra->getBody(), true);
+
+        return $this->render('flight/review_flight_details.html.twig', [
+            'details' => $data['Status'] === 1 ? $data['UpdateFareQuote'] : $data,
+            'extra' => $dataExtra
+        ]);
     }
 
     #[Route('/search/flights/results', name: 'search_flights_result')]
@@ -76,7 +129,7 @@ class FlightController extends AbstractController
 
 
         $body = '{
-                      "AdultCount": "1",
+                      "AdultCount": "2",
                       "ChildCount": "0",
                       "InfantCount": "0",
                       "JourneyType": "OneWay",
@@ -135,6 +188,59 @@ class FlightController extends AbstractController
             'flights' => $result['Search']['FlightDataList']['JourneyList'][0],
             'groupedFlights' => $groupedFlights
         ]);
+    }
+
+    #[Route('/commit-booking', name: 'commitBooking')]
+    public function commitBooking(HttpRequest $request){
+        $data = $request->request->all();
+        $randomString = bin2hex(random_bytes(8)); // 8 bytes will result in a 16-character hexadecimal string
+
+        // Trim the string to 15 characters
+        $randomString = substr($randomString, 0, 15);
+        $passengers = [];
+        foreach ($data['Title'] as $key => $title) {
+            $passenger = [
+                "IsLeadPax"=> "1",
+                'Title' => $title,
+                'FirstName' => $data['FirstName'][$key],
+                'LastName' => $data['LastName'][$key],
+                "Gender"=> 1,
+                'DateOfBirth' => $data['DateOfBirth'][$key],
+                "PassportNumber"=> "",
+                "CountryCode"=> "IN",
+                "CountryName"=> "India",
+                "ContactNo"=> "9372850180",
+                "City"=> "Bangalore",
+                "PinCode"=> "560100",
+                "AddressLine1"=> "2nd Floor, Venkatadri IT Park, HP Avenue,, Konnappana Agrahara, Electronic city",
+                "Email"=> "nitinvarghese829@gmail.com",
+                "PaxType"=> 1
+            ];
+
+            $passengers[] = $passenger;
+        }
+
+        $passengerData = [
+            "AppReference" => $randomString,
+            "SequenceNumber" => "0",
+            "ResultToken" => $data['ResultToken'],
+            "Passengers" => $passengers
+        ];
+
+        $client = new Client();
+        $headers = [
+            'x-Password' => $_ENV['PROVAB_PASSWORD'],
+            'x-DomainKey' => $_ENV['PROVAB_DOMAIN_KEY'],
+            'x-Username' => $_ENV['PROVAB_USERNAME'],
+            'x-system' => 'test',
+            'Content-Type' => 'application/json'
+        ];
+        $body = json_encode($passengerData, JSON_PRETTY_PRINT);
+        $request = new Request('POST', 'http://test.services.travelomatix.com/webservices/index.php/flight/service/CommitBooking', $headers, $body);
+        $res = $client->sendAsync($request)->wait();
+        echo $res->getBody();
+        dd();
+
     }
 
 }

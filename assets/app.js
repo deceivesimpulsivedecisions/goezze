@@ -91,5 +91,63 @@ $(document).ready(function() {
                 $('#result').text('Error: ' + error);
             }
         });
+
+        $('.flight-list-wrapper').find('.fare-rule').on('click', function() {
+            var $clickedElement = $(this); // Store the clicked element
+
+            searchUrl = $clickedElement.data('url');
+            var updatedContent = "<div>New Content</div>";
+            $.ajax({
+                url: searchUrl,
+                type: 'POST',
+                data: {
+                    token: $clickedElement.data('token'),
+                },
+                success: function(response) {
+                    console.log(response, $clickedElement, $clickedElement.data('bs-content'));
+                    $clickedElement.data('bs-content', updatedContent);
+
+                },
+                error: function(xhr, status, error) {
+                    // On error, display the error details
+                    $('#result').text('Error: ' + error);
+                }
+            });
+        });
     }
+
+    const forms = $('.needs-validation');
+    console.log(forms);
+
+    // Prevent form submission if there are invalid fields
+    forms.on('submit', function(event) {
+        // Check form validity using jQuery
+        if (!this.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+        } else {
+            event.preventDefault();
+            console.log($(this).serialize());
+            var url = $(this).data('url');
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function(response) {
+                    // console.log(response, $clickedElement, $clickedElement.data('bs-content'));
+                    // $clickedElement.data('bs-content', updatedContent);
+
+                },
+                error: function(xhr, status, error) {
+                    // On error, display the error details
+                    // $('#result').text('Error: ' + error);
+                }
+            });
+        }
+
+
+        // Add 'was-validated' class to the form
+        $(this).addClass('was-validated');
+    });
 });

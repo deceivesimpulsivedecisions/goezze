@@ -1,0 +1,260 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Review booking{% endblock %}
+
+{% block body %}
+{{ dump(details) }}
+{{ dump(extra) }}
+
+    {% set flights = details['FareQuoteDetails']['JourneyList']['FlightDetails']['Details'][0] %}
+    {% set price = details['FareQuoteDetails']['JourneyList']['Price'] %}
+    {% set convienceFees = 10 %}
+
+    {% if flights is defined %}
+        <div class="container review-flight-container">
+            <div class="row">
+                <div class="col-lg-9 col-md-6 col-sm-12">
+                    <h3 class="text-primary">Review Journey</h3>
+
+                    <div class="card border-0 border-radius-6 overflow-hidden shadow bg-beige">
+                        <div class="card-header border-0">
+                            {% set totalTime = 0 %}
+                            {% set layoverTime = 0 %}
+                            {% for details in flights %}
+                                {% set totalTime = totalTime + details['Duration'] %}
+                                {% if details['LayOverTime'] is defined %}
+                                    {% set lay = details['LayOverTime'] %}
+                                {% else %}
+                                    {% set lay = 0 %}
+                                {% endif %}
+                                {% set layoverTime = layoverTime + lay %}
+                            {% endfor %}
+
+
+
+                            {#                    {% set layoverTimeResult = _self.calculateDuration(layoverTime) %}#}
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                {% set minutes = totalTime %}
+                                {% set hours = (minutes / 60) | round(0, 'floor') %}
+                                {% set remainingMinutes = minutes % 60 %}
+
+                                {% set days = (hours / 24) | round(0, 'floor') %}
+                                {% set remainingHours = hours % 24 %}
+                                <span class="flight-duration">Total Time: {% if days > 0 %}{{ days }} days {% endif %} {% if remainingHours > 0 %}{{ remainingHours }} hr {% endif %}{{ remainingMinutes }} min </span>
+                                {% if layoverTime > 0 %}
+                                    {% set minutes = layoverTime %}
+                                    {% set hours = (minutes / 60) | round(0, 'floor') %}
+                                    {% set remainingMinutes = minutes % 60 %}
+
+                                    {% set days = (hours / 24) | round(0, 'floor') %}
+                                    {% set remainingHours = hours % 24 %}
+                                    <span class="flight-duration">Layover Time: {% if days > 0 %}{{ days }} days {% endif %} {% if remainingHours > 0 %}{{ remainingHours }} hr {% endif %}{{ remainingMinutes }} min </span>
+                                {% endif %}
+                            </div>
+
+                            {#                    <span>Layover Time: {% if layoverTimeResult.days > 0 %}{{ layoverTimeResult.days }} days {% endif %} {% if layoverTimeResult.hours > 0 %}{{ layoverTimeResult.hours }} hr {% endif %}{{ layoverTimeResult.minutes }} min </span>#}
+                        </div>
+                        <div class="card-body">
+
+                            <div class="row">
+                                <div class="col-lg-4 col-md-6 m-auto">
+                                    <div class="d-flex gap-2 flex-column align-items-center">
+                                        <img src="https://assets.duffel.com/img/airlines/for-light-background/full-color-logo/{{ flights[0]['OperatorCode'] }}.svg" width="35" />
+
+                                        <div class="flight-details text-center">
+                                            <h5 class="flight-name m-0">
+                                                {% for flight in flights %}
+                                                    {{ flight['OperatorName'] }} {{ loop.index != flights | length ? '|' }}
+                                                {% endfor %}
+                                            </h5>
+                                            <h5 class="flight-number m-0">
+                                                {% for flight in flights %}
+                                                    {{ flight['DisplayOperatorCode'] }} - {{ flight['FlightNumber'] }} {{ loop.index != flights | length ? '|' }}
+                                                {% endfor %}
+                                            </h5>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-8 col-md-6 m-auto">
+                                    <div class="d-flex gap-2 flex-column justify-content-center">
+                                        {% for details in flights %}
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="d-flex flex-column align-items-center justify-content-start">
+                                            <span class="flight-from-time">
+                                               {{ details['Origin']['DateTime'] | date("H:i") }}
+                                            </span>
+                                                    <span class="flight-from">
+                                                {{ details['Origin']['CityName'] }}
+                                            </span>
+                                                    <span class="flight-from">
+                                                Airport: {{ details['Origin']['AirportName'] }}
+                                            </span>
+                                                </div>
+
+                                                <div class="seperator"></div>
+
+                                                <div class="d-flex flex-column align-items-center justify-content-start">
+                                        <span class="flight-from-time">
+                                            {{ details['Destination']['DateTime'] | date("H:i") }}
+                                        </span>
+                                                    <span class="flight-from">
+                                            {{ details['Destination']['CityName'] }}
+                                        </span>
+                                                    <span class="flight-from">
+                                            Airport: {{ details['Destination']['AirportName'] }}
+                                        </span>
+                                                </div>
+
+                                                {% set minutes = details['Duration'] %}
+                                                {% set hours = (minutes / 60) | round(0, 'floor') %}
+                                                {% set remainingMinutes = minutes % 60 %}
+
+                                                {% set days = (hours / 24) | round(0, 'floor') %}
+                                                {% set remainingHours = hours % 24 %}
+
+
+                                                <div class="col-6 d-flex flex-column align-items-center justify-content-start m-auto">
+                                                    <span class="flight-duration">{% if days > 0 %}{{ days }} days {% endif %} {% if remainingHours > 0 %}{{ remainingHours }} hr {% endif %}{{ remainingMinutes }} min </span>
+                                                    <span class="flight-stops">{{ flights | length > 1 ? flights | length - 1 : 'Non' }} stop</span>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                            {% for flight in flights %}
+                                {#                        {{ dump(flight) }}#}
+                                {#                        {{ dump(flight['Origin']['AirportCode']) }}#}
+                                {#                        {{ dump(flight['Destination']['AirportCode']) }}#}
+                            {% endfor %}
+                        </div>
+
+                        <hr />
+
+                        <form class="needs-validation px-4" data-url="{{ path('flight_commitBooking') }}" novalidate>
+                            <input type="hidden" name="ResultToken" value="{{ details['FareQuoteDetails']['JourneyList']['ResultToken'] }}">
+                            {% for passenger in 0..price['PassengerBreakup']['ADT']['PassengerCount']-1  %}
+                                <div class="p-0 my-3">
+                                    <div class="col-12 text-secondary title border-0 bg-beige px-4 py-0">
+                                        <p class="m-0 text-secondary passenger-title">Adult {{ loop.index }}</p>
+                                    </div>
+                                    <div class="row g-3 m-0 py-0 card-body">
+                                        <div class="col-md-3 mt-2">
+                                            <label for="title[{{ loop.index }}]" class="form-label">Title</label>
+                                            <select class="form-select" id="title[{{ loop.index }}]" name="Title[{{ loop.index }}]" required>
+                                                <option selected disabled value="">Choose...</option>
+                                                <option value="mr">Mr.</option>
+                                                <option value="mrs">Mrs.</option>
+                                                <option value="master">Master.</option>
+                                                <option value="miss">Miss.</option>
+                                            </select>
+                                            <div class="valid-feedback">
+                                                Valid Title!
+                                            </div>
+                                            <div class="invalid-feedback">
+                                                Please select a valid title.
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4 mt-2">
+                                            <label for="firstName[{{ loop.index }}]" class="form-label">First name</label>
+                                            <input type="text" class="form-control" id="firstName[{{ loop.index }}]" name="FirstName[{{ loop.index }}]" value="" maxlength="45" required>
+                                            <div class="invalid-feedback">
+                                                Please provide a valid first name!
+                                            </div>
+                                            <div class="valid-feedback">
+                                                Valid First Name!
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4 mt-2">
+                                            <label for="lastName[{{ loop.index }}]" class="form-label">Last name</label>
+                                            <input type="text" class="form-control" id="lastName[{{ loop.index }}]" name="LastName[{{ loop.index }}]" value="" maxlength="45" required>
+                                            <div class="invalid-feedback">
+                                                Please provide a valid last name!
+                                            </div>
+                                            <div class="valid-feedback">
+                                                Valid Last Name!
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6 mt-2">
+                                            <label for="dob[{{ loop.index }}]" class="form-label">Date of birth</label>
+                                            <input type="date" class="form-control" id="dob[{{ loop.index }}]" name="DateOfBirth[{{ loop.index }}]" required>
+                                            <div class="invalid-feedback">
+                                                Please provide a valid date of birth!
+                                            </div>
+                                            <div class="valid-feedback">
+                                                Valid date of birth!
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                {% if price['PassengerBreakup']['ADT']['PassengerCount'] | length == loop.index %}
+                                    <hr class="mx-4" />
+                                {% endif %}
+
+                            {% endfor %}
+
+                            <div class="col-12">
+                                <button class="btn btn-primary" type="submit">Submit form</button>
+                            </div>
+
+                        </form>
+                    </div>
+
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-12">
+                    <h3 class="text-primary">Fare Summary</h3>
+                    <div class="card border-0 border-radius-6 overflow-hidden shadow">
+                        <div class="card-header border-0 flight-duration">
+                            Fare Details
+                        </div>
+                        <div class="card-body">
+                            <div class="fare-base-price">
+                                <p class="title text-secondary mb-1">Base Fare</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    {% if price['PassengerBreakup']['ADT'] %}
+                                        <p class="fare-details mb-1">{{ price['PassengerBreakup']['ADT']['PassengerCount'] }} Adult (1 x {{ price['PassengerBreakup']['ADT']['BasePrice'] / 2 }})</p>
+                                        <p class="fare-details mb-1">₹ {{ price['PassengerBreakup']['ADT']['BasePrice'] }}</p>
+                                    {% endif %}
+                                </div>
+                                <hr />
+                                <p class="title text-secondary mb-1">Taxes</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    {% if price['PassengerBreakup']['ADT']['Tax'] %}
+                                        <p class="fare-details mb-1">Taxes & Fees</p>
+                                        <p class="fare-details mb-1">₹ {{ price['PassengerBreakup']['ADT']['Tax'] }}</p>
+                                    {% endif %}
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    {% if price['PassengerBreakup']['ADT']['Tax'] %}
+                                        <p class="fare-details mb-1">Convenience Fees</p>
+                                        <p class="fare-details mb-1">₹ {{ convienceFees }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <hr />
+                                <p class="title text-primary mb-1"></p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    {% if price['PassengerBreakup']['ADT'] %}
+                                        <p class="title text-primary mb-1">Grand Total</p>
+                                        <h2 class="mb-1 title text-black">₹ {{ price['PassengerBreakup']['ADT']['BasePrice'] + price['PassengerBreakup']['ADT']['Tax'] + convienceFees }}</h2>
+                                    {% endif %}
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    {% endif %}
+
+{% endblock %}
