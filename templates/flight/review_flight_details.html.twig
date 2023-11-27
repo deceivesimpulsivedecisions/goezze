@@ -8,6 +8,7 @@
 
     {% set flights = details['FareQuoteDetails']['JourneyList']['FlightDetails']['Details'][0] %}
     {% set price = details['FareQuoteDetails']['JourneyList']['Price'] %}
+    {% set extraServices = extra['ExtraServices']['ExtraServiceDetails'] %}
     {% set convienceFees = 10 %}
 
     {% if flights is defined %}
@@ -136,6 +137,7 @@
                         <form class="needs-validation px-4" data-url="{{ path('flight_commitBooking') }}" novalidate>
                             <input type="hidden" name="ResultToken" value="{{ details['FareQuoteDetails']['JourneyList']['ResultToken'] }}">
                             {% for passenger in 0..price['PassengerBreakup']['ADT']['PassengerCount']-1  %}
+                                {% set passengerIndex = loop.index %}
                                 <div class="p-0 my-3">
                                     <div class="col-12 text-secondary title border-0 bg-beige px-4 py-0">
                                         <p class="m-0 text-secondary passenger-title">Adult {{ loop.index }}</p>
@@ -192,6 +194,141 @@
                                         </div>
                                     </div>
 
+                                    <hr class="mx-4" />
+
+                                    <p class="mx-4 text-secondary passenger-title">Service Requests(Optional)</p>
+                                    <div class="accordion accordion-flush mx-4" id="accordionFlushExample">
+                                        {% if extraServices['Baggage'] is defined %}
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header">
+                                                    <button class="accordion-button collapsed bg-beige" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-baggage{{loop.index}}" aria-expanded="false" aria-controls="accordion-baggage{{loop.index}}">
+                                                        Additional Baggage
+                                                    </button>
+                                                </h2>
+                                                <div id="accordion-baggage{{loop.index}}" class="accordion-collapse collapse bg-beige" data-bs-parent="#accordionFlushExample">
+                                                    <div class="accordion-body">
+                                                        {% for flight in extraServices['Baggage'] %}
+                                                            <div class="row baggage-row">
+                                                                <input type="hidden" class="add-baggage" name="baggage[{{ passengerIndex }}][{{ loop.index }}]" />
+                                                                <div class="col-12 text-center">
+                                                                    <h4 class="meal-for-flight">{{ flight[0]['Origin'] }} - {{ flight[0]['Destination'] }}</h4>
+                                                                </div>
+                                                                {% for baggage in flight %}
+                                                                    <div class="col-lg-4 col-md-6 col-sm-12 text-center my-2">
+                                                                        <div class="card overflow-hidden border-radius-6 border-0 shadow baggage-wrapper cursor-pointer py-4" data-passenger-index="{{ passengerIndex }}" data-baggage-id="{{ baggage['BaggageId'] }}">
+                                                                            <div class="text-center">
+                                                                                <img class="text-center m-auto" src="{{ asset('images/baggage.png') }}" alt="baggage">
+                                                                            </div>
+                                                                            <p class="fa-bold m-0">Additional</p>
+                                                                            <p class="m-0 baggage-weight">{{ baggage['Weight'] }}</p>
+                                                                            <p class="m-0">₹ <span class="baggage-price">{{ baggage['Price'] }}</span></p>
+                                                                            <span class="select btn btn-outline-secondary m-auto">Select</span>
+                                                                            <img class="selected d-none m-auto" src="{{ asset('images/tick.svg') }}" width="30" />
+                                                                        </div>
+                                                                    </div>
+                                                                {% endfor %}
+                                                            </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                        {% if extraServices['Meals'] is defined %}
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header">
+                                                    <button class="accordion-button collapsed bg-beige" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-meal{{loop.index}}" aria-expanded="false" aria-controls="accordion-meal{{loop.index}}">
+                                                        Add Meals
+                                                    </button>
+                                                </h2>
+                                                <div id="accordion-meal{{loop.index}}" class="accordion-collapse collapse bg-beige" data-bs-parent="#accordionFlushExample">
+                                                    <div class="accordion-body">
+                                                        <input type="hidden" class="add-meal" name="meal[{{ passengerIndex }}]" />
+                                                            {% for flight in extraServices['Meals'] %}
+                                                            <div class="row">
+                                                                <div class="col-12 text-center">
+                                                                    <h4 class="meal-for-flight">{{ flight[0]['Origin'] }} - {{ flight[0]['Destination'] }}</h4>
+                                                                </div>
+                                                                {% for meal in flight %}
+                                                                    <div class="col-lg-4 col-md-6 col-sm-12 text-center my-2">
+                                                                        <div class="card overflow-hidden border-radius-6 border-0 shadow meal-wrapper cursor-pointer py-4" data-passenger-index="{{ passengerIndex }}" data-meal-id="{{ meal['MealId'] }}">
+                                                                            <div class="text-center">
+                                                                                <img class="text-center m-auto" src="{{ asset('images/food-tray.png') }}" alt="meal">
+                                                                            </div>
+                                                                            <p class=""></p>
+                                                                            <p class="m-0 meal-name">{{ meal['Description'] }}</p>
+                                                                            <p class="m-0">₹ <span class="meal-price">{{ meal['Price'] }}</span></p>
+                                                                            <span class="select btn btn-outline-secondary m-auto">Select</span>
+                                                                            <img class="selected d-none m-auto" src="{{ asset('images/tick.svg') }}" width="30" />
+                                                                        </div>
+
+                                                                    </div>
+                                                                {% endfor %}
+                                                            </div>
+                                                            {% endfor %}
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                        {% if extraServices['Seat'] is defined %}
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header">
+                                                    <button class="accordion-button collapsed bg-beige" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-seat{{loop.index}}" aria-expanded="false" aria-controls="accordion-seat{{loop.index}}">
+                                                        Seat
+                                                    </button>
+                                                </h2>
+                                                <div id="accordion-seat{{loop.index}}" class="accordion-collapse collapse bg-beige" data-bs-parent="#accordionFlushExample">
+                                                    <div class="accordion-body">
+                                                        {% for flight in extraServices['Seat'] %}
+                                                            <div class="col-12 text-center">
+                                                                <h4>{{ flight[0][0]['Origin'] }} - {{ flight[0][0]['Destination'] }}</h4>
+                                                            </div>
+                                                            <input type="hidden" class="add-seat" name="seat[{{ passengerIndex }}][{{ loop.index }}]" />
+                                                            <div class="row">
+                                                                <div class="col-9">
+                                                                    <div class="plane">
+                                                                        <div class="cockpit">
+                                                                            <h1>Flight Seat Selection</h1>
+                                                                        </div>
+                                                                        <div class="exit exit--front fuselage">
+
+                                                                        </div>
+                                                                        <ol class="cabin fuselage">
+
+                                                                            {% for row in flight %}
+                                                                                {% set flightIndex = loop.index %}
+                                                                                <li class="row row--{{ passengerIndex }}">
+                                                                                    <ol class="seats" type="A">
+                                                                                        {% for seat in row %}
+                                                                                            <li class="seat">
+                                                                                                <input type="checkbox" name="seat{{ passengerIndex }}" id="{{ seat['SeatNumber'] }}" {% if seat['AvailablityType'] == '0' %} disabled {% endif %} data-price="{{ seat['Price'] }}" data-seat="{{ seat['SeatNumber'] }}" data-passenger="{{ passengerIndex }}" />
+                                                                                                <label for="{{ seat['SeatNumber'] }}">{% if seat['AvailablityType'] == '0' %} 'Occupied' {% else %} {{ seat['SeatNumber'] }} {% endif %}</label>
+                                                                                            </li>
+                                                                                        {% endfor %}
+                                                                                    </ol>
+                                                                                </li>
+                                                                            {% endfor %}
+                                                                        </ol>
+                                                                        <div class="exit exit--back fuselage">
+
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="col-3 selected-seat-{{ passengerIndex }}">
+                                                                    <p class="seat"></p>
+                                                                    <p class="amount"></p>
+                                                                </div>
+
+
+                                                            </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+
                                 </div>
 
                                 {% if price['PassengerBreakup']['ADT']['PassengerCount'] | length == loop.index %}
@@ -200,7 +337,10 @@
 
                             {% endfor %}
 
-                            <div class="col-12">
+
+
+
+                            <div class="col-12 text-center">
                                 <button class="btn btn-primary" type="submit">Submit form</button>
                             </div>
 
@@ -210,7 +350,7 @@
                 </div>
                 <div class="col-lg-3 col-md-6 col-sm-12">
                     <h3 class="text-primary">Fare Summary</h3>
-                    <div class="card border-0 border-radius-6 overflow-hidden shadow">
+                    <div class="card border-0 border-radius-6 overflow-hidden shadow fare-summary">
                         <div class="card-header border-0 flight-duration">
                             Fare Details
                         </div>
@@ -220,7 +360,7 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     {% if price['PassengerBreakup']['ADT'] %}
                                         <p class="fare-details mb-1">{{ price['PassengerBreakup']['ADT']['PassengerCount'] }} Adult (1 x {{ price['PassengerBreakup']['ADT']['BasePrice'] / 2 }})</p>
-                                        <p class="fare-details mb-1">₹ {{ price['PassengerBreakup']['ADT']['BasePrice'] }}</p>
+                                        <p class="fare-details mb-1">₹ <span class="base-price">{{ price['PassengerBreakup']['ADT']['BasePrice'] }}</span> </p>
                                     {% endif %}
                                 </div>
                                 <hr />
@@ -228,22 +368,53 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     {% if price['PassengerBreakup']['ADT']['Tax'] %}
                                         <p class="fare-details mb-1">Taxes & Fees</p>
-                                        <p class="fare-details mb-1">₹ {{ price['PassengerBreakup']['ADT']['Tax'] }}</p>
+                                        <p class="fare-details mb-1">₹ <span class="taxes">{{ price['PassengerBreakup']['ADT']['Tax'] }}</span></p>
                                     {% endif %}
                                 </div>
                                 <div class="d-flex justify-content-between align-items-center">
                                     {% if price['PassengerBreakup']['ADT']['Tax'] %}
                                         <p class="fare-details mb-1">Convenience Fees</p>
-                                        <p class="fare-details mb-1">₹ {{ convienceFees }}</p>
+                                        <p class="fare-details mb-1">₹ <span class="convenience">{{ convienceFees }}</span></p>
                                     {% endif %}
                                 </div>
+
+                                <div class="extra-services d-none">
+                                    <hr />
+                                    <p class="title text-secondary mb-1">Additional Charges</p>
+                                    <div class="baggage-service d-none">
+                                    {% for passenger in 0..price['PassengerBreakup']['ADT']['PassengerCount']-1  %}
+                                    <div class="d-flex justify-content-between align-items-center d-none baggage-passenger-{{ loop.index }}">
+                                        <p class="fare-details mb-1 text-truncate">Pax - {{ loop.index }} Extra Baggage <span class="extra-baggage{{ loop.index }}">3Kg</span></p>
+                                        <p class="fare-details mb-1">₹ <span class="baggage-price{{ loop.index }} fare-baggage-price"></span></p>
+                                    </div>
+                                    {% endfor %}
+                                    </div>
+                                    <div class="meal-service d-none">
+                                    {% for passenger in 0..price['PassengerBreakup']['ADT']['PassengerCount']-1  %}
+                                        <div class="d-flex justify-content-between align-items-center d-none meal-passenger-{{ loop.index }}">
+                                            <p class="fare-details fare-meal-name mb-1 text-truncate">Pax - {{ loop.index }} <span class="meal-name{{ loop.index }}"></span></p>
+                                            <p class="fare-details mb-1">₹ <span class="meal-price{{ loop.index }} fare-meal-price"></span></p>
+                                        </div>
+                                    {% endfor %}
+                                    </div>
+                                    <div class="seat-service d-none">
+                                    {% for passenger in 0..price['PassengerBreakup']['ADT']['PassengerCount']-1  %}
+                                        <div class="d-flex justify-content-between align-items-center d-none seat-passenger-{{ loop.index }}">
+                                            <p class="fare-details fare-seat-name mb-1 text-truncate">Pax - {{ loop.index }} <span class="seat-name{{ loop.index }}"></span></p>
+                                            <p class="fare-details mb-1">₹ <span class="seat-price{{ loop.index }} fare-seat-price"></span></p>
+                                        </div>
+                                    {% endfor %}
+                                    </div>
+                                </div>
+
+
 
                                 <hr />
                                 <p class="title text-primary mb-1"></p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     {% if price['PassengerBreakup']['ADT'] %}
                                         <p class="title text-primary mb-1">Grand Total</p>
-                                        <h2 class="mb-1 title text-black">₹ {{ price['PassengerBreakup']['ADT']['BasePrice'] + price['PassengerBreakup']['ADT']['Tax'] + convienceFees }}</h2>
+                                        <h2 class="mb-1 title text-black">₹ <span class="total-amount">{{ price['PassengerBreakup']['ADT']['BasePrice'] + price['PassengerBreakup']['ADT']['Tax'] + convienceFees }}</span></h2>
                                     {% endif %}
                                 </div>
 
