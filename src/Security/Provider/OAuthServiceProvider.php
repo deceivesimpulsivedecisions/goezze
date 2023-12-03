@@ -20,6 +20,20 @@ class OAuthServiceProvider implements OAuthAwareUserProviderInterface
     {
         $data = $response->getData();
         $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $data['email']]);
+
+        // If the user is not available then register the user
+        if(is_null($user))
+        {
+            $user = new User();
+
+            $user->setEmail($data['email']);
+            $user->setFirstName($data['given_name']);
+            $user->setLastName($data['family_name']);
+            $user->setIsVerified(true);
+
+            $this->entityManager->persist($user);
+            $this->entityManager->flush();
+        }
         dd($response->getData(), $user);
     }
 }

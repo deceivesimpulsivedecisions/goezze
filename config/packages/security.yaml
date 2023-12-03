@@ -45,10 +45,9 @@ security:
             oauth:
                 resource_owners:
                     google: /auth/connect/google/check
-                login_path: /login
+                login_path: /google/login
                 use_forward: false
                 failure_path: /login
-
                 oauth_user_provider:
                     service: App\Security\Provider\OAuthServiceProvider
                 
