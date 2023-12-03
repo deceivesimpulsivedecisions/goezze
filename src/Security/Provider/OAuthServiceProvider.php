@@ -43,7 +43,9 @@ class OAuthServiceProvider implements OAuthAwareUserProviderInterface
             $this->entityManager->persist($user);
             $this->entityManager->flush();
         }
+
+        $this->userAuthenticator->authenticateUser($user, $this->authenticator, $this->request->getCurrentRequest());
         
-        return $this->userAuthenticator->authenticateUser($user, $this->authenticator, $this->request->getCurrentRequest());
+        return $user;
     }
 }
