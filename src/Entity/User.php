@@ -111,7 +111,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getPassword(): string
     {
-        return $this->password;
+        return is_null($this->password)?'':$this->password;
     }
 
     public function setPassword(string $password): static

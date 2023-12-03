@@ -3,17 +3,26 @@
 namespace App\Security\Provider;
 
 use App\Entity\User;
+use App\Security\GoogleAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
 class OAuthServiceProvider implements OAuthAwareUserProviderInterface
 {
     public $entityManager;
+    public $userAuthenticator;
+    public $authenticator;
+    public $request;
 
-    public function __construct(EntityManagerInterface $entityManagerInterface)
+    public function __construct(EntityManagerInterface $entityManagerInterface, UserAuthenticatorInterface $userAuthenticatorInterface, GoogleAuthenticator $formLoginAuthenticator, RequestStack $request)
     {
         $this->entityManager = $entityManagerInterface; 
+        $this->userAuthenticator = $userAuthenticatorInterface;
+        $this->authenticator = $formLoginAuthenticator;
+        $this->request = $request;
     }
 
     public function loadUserByOAuthUserResponse(UserResponseInterface $response)
@@ -34,6 +43,7 @@ class OAuthServiceProvider implements OAuthAwareUserProviderInterface
             $this->entityManager->persist($user);
             $this->entityManager->flush();
         }
-        dd($response->getData(), $user);
+        
+        return $this->userAuthenticator->authenticateUser($user, $this->authenticator, $this->request->getCurrentRequest());
     }
 }
