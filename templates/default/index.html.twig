@@ -4,7 +4,7 @@
 
 {% block body %}
 
-    <form class="search-flight" data-fetch-airport-url="{{ path('flight_search_airport') }}">
+    <form class="search-flight" data-fetch-airport-url="{{ path('flight_search_airport') }}" action="{{ path('flight_search_flights') }}">
 
         <select class="flight-from" name="flight-from" id="flight-from" required>
             <option disabled>From</option>

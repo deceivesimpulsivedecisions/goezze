@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+
+{#{{ dump(flights) }}#}
+{#{% for flight in flights %}#}
+{#    {{ dump(flight) }}#}
+{#{% endfor %}#}
+
+<div class="container flight-list-container" data-url="{{ path('flight_search_flights_result') }}">
+
+    <div class="m-5 p-5 loader">
+        <div class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
+            </div>
+        </div>
+    </div>
+
+
+    <div id="result"></div>
+
+</div>
+
+
+{% endblock %}
