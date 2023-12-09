@@ -6,7 +6,21 @@
 
     <form class="search-flight" data-fetch-airport-url="{{ path('flight_search_airport') }}" action="{{ path('flight_search_flights') }}">
 
-        <select class="flight-from" name="flight-from" id="flight-from" required>
+        <div class="d-flex gap-3 py-3">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="tripStatus" id="one-way" value="one-way" checked>
+                <label class="form-check-label" for="one-way">
+                    One way
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="tripStatus" id="round-trip" value="round-trip">
+                <label class="form-check-label" for="round-trip">
+                    Round Trip
+                </label>
+            </div>
+        </div>
+        <select class="flight-from" name="flight-from" id="flight-from"  required>
             <option disabled>From</option>
         </select>
 
@@ -15,7 +29,7 @@
         </select>
 
         <input type="date" id="datepicker" name="datepicker" required>
-
+        <button type="button" class="btn btn-lg btn-danger example-popover" data-bs-toggle="popover" title="Popover title" data-bs-content="And here's some amazing content. It's very engaging. Right?">Click to toggle popover</button>
         <button type="submit" class="bg-primary p-3 rounded text-white">Go</button>
     </form>
 

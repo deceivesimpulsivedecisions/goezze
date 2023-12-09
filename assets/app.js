@@ -31,6 +31,7 @@ $(document).ready(function() {
 
         $('#flight-from').select2({
             width: '300px',
+            placeholder: 'From',
             minimumInputLength: 1, // Minimum number of characters required to start searching
             ajax: {
                 url: url, // The URL to your PHP script
@@ -48,6 +49,7 @@ $(document).ready(function() {
 
         $('#flight-to').select2({
             width: '300px',
+            placeholder: 'To',
             minimumInputLength: 1, // Minimum number of characters required to start searching
             ajax: {
                 url: url, // The URL to your PHP script
@@ -63,6 +65,16 @@ $(document).ready(function() {
             }
         });
 
+        var selectedOption = $("input[name='tripStatus']:checked").val();
+        console.log("Selected option on load: " + selectedOption);
+
+        // Attach a change event handler to the radio buttons
+        $("input[name='tripStatus']").change(function(){
+            // Check which radio button is selected on change
+            selectedOption = $("input[name='tripStatus']:checked").val();
+            console.log("Selected option on change: " + selectedOption);
+        });
+
         // $('.search-flight').on('submit', function (e) {
         //     console.log('submit');
         //     e.preventDefault();
@@ -71,6 +83,10 @@ $(document).ready(function() {
         //     var _date = $('#datepicker').val();
         //     console.log(airportFrom, airportTo, _date);
         // });
+
+        $('.example-popover').popover({
+            container: 'body'
+        });
     }
 
     if($('.flight-list-container').length){
