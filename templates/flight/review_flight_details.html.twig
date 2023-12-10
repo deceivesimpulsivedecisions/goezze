@@ -286,7 +286,7 @@
                                                             <input type="hidden" class="add-seat" name="seat[{{ passengerIndex }}][{{ loop.index }}]" />
                                                             <div class="row">
                                                                 <div class="col-9">
-                                                                    <div class="plane">
+                                                                    <div class="plane plane{{ passengerIndex }}">
                                                                         <div class="cockpit">
                                                                             <h1>Flight Seat Selection</h1>
                                                                         </div>
@@ -300,9 +300,9 @@
                                                                                 <li class="row row--{{ passengerIndex }}">
                                                                                     <ol class="seats" type="A">
                                                                                         {% for seat in row %}
-                                                                                            <li class="seat">
-                                                                                                <input type="checkbox" name="seat{{ passengerIndex }}" id="{{ seat['SeatNumber'] }}" {% if seat['AvailablityType'] == '0' %} disabled {% endif %} data-price="{{ seat['Price'] }}" data-seat="{{ seat['SeatNumber'] }}" data-passenger="{{ passengerIndex }}" />
-                                                                                                <label for="{{ seat['SeatNumber'] }}">{% if seat['AvailablityType'] == '0' %} 'Occupied' {% else %} {{ seat['SeatNumber'] }} {% endif %}</label>
+                                                                                            <li class="seat" data-bs-trigger="hover" data-bs-toggle="popover" title="{{ seat['SeatNumber'] }}" data-bs-content="{{ seat['Price'] }}">
+                                                                                                <input type="checkbox" name="seat{{ passengerIndex }}" id="{{ passengerIndex }}{{ seat['SeatNumber'] }}" {% if seat['AvailablityType'] == '0' %} disabled {% endif %} data-price="{{ seat['Price'] }}" data-seat="{{ seat['SeatNumber'] }}" data-passenger="{{ passengerIndex }}" />
+                                                                                                <label for="{{ passengerIndex }}{{ seat['SeatNumber'] }}">{% if seat['AvailablityType'] == '0' %} 'Occupied' {% else %} {{ seat['SeatNumber'] }} {% endif %}</label>
                                                                                             </li>
                                                                                         {% endfor %}
                                                                                     </ol>

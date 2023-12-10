@@ -249,7 +249,6 @@ $(document).ready(function() {
     });
 
     const forms = $('.needs-validation');
-    console.log(baggages);
 
     // Prevent form submission if there are invalid fields
     forms.on('submit', function(event) {
@@ -282,24 +281,25 @@ $(document).ready(function() {
         // Add 'was-validated' class to the form
         $(this).addClass('was-validated');
     });
-    console.log($('.example-popover'));
 
     if($('.plane').length){
         $("input:checkbox").on('click', function() {
             // in the handler, 'this' refers to the box clicked on
             var $box = $(this);
-            console.log($box);
+            var passengerIndex = $box.data('passenger');
+            var $plane = $box.closest('.plane'+passengerIndex);
+            var planes = body.find('.plane');
             if ($box.is(":checked")) {
                 // the name of the box is retrieved using the .attr() method
                 // as it is assumed and expected to be immutable
                 var group = "input:checkbox[name='" + $box.attr("name") + "']";
-                console.log($(group), $box);
+                console.log('abcd', $(group), $plane);
                 // the checked state of the group/box on the other hand will change
                 // and the current value is retrieved using .prop() method
                 $(group).prop("checked", false);
                 $box.prop("checked", true);
                 var price = parseInt($box.data('price'))
-                var seat = $box.data('seat')
+                var seat = $box.data('seat');
                 var passengerIndex = parseInt($box.data('passenger'))
                 var selectedSeat = body.find('.selected-seat-'+passengerIndex);
                 selectedSeat.find('.seat').text(seat);
