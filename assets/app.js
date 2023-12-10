@@ -13,7 +13,7 @@ const $ = require('jquery');
 import 'select2';
 // this "modifies" the jquery module: adding behavior to it
 // the bootstrap module doesn't export/return anything
-require('bootstrap');
+window.bootstrap = require('bootstrap/dist/js/bootstrap.bundle.js');
 import 'bootstrap';
 
 
@@ -23,6 +23,9 @@ import 'bootstrap';
 
 $(document).ready(function() {
     console.log('aaaa');
+
+
+
     var body= $('body');
 
     if($('.search-flight').length) {
@@ -84,9 +87,9 @@ $(document).ready(function() {
         //     console.log(airportFrom, airportTo, _date);
         // });
 
-        $('.example-popover').popover({
-            container: 'body'
-        });
+        // $('.example-popover').popover({
+        //     container: 'body'
+        // });
     }
 
     if($('.flight-list-container').length){
@@ -341,4 +344,8 @@ $(document).ready(function() {
         });
     }
 
+    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+    var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+    return new bootstrap.Popover(popoverTriggerEl)
+    })
 });
