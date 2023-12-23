@@ -114,7 +114,7 @@ class FlightController extends AbstractController
     public function searchFlightsResult(HttpRequest $request){
         $from = $request->query->get('flight-from');
         $to = $request->query->get('flight-to');
-        $date = $request->query->get('datepicker');
+        $date = $request->query->get('from-date');
 
 //        dd($from, $to, $date);
 

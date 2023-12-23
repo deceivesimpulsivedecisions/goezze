@@ -13,7 +13,8 @@ const $ = require('jquery');
 import 'select2';
 // this "modifies" the jquery module: adding behavior to it
 // the bootstrap module doesn't export/return anything
-window.bootstrap = require('bootstrap/dist/js/bootstrap.bundle.js');
+// window.bootstrap = require('bootstrap/dist/js/bootstrap.bundle.js');
+require('bootstrap');
 import 'bootstrap';
 
 
@@ -27,13 +28,16 @@ $(document).ready(function() {
 
 
     var body= $('body');
-
+    $('#destinations').select2({
+        width: '200px',
+        placeholder: 'Destination',
+    });
     if($('.search-flight').length) {
         console.log('found');
-        var url = $('#flight-from').parent('.search-flight').data('fetch-airport-url');
+        var url = $('#flight-from').parents('.search-flight').data('fetch-airport-url');
 
         $('#flight-from').select2({
-            width: '300px',
+            width: '100%',
             placeholder: 'From',
             minimumInputLength: 1, // Minimum number of characters required to start searching
             ajax: {
@@ -41,7 +45,7 @@ $(document).ready(function() {
                 dataType: 'json',  // Expected data type (json in this case)
                 delay: 20,        // Delay in milliseconds before sending the request
                 processResults: function (data) {
-                    console.log('Request sent');
+                    console.log('Request sent',data);
                     // Process the data returned from the server
                     return {
                         results: data
@@ -51,7 +55,7 @@ $(document).ready(function() {
         });
 
         $('#flight-to').select2({
-            width: '300px',
+            width: '100%',
             placeholder: 'To',
             minimumInputLength: 1, // Minimum number of characters required to start searching
             ajax: {
@@ -72,10 +76,79 @@ $(document).ready(function() {
         console.log("Selected option on load: " + selectedOption);
 
         // Attach a change event handler to the radio buttons
-        $("input[name='tripStatus']").change(function(){
+        $("input[name='tripStatus']").on('change', function(){
             // Check which radio button is selected on change
             selectedOption = $("input[name='tripStatus']:checked").val();
             console.log("Selected option on change: " + selectedOption);
+
+            if(selectedOption === 'round-trip'){
+                console.log('aaaa', body.find('#to-date'));
+                body.find('#to-date').prop("disabled", false);
+            } else {
+                body.find('#to-date').prop("disabled", true);
+            }
+        })
+
+        $('select[name="adult"]').on('change', function() {
+            // Get the selected value of the "Adult" select
+            var selectedAdults = parseInt($(this).val());
+
+            // Calculate the maximum allowed children and infants based on the selected adults
+            var maxChildren = Math.max(0, 9 - selectedAdults);
+            var maxInfants = Math.min(selectedAdults, 5);
+
+            // Update the options of the "Children" select based on the calculated maximum
+            updateOptions('children', maxChildren);
+
+            // Update the options of the "Infants" select based on the calculated maximum
+            updateOptions('infant', maxInfants);
+        });
+
+
+        $('select[name="adult"]').on('change', function() {
+            // Get the selected value of the "Adult" select
+            var selectedAdults = parseInt($(this).val());
+
+            // Calculate the maximum allowed children and infants based on the selected adults
+            var maxChildren = Math.max(0, 9 - selectedAdults);
+
+            // Update the options of the "Children" select based on the calculated maximum
+            updateOptions('children', maxChildren);
+
+            // Update the options of the "Infants" select based on the calculated maximum
+            updateOptions('infant', selectedAdults);
+        });
+
+        function updateOptions(selectName, maxOptions) {
+            var $select = $('select[name="' + selectName + '"]');
+            var selectedValue = $select.val(); // Store the selected value
+
+            $select.empty(); // Clear existing options
+
+            // Generate new options based on the calculated maximum
+            for (var i = 0; i <= maxOptions; i++) {
+                $select.append('<option value="' + i + '">' + i + '</option>');
+            }
+
+            // Restore the selected value if it's within the new range
+            if (selectedValue <= maxOptions) {
+                $select.val(selectedValue);
+            } else {
+                // If the selected value is now out of range, select the maximum available value
+                $select.val(maxOptions);
+            }
+        }
+
+        $('select[name="adult"], select[name="children"]').on('change', function() {
+            // Get the selected values of the "Adult" and "Children" selects
+            var adultCount = parseInt($('select[name="adult"]').val()) || 0;
+            var childrenCount = parseInt($('select[name="children"]').val()) || 0;
+
+            // Calculate the total passenger count
+            var totalPassengers = adultCount + childrenCount;
+
+            // Update the passenger count in the accordion header
+            $('.passenger-count').text(totalPassengers);
         });
 
         // $('.search-flight').on('submit', function (e) {
@@ -90,6 +163,158 @@ $(document).ready(function() {
         // $('.example-popover').popover({
         //     container: 'body'
         // });
+
+
+    }
+
+    if($('.all-packages-wrapper').length){
+        var urlParams = new URLSearchParams(window.location.search);
+        var searchUrl = $('.all-packages-wrapper').data('url') + '?' + urlParams;
+
+        function getQueryParams() {
+            var queryParams = {};
+            var queryString = window.location.search.substring(1);
+            var pairs = queryString.split("&");
+
+            for (var i = 0; i < pairs.length; i++) {
+                var pair = pairs[i].split("=");
+                var key = decodeURIComponent(pair[0]);
+                var value = decodeURIComponent(pair[1]);
+
+                // If the parameter has multiple values, create an array
+                if (queryParams[key]) {
+                    if (Array.isArray(queryParams[key])) {
+                        queryParams[key].push(value);
+                    } else {
+                        queryParams[key] = [queryParams[key], value];
+                    }
+                } else {
+                    queryParams[key] = value;
+                }
+            }
+
+            return queryParams;
+        }
+        function checkCheckboxesFromParams() {
+            var queryParams = getQueryParams();
+            console.log(queryParams);
+            // Check category checkboxes
+            if (queryParams.category) {
+                var categoryArray = queryParams.category.split(',');
+                categoryArray.forEach(function(value) {
+                    $('#' + value).prop('checked', true);
+                });
+            }
+
+            // Check destination checkboxes
+            if (queryParams.destination) {
+                var destinationValues = queryParams.destination.split(',');
+                destinationValues.forEach(function(value) {
+                    $('#' + value).prop('checked', true);
+                });
+            }
+
+            if(queryParams.search){
+                $('.form-control').val(queryParams.search);
+            }
+        }
+
+        // Example: Check checkboxes based on query parameters
+        checkCheckboxesFromParams();
+        $('.grabPromo').click(function(e){
+            $('.slideDown').slideToggle();
+            $('.slideDown').toggleClass('d-none');
+        });
+
+        function updateUrlParameter(key, value) {
+            var url = new URL(window.location.href);
+            var currentValue = url.searchParams.get(key);
+
+            // Decode the current value
+            if (currentValue) {
+                currentValue = decodeURIComponent(currentValue);
+            }
+
+            // Check if the parameter already exists
+            if (currentValue) {
+                // Split the current value into an array
+                var valuesArray = currentValue.split(',');
+
+                // Check if the value is already in the array
+                var index = valuesArray.indexOf(value);
+                if (index === -1) {
+                    // If not, add the new value
+                    valuesArray.push(value);
+                } else {
+                    // If yes, remove the value (uncheck)
+                    valuesArray.splice(index, 1);
+                }
+
+                // Join the array back into a comma-separated string
+                value = valuesArray.join(',');
+            }
+
+            // Encode the value before setting it in the URL
+            value = encodeURIComponent(value).replace(/%2C/g, ',');
+
+            url.searchParams.set(key, value);
+            window.history.replaceState({}, '', url);
+
+            console.log(searchUrl.split('?')[0]+ '?' +window.location.search.substring(1).replace(/%2C/g, ','));
+            fetchPackages();
+        }
+
+        // Function to handle checkbox click event
+        function handleCheckboxClick() {
+            // Get the checkbox value and id
+            var checkboxValue = $(this).val();
+            var checkboxId = $(this).attr('name');
+
+            // Update URL parameters based on checkbox type (category or destination)
+            if (checkboxId.startsWith('category')) {
+                updateUrlParameter('category', checkboxValue);
+            } else if (checkboxId.startsWith('destination')) {
+                updateUrlParameter('destination', checkboxValue);
+            }
+        }
+
+        function updateSearchUrlParameter(key, value) {
+            var url = new URL(window.location.href);
+            url.searchParams.set(key, value);
+            window.history.replaceState({}, '', url);
+            console.log(searchUrl.split('?')[0]+ '?' +window.location.search.substring(1).replace(/%2C/g, ','));
+            fetchPackages();
+        }
+        function handleSearchButtonClick() {
+            var searchValue = $('.form-control').val();
+
+            // Update URL parameters based on the search value
+            updateSearchUrlParameter('search', searchValue);
+        }
+
+        // Attach click event handler to checkboxes
+        $('.form-check-input').on('click', handleCheckboxClick);
+        $('.search-packages').on('click', handleSearchButtonClick);
+        console.log($('.search-packages'))
+
+
+        fetchPackages();
+
+        function fetchPackages() {
+            $.ajax({
+                url: searchUrl.split('?')[0] + '?' + window.location.search.substring(1).replace(/%2C/g, ','),
+                type: 'GET',
+                success: function(response) {
+                    // On success, display the response
+                    $('.all-packages-wrapper').find('.loader').addClass('d-none');
+                    $('#result').html(response);
+                },
+                error: function(xhr, status, error) {
+                    // On error, display the error details
+                    $('#result').text('Error: ' + error);
+                }
+            });
+        }
     }
 
     if($('.flight-list-container').length){
@@ -135,118 +360,121 @@ $(document).ready(function() {
             });
         });
     }
-    const baggages = $('.baggage-wrapper');
-    const meals = $('.meal-wrapper');
+    if($('.meal-wrapper').length){
+        const baggages = $('.baggage-wrapper');
+        const meals = $('.meal-wrapper');
 
-    meals.on('click', function () {
+        meals.on('click', function () {
 
-        var passengerIndex = $(this).data('passenger-index');
-        $(this).addClass('selected-meal');
-        $(this).parents('.accordion-body').find('.select').removeClass('d-none');
-        $(this).parents('.accordion-body').find('.selected').addClass('d-none');
-        $(this).parents('.accordion-body').find('.selected-meal').css('background-color', '');
-        const mealId = $(this).data('meal-id');
+            var passengerIndex = $(this).data('passenger-index');
+            $(this).addClass('selected-meal');
+            $(this).parents('.accordion-body').find('.select').removeClass('d-none');
+            $(this).parents('.accordion-body').find('.selected').addClass('d-none');
+            $(this).parents('.accordion-body').find('.selected-meal').css('background-color', '');
+            const mealId = $(this).data('meal-id');
 
-        $(this).parents('.accordion-body').children('.add-meal').val(mealId);
+            $(this).parents('.accordion-body').children('.add-meal').val(mealId);
 
-        $(this).find('.select').addClass('d-none');
-        $(this).find('.selected').removeClass('d-none');
-        $(this).css('background-color', '#f5b9a0');
+            $(this).find('.select').addClass('d-none');
+            $(this).find('.selected').removeClass('d-none');
+            $(this).css('background-color', '#f5b9a0');
 
-        var fareSummary = body.find('.fare-summary');
-        var extraServices = fareSummary.find('.extra-services');
-        var mealServices = extraServices.find('.meal-service');
-        var grandTotal = fareSummary.find('.total-amount');
+            var fareSummary = body.find('.fare-summary');
+            var extraServices = fareSummary.find('.extra-services');
+            var mealServices = extraServices.find('.meal-service');
+            var grandTotal = fareSummary.find('.total-amount');
 
-        mealServices.find('.meal-passenger-'+passengerIndex).removeClass('d-none');
-        var mealName =  $(this).find('.meal-name').text();
-        var mealPrice =  parseInt($(this).find('.meal-price').text());
-        mealServices.find('.meal-name'+passengerIndex).text(mealName);
-        mealServices.find('.meal-price'+passengerIndex).text(mealPrice);
+            mealServices.find('.meal-passenger-'+passengerIndex).removeClass('d-none');
+            var mealName =  $(this).find('.meal-name').text();
+            var mealPrice =  parseInt($(this).find('.meal-price').text());
+            mealServices.find('.meal-name'+passengerIndex).text(mealName);
+            mealServices.find('.meal-price'+passengerIndex).text(mealPrice);
 
-        var basePrice = parseInt(fareSummary.find('.base-price').text());
-        var taxes = parseInt(fareSummary.find('.taxes').text());
-        var convienceFee = parseInt(fareSummary.find('.convenience').text());
+            var basePrice = parseInt(fareSummary.find('.base-price').text());
+            var taxes = parseInt(fareSummary.find('.taxes').text());
+            var convienceFee = parseInt(fareSummary.find('.convenience').text());
 
-        var baggagePrice =  parseInt(fareSummary.find('.price').text() === '' ? 0 : fareSummary.find('.price').text());
+            var baggagePrice =  parseInt(fareSummary.find('.price').text() === '' ? 0 : fareSummary.find('.price').text());
 
-        extraServices.removeClass('d-none');
-        mealServices.removeClass('d-none');
-        let sumMealPrices = 0;
+            extraServices.removeClass('d-none');
+            mealServices.removeClass('d-none');
+            let sumMealPrices = 0;
 
-        $('.fare-meal-price').each(function () {
-            sumMealPrices += parseFloat($(this).text()) || 0;
+            $('.fare-meal-price').each(function () {
+                sumMealPrices += parseFloat($(this).text()) || 0;
+            });
+
+            let sumBaggagePrices = 0;
+
+            $('.fare-baggage-price').each(function () {
+                sumBaggagePrices += parseFloat($(this).text()) || 0;
+            });
+
+            let sumSeatPrices = 0;
+
+            $('.fare-seat-price').each(function () {
+                sumSeatPrices += parseFloat($(this).text()) || 0;
+            });
+
+            grandTotal.text(basePrice + taxes + convienceFee + sumBaggagePrices + sumMealPrices + sumSeatPrices);
         });
 
-        let sumBaggagePrices = 0;
 
-        $('.fare-baggage-price').each(function () {
-            sumBaggagePrices += parseFloat($(this).text()) || 0;
+        baggages.on('click', function () {
+            var passengerIndex = $(this).data('passenger-index');
+            $(this).addClass('selected-baggage');
+            $(this).parents('.baggage-row').find('.select').removeClass('d-none');
+            $(this).parents('.baggage-row').find('.selected').addClass('d-none');
+            $(this).parents('.baggage-row').find('.selected-baggage').css('background-color', '');
+            const baggageId = $(this).data('baggage-id');
+
+            $(this).parents('.baggage-row').find('.add-baggage').val(baggageId);
+
+            $(this).find('.select').addClass('d-none');
+            $(this).find('.selected').removeClass('d-none');
+            $(this).css('background-color', '#f5b9a0');
+
+            var extraServices = body.find('.extra-services');
+            var baggageServices = extraServices.find('.baggage-service');
+            var fareSummary = body.find('.fare-summary');
+            var grandTotal = fareSummary.find('.total-amount');
+
+
+            var weight =  $(this).find('.baggage-weight').text();
+            var basePrice = parseInt(fareSummary.find('.base-price').text());
+            var taxes = parseInt(fareSummary.find('.taxes').text());
+            var convienceFee = parseInt(fareSummary.find('.convenience').text());
+            var baggagePrice =  parseInt($(this).find('.baggage-price').text());
+            var mealPrice =  parseInt(fareSummary.find('.meal-price').text() === '' ? 0 : fareSummary.find('.meal-price').text());
+
+            console.log(extraServices, baggageServices, weight, baggagePrice, basePrice, taxes, convienceFee, mealPrice);
+            extraServices.removeClass('d-none');
+            baggageServices.removeClass('d-none');
+            baggageServices.find('.baggage-passenger-'+passengerIndex).removeClass('d-none');
+
+            baggageServices.find('.extra-baggage'+passengerIndex).text(weight);
+            baggageServices.find('.baggage-price'+passengerIndex).text(baggagePrice);
+            let sumMealPrices = 0;
+
+            $('.fare-meal-price').each(function () {
+                sumMealPrices += parseFloat($(this).text()) || 0;
+            });
+
+            let sumBaggagePrices = 0;
+
+            $('.fare-baggage-price').each(function () {
+                sumBaggagePrices += parseFloat($(this).text()) || 0;
+            });
+
+            let sumSeatPrices = 0;
+
+            $('.fare-seat-price').each(function () {
+                sumSeatPrices += parseFloat($(this).text()) || 0;
+            });
+            grandTotal.text(basePrice + taxes + convienceFee + sumBaggagePrices + sumMealPrices + sumSeatPrices);
         });
+    }
 
-        let sumSeatPrices = 0;
-
-        $('.fare-seat-price').each(function () {
-            sumSeatPrices += parseFloat($(this).text()) || 0;
-        });
-
-        grandTotal.text(basePrice + taxes + convienceFee + sumBaggagePrices + sumMealPrices + sumSeatPrices);
-    });
-
-
-    baggages.on('click', function () {
-        var passengerIndex = $(this).data('passenger-index');
-        $(this).addClass('selected-baggage');
-        $(this).parents('.baggage-row').find('.select').removeClass('d-none');
-        $(this).parents('.baggage-row').find('.selected').addClass('d-none');
-        $(this).parents('.baggage-row').find('.selected-baggage').css('background-color', '');
-        const baggageId = $(this).data('baggage-id');
-
-        $(this).parents('.baggage-row').find('.add-baggage').val(baggageId);
-
-        $(this).find('.select').addClass('d-none');
-        $(this).find('.selected').removeClass('d-none');
-        $(this).css('background-color', '#f5b9a0');
-
-        var extraServices = body.find('.extra-services');
-        var baggageServices = extraServices.find('.baggage-service');
-        var fareSummary = body.find('.fare-summary');
-        var grandTotal = fareSummary.find('.total-amount');
-
-
-        var weight =  $(this).find('.baggage-weight').text();
-        var basePrice = parseInt(fareSummary.find('.base-price').text());
-        var taxes = parseInt(fareSummary.find('.taxes').text());
-        var convienceFee = parseInt(fareSummary.find('.convenience').text());
-        var baggagePrice =  parseInt($(this).find('.baggage-price').text());
-        var mealPrice =  parseInt(fareSummary.find('.meal-price').text() === '' ? 0 : fareSummary.find('.meal-price').text());
-
-        console.log(extraServices, baggageServices, weight, baggagePrice, basePrice, taxes, convienceFee, mealPrice);
-        extraServices.removeClass('d-none');
-        baggageServices.removeClass('d-none');
-        baggageServices.find('.baggage-passenger-'+passengerIndex).removeClass('d-none');
-
-        baggageServices.find('.extra-baggage'+passengerIndex).text(weight);
-        baggageServices.find('.baggage-price'+passengerIndex).text(baggagePrice);
-        let sumMealPrices = 0;
-
-        $('.fare-meal-price').each(function () {
-            sumMealPrices += parseFloat($(this).text()) || 0;
-        });
-
-        let sumBaggagePrices = 0;
-
-        $('.fare-baggage-price').each(function () {
-            sumBaggagePrices += parseFloat($(this).text()) || 0;
-        });
-
-        let sumSeatPrices = 0;
-
-        $('.fare-seat-price').each(function () {
-            sumSeatPrices += parseFloat($(this).text()) || 0;
-        });
-        grandTotal.text(basePrice + taxes + convienceFee + sumBaggagePrices + sumMealPrices + sumSeatPrices);
-    });
 
     const forms = $('.needs-validation');
 

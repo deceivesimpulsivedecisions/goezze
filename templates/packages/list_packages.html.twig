@@ -1,0 +1,41 @@
+{% for package in packages %}
+    <div class="row my-4">
+        <div class="col-lg-3">
+            {% for image in package.packageMedia %}
+                {% if loop.index == 1 %}
+                    <img class="package-image" src="{{ asset('uploads/packages/') }}{{ image.image }}" alt="{{ image.originalName }}" />
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="col-lg-9 d-flex flex-column justify-content-center">
+            <div class="d-flex justify-content-between align-items-center py-3">
+                <div class="package-title">
+                    <h3 class="m-0 text-primary">{{ package.title }}</h3>
+                </div>
+                <div class="package-days d-flex gap-2 justify-content-center align-items-center text-secondary">
+                    <i class="fas fa-calendar"></i> <p class="m-0 fw-semibold">{{ package.packageItinerary | length }} Days</p>
+                </div>
+            </div>
+
+            <hr class="m-0"/>
+
+            <div class="d-flex justify-content-between align-items-center py-3">
+                <div>
+
+                    <div class="package-days d-flex gap-2 justify-content-start align-items-center text-secondary">
+                        <i class="fas fa-map-marker-alt"></i> <p class="m-0 fw-semibold">{{ package.destination }}</p>
+                    </div>
+                    <div class="package-desc py-2 text-secondary">
+                        <div class="m-0">{{ package.description | raw }}</div>
+                    </div>
+                </div>
+
+                <div>
+                    <h5 class="package-price text-truncate text-primary fw-bold">₹ {{ package.amount / 100 | number_format }}</h5>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+{% endfor %}

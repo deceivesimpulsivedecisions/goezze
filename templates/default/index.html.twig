@@ -4,35 +4,136 @@
 
 {% block body %}
 
-    <form class="search-flight" data-fetch-airport-url="{{ path('flight_search_airport') }}" action="{{ path('flight_search_flights') }}">
-
-        <div class="d-flex gap-3 py-3">
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="tripStatus" id="one-way" value="one-way" checked>
-                <label class="form-check-label" for="one-way">
-                    One way
-                </label>
+    <div class="position-relative pos">
+        <img src="{{ asset('images/background.png') }}" width="100%" alt="flight-bg">
+        <img class="d-none" src="{{ asset('images/background.png') }}" width="100%" alt="hotel-bg">
+        <div class="tablist position-absolute container">
+            <div class="nav nav-tabs justify-content-center" id="nav-tab" role="tablist">
+                <button class="nav-link active text-white" id="nav-flight-tab" data-bs-toggle="tab" data-bs-target="#nav-flight" type="button" role="tab" aria-controls="nav-flight" aria-selected="true">
+                    <i class="fa-solid fa-plane-departure my-3"></i>Flight
+                </button>
+                <button class="nav-link text-white" id="nav-hotel-tab" data-bs-toggle="tab" data-bs-target="#nav-hotel" type="button" role="tab" aria-controls="nav-hotel" aria-selected="false">
+                    Hotels
+                </button>
+                <button class="nav-link text-white" id="nav-package-tab" data-bs-toggle="tab" data-bs-target="#nav-package" type="button" role="tab" aria-controls="nav-package" aria-selected="false">
+                    Package
+                </button>
+                <button class="nav-link text-white" id="nav-disabled-tab" data-bs-toggle="tab" data-bs-target="#nav-disabled" type="button" role="tab" aria-controls="nav-disabled" aria-selected="false" disabled>Disabled</button>
             </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="tripStatus" id="round-trip" value="round-trip">
-                <label class="form-check-label" for="round-trip">
-                    Round Trip
-                </label>
+
+            <div class="tab-content py-4" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-flight" role="tabpanel" aria-labelledby="nav-flight-tab" tabindex="0">
+                    <form class="search-flight container" data-fetch-airport-url="{{ path('flight_search_airport') }}" action="{{ path('flight_search_flights') }}">
+
+                        <div class="d-flex justify-content-center gap-3 py-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="tripStatus" id="one-way" value="one-way" checked>
+                                <label class="form-check-label text-white" for="one-way">
+                                    One way
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="tripStatus" id="round-trip" value="round-trip">
+                                <label class="form-check-label text-white" for="round-trip">
+                                    Round Trip
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="row justify-content-center p-3">
+                            <div class="col-lg-2 col-md-4 col-sm-12 my-2">
+                                <select class="flight-from" name="flight-from" id="flight-from"  required>
+                                    <option disabled>From</option>
+                                </select>
+                            </div>
+
+                            <div class="col-lg-2 col-md-4 col-sm-12 my-2">
+                                <select class="flight-to" name="flight-to" id="flight-to" required>
+                                    <option disabled>To</option>
+                                </select>
+                            </div>
+
+
+                            <div class="col-lg-2 col-md-4 col-sm-12 my-2">
+                                <input class="w-100 from-date" type="date" id="from-date" name="from-date" required>
+                            </div>
+
+
+                            <div class="col-lg-2 col-md-4 col-sm-12 my-2">
+                                <input class="w-100 to-date" type="date" id="to-date" name="to-date" disabled required>
+                            </div>
+
+
+                            <div class="col-lg-2 col-md-4 col-sm-12 my-2">
+                                <div class="accordion w-100" id="passengerAccordion">
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed p-2" type="button" data-bs-toggle="collapse" data-bs-target="#passenger" aria-expanded="false" aria-controls="passenger">
+                                                Passenger (<span class="passenger-count fw-bold">1</span>)
+                                            </button>
+                                        </h2>
+                                        <div id="passenger" class="accordion-collapse collapse" data-bs-parent="#passengerAccordion">
+                                            <div class="accordion-body">
+                                                <div class="mb-3">
+                                                    <label for="exampleFormControlInput1" class="form-label">Adult <small>12+</small></label>
+                                                    <select class="form-select" name="adult" id="exampleFormControlInput1" aria-label="Default select example">
+                                                        {% for i in 1..9 %}
+                                                            <option value="{{ i }}">{{ i }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="exampleFormControlInput1" class="form-label">Children <small>2-11</small></label>
+                                                    <select class="form-select" name="children" id="exampleFormControlInput1" aria-label="Default select example">
+                                                        {% for i in 0..8 %}
+                                                            <option value="{{ i }}">{{ i }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="exampleFormControlInput1" class="form-label">Infants <small>less than 2</small></label>
+                                                    <select class="form-select" name="infant" id="exampleFormControlInput1" aria-label="Default select example">
+                                                        {% for i in 0..1 %}
+                                                            <option value="{{ i }}">{{ i }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <button class="btn btn-primary px-5" type="submit">Go</button>
+                        </div>
+
+                    </form>
+
+
+                </div>
+                <div class="tab-pane fade" id="nav-hotel" role="tabpanel" aria-labelledby="nav-hotel-tab" tabindex="0">...</div>
+                <div class="tab-pane fade" id="nav-package" role="tabpanel" aria-labelledby="nav-package-tab" tabindex="0">
+                    <form class="search-package container" data-fetch-airport-url="{{ path('flight_search_airport') }}" action="{{ path('flight_search_flights') }}">
+                        <select class="destinations" name="destination" id="destinations"  required>
+                            <option disabled>Destination</option>
+                            {% for destination in destinations %}
+                                <option value="{{ destination.name | lower }}">{{ destination.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </form>
+
+                </div>
+                <div class="tab-pane fade" id="nav-disabled" role="tabpanel" aria-labelledby="nav-disabled-tab" tabindex="0">...</div>
             </div>
         </div>
-        <select class="flight-from" name="flight-from" id="flight-from"  required>
-            <option disabled>From</option>
-        </select>
 
-        <select class="flight-to" name="flight-to" id="flight-to" required>
-            <option disabled>To</option>
-        </select>
 
-        <input type="date" id="from-datepicker" name="from-datepicker" required>
-        <input type="date" id="from-datepicker" name="to-datepicker" disabled>
-        <button type="button" class="btn btn-lg btn-danger example-popover" data-bs-trigger="hover" data-bs-toggle="popover" title="Popover title" data-bs-content="And here's some amazing content. It's very engaging. Right?">Click to toggle popover</button>
-        <button type="submit" class="bg-primary p-3 rounded text-white">Go</button>
-    </form>
+    </div>
+
 
 
 
