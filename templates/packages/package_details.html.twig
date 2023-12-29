@@ -89,6 +89,15 @@
             </div>
             <div class="col-lg-4 col-sm-12">
                 Contact Us
+
+                {{ form_start(form) }}
+                {{ form_row(form.fromDate) }}
+                {{ form_row(form.adults) }}
+                {{ form_row(form.childrens) }}
+                {{ form_row(form.infants) }}
+                {{ form_row(form.package) }}
+                {{ form_row(form.amount) }}
+                {{ form_end(form) }}
             </div>
         </div>
 

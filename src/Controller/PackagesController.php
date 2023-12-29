@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\PackageEnquiry;
+use App\Form\PackageEnquiryType;
 use App\Repository\DestinationRepository;
 use App\Repository\PackageCategoryRepository;
 use App\Repository\PackageRepository;
@@ -49,10 +51,16 @@ class PackagesController extends AbstractController
     }
 
     #[Route('/packages/detail/{slug}', name: 'app_package_details')]
-    public function packageDetails(PackageRepository $packageRepository, $slug = null){
+    public function packageDetails(Request $request, PackageRepository $packageRepository, $slug = null){
         $package = $packageRepository->findOneBy(['slug' => $slug]);
+        $packageEnquiry = new PackageEnquiry();
+        $form = $this->createForm(PackageEnquiryType::class, $packageEnquiry);
+
+        $form->handleRequest($request);
+
         return $this->render('packages/package_details.html.twig', [
-            'package' => $package
+            'package' => $package,
+            'form' => $form->createView(),
         ]);
     }
 }

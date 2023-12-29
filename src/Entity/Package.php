@@ -71,6 +71,9 @@ class Package
     #[ORM\Column(length: 255, unique: true)]
     private ?string $slug = null;
 
+    #[ORM\ManyToOne(inversedBy: 'package')]
+    private ?PackageEnquiry $packageEnquiry = null;
+
     public function __construct()
     {
         $this->packageItinerary = new ArrayCollection();
@@ -326,6 +329,18 @@ class Package
     public function setSlug(string $slug): static
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function getPackageEnquiry(): ?PackageEnquiry
+    {
+        return $this->packageEnquiry;
+    }
+
+    public function setPackageEnquiry(?PackageEnquiry $packageEnquiry): static
+    {
+        $this->packageEnquiry = $packageEnquiry;
 
         return $this;
     }
