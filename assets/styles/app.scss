@@ -412,7 +412,7 @@ ol {
   animation-name: rubberBand;
 }
 
-.all-packages-wrapper{
+.all-packages-wrapper, .package-details-wrapper{
   .hero-image{
     img{
       height: 250px;
@@ -424,6 +424,16 @@ ol {
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
+    }
+  }
+  .carousel{
+    .carousel-item{
+      height: 400px;
+      overflow: hidden;
+      img{
+        height: 400px;
+        object-fit: cover;
+      }
     }
   }
   .package-image{

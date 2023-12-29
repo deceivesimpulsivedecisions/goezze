@@ -47,4 +47,12 @@ class PackagesController extends AbstractController
             ]);
 
     }
+
+    #[Route('/packages/detail/{slug}', name: 'app_package_details')]
+    public function packageDetails(PackageRepository $packageRepository, $slug = null){
+        $package = $packageRepository->findOneBy(['slug' => $slug]);
+        return $this->render('packages/package_details.html.twig', [
+            'package' => $package
+        ]);
+    }
 }

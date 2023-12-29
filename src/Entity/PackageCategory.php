@@ -34,6 +34,9 @@ class PackageCategory
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image;
 
+    #[ORM\Column]
+    private ?bool $trending = false;
+
     /**
      * @return string|null
      */
@@ -115,6 +118,18 @@ class PackageCategory
                 $package->setCategory(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isTrending(): ?bool
+    {
+        return $this->trending;
+    }
+
+    public function setTrending(bool $trending): static
+    {
+        $this->trending = $trending;
 
         return $this;
     }

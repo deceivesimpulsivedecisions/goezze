@@ -1,0 +1,99 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Package Details{% endblock %}
+
+{% block body %}
+
+<div class="package-details-wrapper">
+    <div class="hero-image position-relative">
+        <img src="{{ asset('images/all-package-hero-image.jpg') }}" alt="all-categories" />
+        <h2 class="text-white position-absolute">Packages Details</h2>
+    </div>
+
+    <div class="container my-4">
+        <h1>{{ package.title }}</h1>
+        <div class="row">
+            <div class="col-lg-8 col-sm-12">
+                <ul class="nav nav-pills mb-3 justify-content-center" id="package-details-pills-tab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="package-pills-detail-tab" data-bs-toggle="pill" data-bs-target="#pills-detail" type="button" role="tab" aria-controls="pills-detail" aria-selected="true">Details</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="package-pills-photos-tab" data-bs-toggle="pill" data-bs-target="#pills-photo" type="button" role="tab" aria-controls="pills-photo" aria-selected="false">Photos</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="package-pills-itinerary-tab" data-bs-toggle="pill" data-bs-target="#pills-itinerary" type="button" role="tab" aria-controls="pills-itinerary" aria-selected="false">Itinerary</button>
+                    </li>
+                    
+                </ul>
+                <div class="tab-content" id="package-details-pills-tabContent">
+                    <div class="tab-pane fade show active" id="pills-detail" role="tabpanel" aria-labelledby="package-pills-detail-tab" tabindex="0">
+                        <div class="package-details my-2">
+                            {{ package.description | raw }}
+                        </div>
+
+                        <div class="inclusions my-2">
+                            <h4>Inclusions : </h4>
+                            <div class="">
+                                {{ package.inclusions | raw }}
+                            </div>
+                        </div>
+
+                        <div class="exclusions my-2">
+                            <h4>Exclusions : </h4>
+                            <div class="">
+                                {{ package.exclusions | raw }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="pills-photo" role="tabpanel" aria-labelledby="package-pills-photos-tab" tabindex="0">
+                        <div id="carouselPackageImages" class="carousel slide carousel-fade">
+                            <div class="carousel-inner">
+                                {% for image in package.packageMedia %}
+                                    <div class="carousel-item {{ loop.index == 1  ? 'active' }}">
+                                        <img src="{{ asset('uploads/packages/') }}{{ image.image }}" class="d-block w-100" alt="{{ image.originalName }}">
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselPackageImages" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselPackageImages" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="pills-itinerary" role="tabpanel" aria-labelledby="package-pills-itinerary-tab" tabindex="0">
+                        <div class="accordion" id="accordionItinerary">
+                            {% for itinerary in package.packageItinerary %}
+                            <div class="accordion-item my-2">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#itinerary{{ itinerary.position }}" aria-expanded="true" aria-controls="itinerary{{ itinerary.position }}">
+                                        {{ itinerary.title }}
+                                    </button>
+                                </h2>
+                                <div id="itinerary{{ itinerary.position }}" class="accordion-collapse collapse" data-bs-parent="#accordionItinerary">
+                                    <div class="accordion-body">
+                                        {{ itinerary.description }}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-lg-4 col-sm-12">
+                Contact Us
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+{% endblock %}

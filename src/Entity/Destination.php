@@ -21,6 +21,9 @@ class Destination
     #[ORM\OneToMany(mappedBy: 'destination', targetEntity: Package::class)]
     private Collection $packages;
 
+    #[ORM\Column]
+    private ?bool $trending = false;
+
     public function __toString()
     {
         return $this->name;
@@ -73,6 +76,18 @@ class Destination
                 $package->setDestination(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isTrending(): ?bool
+    {
+        return $this->trending;
+    }
+
+    public function setTrending(bool $trending): static
+    {
+        $this->trending = $trending;
 
         return $this;
     }
