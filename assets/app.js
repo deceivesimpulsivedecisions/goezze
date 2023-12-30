@@ -576,4 +576,48 @@ $(document).ready(function() {
     var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
     return new bootstrap.Popover(popoverTriggerEl)
     })
+
+    if($('.package-details-wrapper').length){
+        $('#packageEnquiryForm').submit(function (e) {
+            e.preventDefault(); // Prevent the form from submitting in the traditional way
+
+            var formData = $(this).serialize(); // Serialize the form data
+
+            $.ajax({
+                type: 'POST',
+                url: $(this).attr('action'), // Use the form's action attribute as the URL
+                data: formData,
+                success: function (data) {
+                    // Handle the success response
+                    $('.success-data').removeClass('d-none');
+                    $('.enquiry-form').addClass('d-none');
+                    // You can update the page or perform additional actions here
+                },
+                error: function (data) {
+                    // Handle the error response
+                    $('.error-data').removeClass('d-none');
+                    $('.enquiry-form').addClass('d-none');
+                    // You can display error messages or perform additional error handling here
+                }
+            });
+        });
+
+        $('#package_enquiry_childrens, #package_enquiry_adults').on('input', function () {
+            updateAmount();
+        });
+
+        // Function to update the amount based on the selected values
+        function updateAmount() {
+
+            var packagePrice = parseFloat($('#defaultPackagePrice').data('price')) || 0;
+            var adults = parseInt($('#package_enquiry_adults').val()) || 0;
+            var childrens = parseInt($('#package_enquiry_childrens').val()) || 0;
+
+            var amount = packagePrice * (adults + childrens) / 100;
+
+            $('#package_enquiry_amount').val(amount.toFixed(2));
+        }
+        updateAmount();
+    }
+
 });

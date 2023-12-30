@@ -7,6 +7,8 @@ use App\Form\PackageEnquiryType;
 use App\Repository\DestinationRepository;
 use App\Repository\PackageCategoryRepository;
 use App\Repository\PackageRepository;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -51,12 +53,23 @@ class PackagesController extends AbstractController
     }
 
     #[Route('/packages/detail/{slug}', name: 'app_package_details')]
-    public function packageDetails(Request $request, PackageRepository $packageRepository, $slug = null){
+    public function packageDetails(Request $request, EntityManagerInterface $em, PackageRepository $packageRepository, $slug = null){
         $package = $packageRepository->findOneBy(['slug' => $slug]);
         $packageEnquiry = new PackageEnquiry();
+        $packageEnquiry->setPackage($package);
         $form = $this->createForm(PackageEnquiryType::class, $packageEnquiry);
 
         $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Handle form submission, e.g., persist to the database
+
+            $em->persist($packageEnquiry);
+            $em->flush();
+
+            // Redirect to a specific route after successful form submission
+            return $this->redirectToRoute('app_package_details', ['slug' => $slug]); // Replace 'success_route' with your desired route name
+        }
 
         return $this->render('packages/package_details.html.twig', [
             'package' => $package,

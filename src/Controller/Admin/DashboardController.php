@@ -6,6 +6,7 @@ use App\Entity\Admin;
 use App\Entity\Destination;
 use App\Entity\Package;
 use App\Entity\PackageCategory;
+use App\Entity\PackageEnquiry;
 use App\Entity\PackageItenary;
 use App\Entity\PackageType;
 use App\Entity\User;
@@ -75,6 +76,7 @@ class DashboardController extends AbstractDashboardController
                 MenuItem::linkToCrud('Itinerary', 'fa fa-table-cells', PackageItenary::class),
                 MenuItem::linkToCrud('Destination', 'fa fa-table-cells', Destination::class),
                 MenuItem::linkToCrud('Type', 'fa fa-table-cells', PackageType::class),
+                MenuItem::linkToCrud('Enquiry', 'fa fa-table-cells', PackageEnquiry::class),
             ]),
 
 

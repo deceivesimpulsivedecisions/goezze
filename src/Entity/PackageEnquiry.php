@@ -28,16 +28,17 @@ class PackageEnquiry
     #[ORM\Column]
     private ?int $infants = null;
 
-    #[ORM\OneToMany(mappedBy: 'packageEnquiry', targetEntity: Package::class)]
-    private Collection $package;
-
     #[ORM\Column]
     private ?float $amount = null;
 
-    public function __construct()
-    {
-        $this->package = new ArrayCollection();
-    }
+    #[ORM\ManyToOne(inversedBy: 'packageEnquiries')]
+    private ?Package $package = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $email = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $phoneNo = null;
 
     public function getId(): ?int
     {
@@ -92,36 +93,6 @@ class PackageEnquiry
         return $this;
     }
 
-    /**
-     * @return Collection<int, Package>
-     */
-    public function getPackage(): Collection
-    {
-        return $this->package;
-    }
-
-    public function addPackage(Package $package): static
-    {
-        if (!$this->package->contains($package)) {
-            $this->package->add($package);
-            $package->setPackageEnquiry($this);
-        }
-
-        return $this;
-    }
-
-    public function removePackage(Package $package): static
-    {
-        if ($this->package->removeElement($package)) {
-            // set the owning side to null (unless already changed)
-            if ($package->getPackageEnquiry() === $this) {
-                $package->setPackageEnquiry(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getAmount(): ?float
     {
         return $this->amount;
@@ -130,6 +101,42 @@ class PackageEnquiry
     public function setAmount(float $amount): static
     {
         $this->amount = $amount;
+
+        return $this;
+    }
+
+    public function getPackage(): ?Package
+    {
+        return $this->package;
+    }
+
+    public function setPackage(?Package $package): static
+    {
+        $this->package = $package;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(?string $email): static
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    public function getPhoneNo(): ?int
+    {
+        return $this->phoneNo;
+    }
+
+    public function setPhoneNo(?int $phoneNo): static
+    {
+        $this->phoneNo = $phoneNo;
 
         return $this;
     }

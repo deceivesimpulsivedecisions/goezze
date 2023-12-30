@@ -71,14 +71,20 @@ class Package
     #[ORM\Column(length: 255, unique: true)]
     private ?string $slug = null;
 
-    #[ORM\ManyToOne(inversedBy: 'package')]
-    private ?PackageEnquiry $packageEnquiry = null;
+    #[ORM\OneToMany(mappedBy: 'package', targetEntity: PackageEnquiry::class)]
+    private Collection $packageEnquiries;
 
     public function __construct()
     {
         $this->packageItinerary = new ArrayCollection();
         $this->packageMedia = new ArrayCollection();
         $this->generateSlug();
+        $this->packageEnquiries = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->title;
     }
 
     public function generateSlug(): void
@@ -333,14 +339,32 @@ class Package
         return $this;
     }
 
-    public function getPackageEnquiry(): ?PackageEnquiry
+    /**
+     * @return Collection<int, PackageEnquiry>
+     */
+    public function getPackageEnquiries(): Collection
     {
-        return $this->packageEnquiry;
+        return $this->packageEnquiries;
     }
 
-    public function setPackageEnquiry(?PackageEnquiry $packageEnquiry): static
+    public function addPackageEnquiry(PackageEnquiry $packageEnquiry): static
     {
-        $this->packageEnquiry = $packageEnquiry;
+        if (!$this->packageEnquiries->contains($packageEnquiry)) {
+            $this->packageEnquiries->add($packageEnquiry);
+            $packageEnquiry->setPackage($this);
+        }
+
+        return $this;
+    }
+
+    public function removePackageEnquiry(PackageEnquiry $packageEnquiry): static
+    {
+        if ($this->packageEnquiries->removeElement($packageEnquiry)) {
+            // set the owning side to null (unless already changed)
+            if ($packageEnquiry->getPackage() === $this) {
+                $packageEnquiry->setPackage(null);
+            }
+        }
 
         return $this;
     }

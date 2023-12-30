@@ -88,16 +88,72 @@
                 </div>
             </div>
             <div class="col-lg-4 col-sm-12">
-                Contact Us
+                <div class="enquiry-form">
+                    Contact Us
+                    {{ form_start(form, {'attr': {'class': 'form', 'id': 'packageEnquiryForm'}}) }}
+                    <div class="mb-3">
+                        {{ form_label(form.fromDate) }}
+                        {{ form_widget(form.fromDate, {'attr': {'class': 'form-control'}}) }}
+                    </div>
 
-                {{ form_start(form) }}
-                {{ form_row(form.fromDate) }}
-                {{ form_row(form.adults) }}
-                {{ form_row(form.childrens) }}
-                {{ form_row(form.infants) }}
-                {{ form_row(form.package) }}
-                {{ form_row(form.amount) }}
-                {{ form_end(form) }}
+                    <div class="mb-3">
+                        {{ form_label(form.adults) }}
+                        {{ form_widget(form.adults, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_label(form.childrens) }}
+                        {{ form_widget(form.childrens, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_label(form.infants) }}
+                        {{ form_widget(form.infants, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_label(form.email) }}
+                        {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_label(form.phoneNo) }}
+                        {{ form_widget(form.phoneNo, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+
+                    <input type="hidden" id="defaultPackagePrice" data-price="{{ package.amount }}" />
+
+
+                    {#                <div class="mb-3">#}
+                    {#                    {{ form_label(form.package) }}#}
+                    {#                    {{ form_widget(form.package, {'attr': {'class': 'form-control'}}) }}#}
+                    {#                </div>#}
+
+                    <div class="mb-3">
+                        {{ form_label(form.amount) }}
+                        {{ form_widget(form.amount, {'attr': {'class': 'form-control', 'readonly': 'readonly', 'id': 'amount'}}) }}
+                    </div>
+
+                    <div class="d-flex justify-content-center align-items-center">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+
+                    {{ form_end(form) }}
+                </div>
+
+                <div class="success-data d-none">
+                    <div class="alert alert-success" role="alert">
+                        Enquiry sent! Our agent will contact  you soon
+                    </div>
+                </div>
+
+                <div class="error-data d-none">
+                    <div class="alert alert-danger" role="alert">
+                        Error occured! Please  resubmit the form.
+                    </div>
+                </div>
+
+
             </div>
         </div>
 
