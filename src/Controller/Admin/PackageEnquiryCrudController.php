@@ -45,7 +45,6 @@ class PackageEnquiryCrudController extends AbstractCrudController
             ->remove(Crud::PAGE_INDEX, Action::EDIT )
             ->remove(Crud::PAGE_INDEX, Action::DELETE )
             ->remove(Crud::PAGE_INDEX, Action::NEW )
-
             ;
     }
 

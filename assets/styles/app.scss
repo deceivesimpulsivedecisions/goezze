@@ -23,13 +23,17 @@ body{
   border-radius: 6px;
 }
 
+.hero-img{
+  height: 640px;
+}
+
 .tablist{
   top: 35%;
   right: 5%;
   left: 5%;
   background: #a79c9447;
   border-radius: 20px;
-  overflow: hidden;
+  overflow: visible;
   .nav-link.active{
       color: $primary !important;
   }

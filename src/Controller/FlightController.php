@@ -115,6 +115,10 @@ class FlightController extends AbstractController
         $from = $request->query->get('flight-from');
         $to = $request->query->get('flight-to');
         $date = $request->query->get('from-date');
+        $adult = $request->query->get('adult');
+        $children = $request->query->get('children');
+        $infant = $request->query->get('infant');
+        $tripStatus = $request->query->get('tripStatus');
 
 //        dd($from, $to, $date);
 
@@ -129,9 +133,9 @@ class FlightController extends AbstractController
 
 
         $body = '{
-                      "AdultCount": "2",
-                      "ChildCount": "0",
-                      "InfantCount": "0",
+                      "AdultCount": "'.$adult.'",
+                      "ChildCount": "'.$children.'",
+                      "InfantCount": "'.$infant.'",
                       "JourneyType": "OneWay",
                       "PreferredAirlines": [
                         "I5", "AI"
