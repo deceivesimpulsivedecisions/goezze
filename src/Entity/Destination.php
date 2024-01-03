@@ -24,6 +24,10 @@ class Destination
     #[ORM\Column]
     private ?bool $trending = false;
 
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $destinationImage = null;
+
     public function __toString()
     {
         return $this->name;
@@ -31,6 +35,18 @@ class Destination
     public function __construct()
     {
         $this->packages = new ArrayCollection();
+    }
+
+    public function getDestinationImage(): ?string
+    {
+        return $this->destinationImage;
+    }
+
+    public function setDestinationImage(?string $destinationImage): static
+    {
+        $this->destinationImage = $destinationImage;
+
+        return $this;
     }
 
     public function getId(): ?int

@@ -46,6 +46,9 @@ body{
 .max-230{
   max-width: 230px;
 }
+.max-330{
+  max-width: 330px;
+}
 .cursor-pointer{
   cursor: pointer;
 }
@@ -556,5 +559,37 @@ ol {
       margin: 0 auto;
     }
   }
+}
+
+.destination-section{
+  .mySwiper{
+    width: 100%;
+  }
+  @media (min-width: 992px) {
+    .mySwiper {
+      width: 70%;
+      margin: 0 auto;
+    }
+  }
+  .destination-wrapper{
+    height: 280px;
+    display: flex;
+    justify-content: center;
+    .destination-image{
+      height: 100%;
+      width: 237px;
+      object-fit: cover;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+    }
+    .destination-name{
+      bottom: 5px;
+      color: #fff;
+    }
+  }
+  .destination-wrapper.swiper-slide-active{
+    height: 350px;
+  }
+
 }
 

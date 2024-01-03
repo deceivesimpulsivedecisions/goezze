@@ -25,6 +25,7 @@
     "dependencies": {
         "ckeditor4": "^4.23.0",
         "file-loader": "^6.2.0",
-        "select2": "^4.1.0-rc.0"
+        "select2": "^4.1.0-rc.0",
+        "swiper": "^11.0.5"
     }
 }

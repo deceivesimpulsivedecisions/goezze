@@ -16,6 +16,12 @@ import 'select2';
 // window.bootstrap = require('bootstrap/dist/js/bootstrap.bundle.js');
 require('bootstrap');
 import 'bootstrap';
+// import Swiper JS
+import Swiper from 'swiper';
+// import Swiper styles
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 
 // or you can include specific pieces
@@ -25,6 +31,35 @@ import 'bootstrap';
 $(document).ready(function() {
     console.log('aaaa');
 
+
+    var swiper = new Swiper(".mySwiper", {
+        grabCursor: true,
+        centeredSlides: true,
+        loop: true,
+        spaceBetween: 20,
+        coverflowEffect: {
+            rotate: 0,
+        },
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+        breakpoints:{
+            576: {
+                slidesPerView: 1, // Show 1 slide for screens larger than or equal to 576px
+            },
+            768: {
+                slidesPerView: 2, // Show 2 slides for screens larger than or equal to 768px
+            },
+            992: {
+                slidesPerView: 3, // Show 3 slides for screens larger than or equal to 992px
+            }
+
+        }
+    });
+
+
+    console.log(swiper)
 
 
     var body= $('body');
