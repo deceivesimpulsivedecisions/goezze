@@ -4,6 +4,9 @@ namespace App\Controller\Admin;
 
 use App\Entity\Destination;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class DestinationCrudController extends AbstractCrudController
 {
@@ -12,14 +15,14 @@ class DestinationCrudController extends AbstractCrudController
         return Destination::class;
     }
 
-    /*
+
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id'),
-            TextField::new('title'),
-            TextEditorField::new('description'),
+            TextField::new('name'),
+            BooleanField::new('trending'),
+            ImageField::new('destinationImage')->setBasePath('uploads/destinations') ->setUploadDir('public/uploads/destinations'),
         ];
     }
-    */
+
 }

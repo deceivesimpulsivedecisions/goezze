@@ -6,6 +6,7 @@ use App\Entity\PackageCategory;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Stof\DoctrineExtensionsBundle\Uploadable\UploadableManager;
@@ -47,7 +48,8 @@ class PackageCategoryCrudController extends AbstractCrudController
             ImageField::new('image','Category Image')
                 ->setBasePath('uploads/category')
                 ->setUploadDir('public/uploads/category')
-                ->setUploadedFileNamePattern('[randomhash].[extension]')->onlyOnForms()
+                ->setUploadedFileNamePattern('[randomhash].[extension]')->onlyOnForms(),
+            BooleanField::new('trending')
         ];
     }
 }

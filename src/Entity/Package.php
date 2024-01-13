@@ -19,7 +19,7 @@ class Package
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 2000)]
     private ?string $description = null;
 
     #[ORM\Column]
@@ -65,10 +65,32 @@ class Package
     #[ORM\Column]
     private ?bool $isActive = true;
 
+    #[ORM\Column]
+    private ?bool $trending = false;
+
+    #[ORM\Column(length: 255, unique: true)]
+    private ?string $slug = null;
+
+    #[ORM\OneToMany(mappedBy: 'package', targetEntity: PackageEnquiry::class)]
+    private Collection $packageEnquiries;
+
     public function __construct()
     {
         $this->packageItinerary = new ArrayCollection();
         $this->packageMedia = new ArrayCollection();
+        $this->generateSlug();
+        $this->packageEnquiries = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->title;
+    }
+
+    public function generateSlug(): void
+    {
+        $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $this->getTitle())));
+        $this->setSlug($slug);
     }
 
     public function getId(): ?int
@@ -84,6 +106,7 @@ class Package
     public function setTitle(string $title): static
     {
         $this->title = $title;
+        $this->generateSlug();
 
         return $this;
     }
@@ -288,6 +311,60 @@ class Package
     public function setIsActive(bool $isActive): static
     {
         $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    public function isTrending(): ?bool
+    {
+        return $this->trending;
+    }
+
+    public function setTrending(bool $trending): static
+    {
+        $this->trending = $trending;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PackageEnquiry>
+     */
+    public function getPackageEnquiries(): Collection
+    {
+        return $this->packageEnquiries;
+    }
+
+    public function addPackageEnquiry(PackageEnquiry $packageEnquiry): static
+    {
+        if (!$this->packageEnquiries->contains($packageEnquiry)) {
+            $this->packageEnquiries->add($packageEnquiry);
+            $packageEnquiry->setPackage($this);
+        }
+
+        return $this;
+    }
+
+    public function removePackageEnquiry(PackageEnquiry $packageEnquiry): static
+    {
+        if ($this->packageEnquiries->removeElement($packageEnquiry)) {
+            // set the owning side to null (unless already changed)
+            if ($packageEnquiry->getPackage() === $this) {
+                $packageEnquiry->setPackage(null);
+            }
+        }
 
         return $this;
     }

@@ -67,7 +67,8 @@ class PackageCrudController extends AbstractCrudController
             CollectionField::new('packageMedia')->onlyOnDetail()->setTemplatePath('admin/packages/preview_image.html.twig'),
             AssociationField::new('type', 'Package Type'),
             AssociationField::new('destination'),
-            BooleanField::new('isActive')
+            BooleanField::new('isActive'),
+            BooleanField::new('trending')
         ];
     }
 

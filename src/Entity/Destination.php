@@ -21,6 +21,13 @@ class Destination
     #[ORM\OneToMany(mappedBy: 'destination', targetEntity: Package::class)]
     private Collection $packages;
 
+    #[ORM\Column]
+    private ?bool $trending = false;
+
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $destinationImage = null;
+
     public function __toString()
     {
         return $this->name;
@@ -28,6 +35,18 @@ class Destination
     public function __construct()
     {
         $this->packages = new ArrayCollection();
+    }
+
+    public function getDestinationImage(): ?string
+    {
+        return $this->destinationImage;
+    }
+
+    public function setDestinationImage(?string $destinationImage): static
+    {
+        $this->destinationImage = $destinationImage;
+
+        return $this;
     }
 
     public function getId(): ?int
@@ -73,6 +92,18 @@ class Destination
                 $package->setDestination(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isTrending(): ?bool
+    {
+        return $this->trending;
+    }
+
+    public function setTrending(bool $trending): static
+    {
+        $this->trending = $trending;
 
         return $this;
     }

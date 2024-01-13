@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
+    <div class="container">
         <a class="navbar-brand" href="{{ path('homepage') }}">
             <img src="{{ asset('images/logo.png') }}" width="30" class="d-inline-block align-top" alt="Goezze">
             Goezze
@@ -46,56 +46,3 @@
         </div>
     </div>
 </nav>
-
-
-{# <script>
-    meals.on('click', function () {
-
-        var passengerIndex = $(this).data('passenger-index');
-        $(this).addClass('selected-meal');
-        $(this).parents('.row').find('.select').removeClass('d-none');
-        $(this).parents('.accordion-body').find('.selected').addClass('d-none');
-        $(this).parents('.accordion-body').find('.selected-meal').css('background-color', '');
-        const mealId = $(this).data('meal-id');
-
-        $(this).parents('.accordion-body').children('.add-meal').val(mealId);
-
-        $(this).find('.select').addClass('d-none');
-        $(this).find('.selected').removeClass('d-none');
-        $(this).css('background-color', '#f5b9a0');
-
-        var extraServices = fareSummary.find('.extra-services');
-        var mealServices = extraServices.find('.meal-service');
-        var fareSummary = body.find('.fare-summary');
-        var grandTotal = fareSummary.find('.total-amount');
-
-        mealServices.find('.meal-passenger-'+passengerIndex).removeClass('d-none');
-        var mealName =  $(this).find('.meal-name').text();
-        var mealPrice =  parseInt($(this).find('.meal-price').text());
-        mealServices.find('.meal-name'+passengerIndex).text(mealName);
-        mealServices.find('.meal-price'+passengerIndex).text(mealPrice);
-
-        var basePrice = parseInt(fareSummary.find('.base-price').text());
-        var taxes = parseInt(fareSummary.find('.taxes').text());
-        var convienceFee = parseInt(fareSummary.find('.convenience').text());
-
-        var baggagePrice =  parseInt(fareSummary.find('.price').text() === '' ? 0 : fareSummary.find('.price').text());
-
-        extraServices.removeClass('d-none');
-        mealServices.removeClass('d-none');
-        let sumMealPrices = 0;
-
-        // Iterate over each element with class starting with "meal-price"
-        console.log($('.fare-meal-price'));
-        $('.fare-meal-price').each(function () {
-            // Get the numeric value of the span content and add it to the sum
-            sumMealPrices += parseFloat($(this).text()) || 0;
-        });
-
-        console.log(sumMealPrices);
-        //
-        // mealServices.find('.meal-name').text(mealName);
-        // mealServices.find('.meal-price').text(mealPrice);
-        grandTotal.text(basePrice + taxes + convienceFee + baggagePrice + sumMealPrices);
-    });
-</script> #}

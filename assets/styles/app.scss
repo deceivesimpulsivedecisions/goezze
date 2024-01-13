@@ -1,6 +1,7 @@
 $primary: #013593;
 $secondary: #a87953;
 @import "~bootstrap/scss/bootstrap";
+
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Ysabeau+Infant:ital,wght@0,1;0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;0,1000;1,1;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900;1,1000&display=swap');
 
 body{
@@ -22,14 +23,51 @@ body{
   border-radius: 6px;
 }
 
+.hero-img{
+  height: 640px;
+}
 
+.tablist{
+  top: 35%;
+  right: 5%;
+  left: 5%;
+  background: #a79c9447;
+  border-radius: 20px;
+  overflow: visible;
+  .nav-link.active{
+      color: $primary !important;
+  }
+}
 
+.font-16{
+  font-size: 16px !important;
+}
+
+.max-230{
+  max-width: 230px;
+}
+.max-330{
+  max-width: 330px;
+}
 .cursor-pointer{
   cursor: pointer;
 }
 .category-wrapper{
   position: relative;
   z-index: 1;
+  .hero-image{
+    img{
+      height: 250px;
+      width:100%;
+      object-fit: cover;
+      opacity: 0.4;
+    }
+    h2, .page-title{
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
   .category-list{
     img{
       width: 90px;
@@ -38,7 +76,7 @@ body{
     }
   }
   .page-title{
-    background: rgb(228 233 244);
+    //background: rgb(228 233 244);
     padding: 12px;
   }
   .category-card{
@@ -205,6 +243,22 @@ ol {
 .row {
 
 }
+.search-flight, .search-package{
+  .accordion{
+    width: 200px;
+    height: 28px;
+  }
+  .select2-selection__rendered {
+    line-height: 31px !important;
+  }
+  .select2-container .select2-selection--single, .from-date, .to-date {
+    height: 35px !important;
+  }
+  .select2-selection__arrow {
+    height: 34px !important;
+  }
+
+}
 
 .seats {
   display: flex;
@@ -364,3 +418,178 @@ ol {
   -webkit-animation-name: rubberBand;
   animation-name: rubberBand;
 }
+
+.all-packages-wrapper, .package-details-wrapper{
+  .hero-image{
+    img{
+      height: 250px;
+      width:100%;
+      object-fit: cover;
+      opacity: 0.4;
+    }
+    h2, .page-title{
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+  .carousel{
+    .carousel-item{
+      height: 400px;
+      overflow: hidden;
+      img{
+        height: 400px;
+        object-fit: cover;
+      }
+    }
+  }
+  .package-image{
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 20px;
+  }
+  .package-desc{
+    width: 90%;
+    font-size: 14px;
+    height: 72px;
+    overflow: auto;
+  }
+}
+
+.flight-loader{
+
+  .loader {
+    text-align: center;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    max-width: 35rem;
+    height: 30rem;
+    margin: 0 auto;
+  }
+
+  .wait {
+    margin: 5rem 0;
+  }
+  .iata_code {
+    font-size: 6rem;
+    opacity:0.3;
+    top: 52%;
+    position: absolute;
+    color: #0099cc;
+  }
+  .departure_city {
+    left: 0;
+  }
+
+  .arrival_city {
+    right: 1.5rem;
+  }
+
+  .plane {
+    position: absolute;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .plane-img {
+    -webkit-animation: spin 2.5s linear infinite;
+    -moz-animation: spin 2.5s linear infinite;
+    animation: spin 2.5s linear infinite;
+  }
+
+  @-moz-keyframes spin {
+    100% {
+      -moz-transform: rotate(360deg);
+    }
+  }
+
+  @-webkit-keyframes spin {
+    100% {
+      -webkit-transform: rotate(360deg);
+    }
+  }
+
+  @keyframes spin {
+    100% {
+      -webkit-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
+  }
+
+
+  .earth-wrapper {
+    position: absolute;
+    margin: 0 auto;
+    width: 100%;
+    padding-top: 2.7rem;
+  }
+
+  .earth {
+    width: 160px;
+    height: 160px;
+    background: url("https://zupimages.net/up/19/34/6vlb.gif");
+    border-radius: 100%;
+    background-size: 340px;
+    animation: earthAnim 12s infinite linear;
+    margin: 0 auto;
+    border: 1px solid #CDD1D3;
+  }
+
+  @keyframes earthAnim {
+    0% {background-position-x: 0;}
+    100% {background-position-x: -340px;}
+  }
+
+  @media screen and (max-width: 420px) {
+    .departure_city {
+      left: 0;
+      right: 0;
+      top: 30%;
+      position: absolute;
+      margin: 0 auto;
+    }
+
+    .arrival_city {
+      left: 0;
+      right: 0;
+      top: 93%;
+      position: absolute;
+      margin: 0 auto;
+    }
+  }
+}
+
+.destination-section{
+  .mySwiper{
+    width: 100%;
+  }
+  @media (min-width: 992px) {
+    .mySwiper {
+      width: 70%;
+      margin: 0 auto;
+    }
+  }
+  .destination-wrapper{
+    height: 280px;
+    display: flex;
+    justify-content: center;
+    .destination-image{
+      height: 100%;
+      width: 237px;
+      object-fit: cover;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+    }
+    .destination-name{
+      bottom: 5px;
+      color: #fff;
+    }
+  }
+  .destination-wrapper.swiper-slide-active{
+    height: 350px;
+  }
+
+}
+
