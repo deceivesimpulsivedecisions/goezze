@@ -6,8 +6,8 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 class HotelService{
 
-    // private $baseUrl = 'http://test.services.travelomatix.com/webservices/index.php/hotel_v3/service/HotelCityList';
-    private $baseUrl = 'http://test.services.travelomatix.com/webservices/index.php/hotel_v3/service/Search';
+    private $baseUrl = 'http://test.services.travelomatix.com/webservices/index.php/hotel_v3/service/HotelCityList';
+    // private $baseUrl = 'http://test.services.travelomatix.com/webservices/index.php/hotel_v3/service/Search';
     private $username = 'test309878';
     private $password = 'test@309';
     private $domainKey = 'TMX5743091695358667';
@@ -41,11 +41,11 @@ class HotelService{
             ]
         ];
 
-        $request = new Request('POST', $this->baseUrl."?limit=10", $headers);
+        $request = new Request('POST', $this->baseUrl."?size=10", $headers);
         $res = $client->sendAsync($request, $filters)->wait();
         $data = json_decode($res->getBody(), true);
 
-        dd($data);
+        return $data['HotelCityList'];
     }
     
 }
