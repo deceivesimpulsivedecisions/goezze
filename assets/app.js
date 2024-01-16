@@ -29,8 +29,6 @@ import 'swiper/css/pagination';
 // require('bootstrap/js/dist/popover');
 
 $(document).ready(function() {
-    console.log('aaaa');
-
 
     var swiper = new Swiper(".mySwiper", {
         grabCursor: true,
@@ -58,8 +56,6 @@ $(document).ready(function() {
         }
     });
 
-
-    console.log(swiper)
 
 
     var body= $('body');
@@ -654,5 +650,4 @@ $(document).ready(function() {
         }
         updateAmount();
     }
-
 });

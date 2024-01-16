@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\City;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -19,6 +20,29 @@ class CityRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, City::class);
+    }
+
+    public function findAllCountries()
+    {
+        $result = $this->createQueryBuilder('c')
+                ->select('c.countryCode','c.countryName')
+                ->groupBy('c.countryCode')
+                ->getQuery()
+                ->getResult()
+            ;
+
+        return array_column($result, 'countryCode', 'countryName');
+    }
+
+    public function findAllCities()
+    {
+        $result = $this->createQueryBuilder('c')
+            ->select('c.cityCode','c.cityName')
+            ->groupBy('c.cityCode')
+            ->getQuery()
+            ->getResult()
+            ;
+        return array_column($result, 'cityCode', 'cityName');
     }
 
 //    /**
