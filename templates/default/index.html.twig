@@ -132,10 +132,31 @@
 
         </div>
 
+        <section class="about-us-section my-3">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-md-12">
+                        <img src="{{ asset('images/about-us.png') }}" alt="about-us"/>
+                    </div>
+                    <div class="col-lg-6 col-md-12">
+                        <div class="d-flex flex-column justify-content-center align-items-start h-100">
+                            <h5 class="my-3 text-secondary">GET ABOUT US</h5>
+                            <h3 class="my-3 text-primary">We create the trips you love.</h3>
+                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
         <section class="container destination-section my-5">
-            <div class="d-flex justify-content-center  align-items-center pb-3">
-                <div class="max-330">
-                    <h2 class="text-center">Discover The Most Attractive Places</h2>
+            <div class="pb-3">
+                <div class="">
+                    <div class="middle-line text-center">
+                        <div class="d-flex justify-content-center align-items-center">
+                            <h2 class="text-primary discover-text px-3 mb-0">Discover The Most Attractive Places</h2>
+                        </div>
+
+                    </div>
                 </div>
             </div>
 
@@ -143,7 +164,7 @@
                 <div class="swiper-wrapper align-items-center">
                     {% for destination in destinations %}
                         <a class="destination-wrapper swiper-slide position-relative" href="{{ path('app_packages') }}?destination={{ destination.name | lower }}">
-                            <img src="{{ asset('uploads/destinations/') }}{{ destination.destinationImage }}" class="destination-image" alt="{{ destination.destinationImage }}">
+                            <img src="{{ asset('uploads/destinations/') }}{{ destination.destinationImage }}" class="destination-image shadow" alt="{{ destination.destinationImage }}">
                             <h4 class="position-absolute destination-name d-flex justify-content-center">{{ destination.name }}</h4>
                         </a>
 
@@ -152,6 +173,130 @@
                 <div class="swiper-pagination"></div>
             </div>
         </section>
+
+
+        <section class="services my-5 py-5">
+            <div class="pb-5 container">
+                <div class="">
+                    <div class="middle-line text-center">
+                        <div class="d-flex justify-content-center align-items-center">
+                            <h2 class="text-primary discover-text px-3 mb-0">Why Choose Us?</h2>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-center text-secondary my-3">
+                    Loreal Ipsum Dolor Sit Amet, Consectetur Adipiscing Elit. Sed Do Eiusmod Tempor Incididunt Ut Labore Et Dolore Magna Aliqua.
+                </p>
+            </div>
+
+            <div class="container">
+                <div class="d-flex flex-lg-nowrap flex-wrap justify-content-center align-items-center gap-5 px-5 mx-3">
+                    <div class="best-price d-flex gap-3 align-items-center">
+                        <div class="description">
+                            <div class="d-flex justify-content-start align-items-center gap-3 my-2">
+                                <i class="fas fa-tags text-secondary"></i>
+                                <h4 class="text-primary m-0">Best Price Guarenteed</h4>
+                            </div>
+
+                            <p class="text-secondary">Best Price Guarenteed Best Price Guarenteed Best Price Guarenteed Best Price Guarenteed Best Price Guarenteed</p>
+                        </div>
+                    </div>
+                    <div class="quick-booking d-flex gap-3 align-items-center">
+                        <div class="description">
+                            <div class="d-flex justify-content-start align-items-center gap-3 my-2">
+                                <i class="fas fa-calendar text-secondary"></i>
+                                <h4 class="text-primary m-0">Easy & Quick booking</h4>
+                            </div>
+
+                            <p class="text-secondary">Best Price Guarenteed Best Price Guarenteed Best Price Guarenteed Best Price Guarenteed Best Price Guarenteed</p>
+                        </div>
+                    </div>
+                    <div class="customer-care  d-flex gap-3 align-items-center">
+                        <div class="description">
+                            <div class="d-flex justify-content-start align-items-center gap-3 my-2">
+                                <i class="fas fa-headset text-secondary"></i>
+                                <h4 class="text-primary m-0">Customer service 24/7</h4>
+                            </div>
+
+                            <p class="text-secondary">Best Price Guarenteed Best Price Guarenteed Best Price Guarenteed Best Price Guarenteed Best Price Guarenteed</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <section class="container package-section my-5">
+            <div class="pb-5">
+                <div class="">
+                    <div class="middle-line text-center">
+                        <div class="d-flex justify-content-center align-items-center">
+                            <h2 class="text-primary discover-text px-3 mb-0">Trending Packages</h2>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center gap-3">
+                {% for package in packages %}
+                    {#                        <a class="destination-wrapper swiper-slide position-relative" href="{{ path('app_packages') }}?destination={{ destination.name | lower }}">#}
+                    <div class="package-wrapper border-radius-6 overflow-hidden shadow">
+                        <div class="position-relative">
+                            <img src="{{ asset('uploads/packages/') }}{{ package.packageMedia[0].image }}" class="destination-image border-radius-6 shadow" alt="{{ package.packageMedia[0].image }}">
+                            <div class="position-absolute package-name">{{ package.destination }}</div>
+                        </div>
+
+                        <div  class="d-flex justify-content-center align-items-center px-3">
+                            <p class="py-2 m-0 package-title text-center text-primary text-truncate">{{ package.title }}</p>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center p-3">
+                            <div class="d-flex gap-3 align-items-center text-secondary">
+                                <i class="fas fa-calendar"></i> <p class="m-0 fw-semibold">{{ package.packageItinerary | length }} Days</p>
+                            </div>
+                            <div>
+                                <h5 class="package-price text-truncate text-primary fw-bold">₹ {{ package.amount / 100 | number_format }}</h5>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    {#                        </a>#}
+
+                {% endfor %}
+            </div>
+
+        </section>
+
+        <section class="sponsor-section my-5 container">
+            <div class="middle-line text-center my-4">
+                <div class="d-flex justify-content-center align-items-center">
+                    <h2 class="text-primary discover-text px-3 mb-0">Our clients</h2>
+                </div>
+
+            </div>
+
+            <div class="sponsor__container container d-flex justify-content-between gap-3 align-items-center">
+                <div class="sponsor__content" data-sr-id="15" style="visibility: visible; opacity: 1; transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transition: opacity 2.8s cubic-bezier(0.5, 0, 0, 1) 0s, transform 2.8s cubic-bezier(0.5, 0, 0, 1) 0s;">
+                    <img src="https://www.goezeetravels.com/assets/img/biochem.png" alt="" class="sponsor__img">
+                </div>
+                <div class="sponsor__content" data-sr-id="16" style="visibility: visible; opacity: 1; transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transition: opacity 2.8s cubic-bezier(0.5, 0, 0, 1) 0s, transform 2.8s cubic-bezier(0.5, 0, 0, 1) 0s;">
+                    <img src="https://www.goezeetravels.com/assets/img/oshka.png" alt="" class="sponsor__img">
+                </div>
+                <div class="sponsor__content" data-sr-id="17" style="visibility: visible; opacity: 1; transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transition: opacity 2.8s cubic-bezier(0.5, 0, 0, 1) 0s, transform 2.8s cubic-bezier(0.5, 0, 0, 1) 0s;">
+                    <img src="https://www.goezeetravels.com/assets/img/mangalanand.png" alt="" class="sponsor__img">
+                </div>
+                <div class="sponsor__content" data-sr-id="18" style="visibility: visible; opacity: 1; transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transition: opacity 2.8s cubic-bezier(0.5, 0, 0, 1) 0s, transform 2.8s cubic-bezier(0.5, 0, 0, 1) 0s;">
+                    <img src="https://www.goezeetravels.com/assets/img/beauna.png" alt="" class="sponsor__img">
+                </div>
+                <div class="sponsor__content" data-sr-id="19" style="visibility: visible; opacity: 1; transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transition: opacity 2.8s cubic-bezier(0.5, 0, 0, 1) 0s, transform 2.8s cubic-bezier(0.5, 0, 0, 1) 0s;">
+                    <img src="https://www.goezeetravels.com/assets/img/uzyt.png" alt="" class="sponsor__img">
+                </div>
+            </div>
+        </section>
+
 
 
     </div>

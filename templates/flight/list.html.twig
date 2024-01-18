@@ -4,18 +4,11 @@
 
 {% block body %}
 
-{#{{ dump(flights) }}#}
-{#{% for flight in flights %}#}
-{#    {{ dump(flight) }}#}
-{#{% endfor %}#}
-
 <div class="container flight-list-container" data-url="{{ path('flight_search_flights_result') }}">
 
     <div class="m-5 p-5 loader">
-        <div class="d-flex justify-content-center">
-{#            {% include 'loader/flight-loader.html.twig' %}#}
-            <div class="spinner-border" role="status">
-            </div>
+        <div class="">
+            {% include 'loader/flight-loader.html.twig' with {'from': app.request.get('flight-from'), 'to': app.request.get('flight-to')} %}
         </div>
     </div>
 

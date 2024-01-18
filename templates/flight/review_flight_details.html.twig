@@ -3,8 +3,6 @@
 {% block title %}Review booking{% endblock %}
 
 {% block body %}
-{{ dump(details) }}
-{{ dump(extra) }}
 
     {% set flights = details['FareQuoteDetails']['JourneyList']['FlightDetails']['Details'][0] %}
     {% set price = details['FareQuoteDetails']['JourneyList']['Price'] %}
@@ -12,7 +10,7 @@
     {% set convienceFees = 10 %}
 
     {% if flights is defined %}
-        <div class="container review-flight-container">
+        <div class="container review-flight-container my-3">
             <div class="row">
                 <div class="col-lg-9 col-md-6 col-sm-12">
                     <h3 class="text-primary">Review Journey</h3>
@@ -286,7 +284,7 @@
                                                             <input type="hidden" class="add-seat" name="seat[{{ passengerIndex }}][{{ loop.index }}]" />
                                                             <div class="row">
                                                                 <div class="col-9">
-                                                                    <div class="plane plane{{ passengerIndex }}">
+                                                                    <div class="flight-plane plane{{ passengerIndex }}">
                                                                         <div class="cockpit">
                                                                             <h1>Flight Seat Selection</h1>
                                                                         </div>
@@ -341,7 +339,7 @@
 
 
                             <div class="col-12 text-center">
-                                <button class="btn btn-primary" type="submit">Submit form</button>
+                                <button class="btn btn-primary mb-3" type="submit">Submit form</button>
                             </div>
 
                         </form>
@@ -359,7 +357,7 @@
                                 <p class="title text-secondary mb-1">Base Fare</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     {% if price['PassengerBreakup']['ADT'] %}
-                                        <p class="fare-details mb-1">{{ price['PassengerBreakup']['ADT']['PassengerCount'] }} Adult (1 x {{ price['PassengerBreakup']['ADT']['BasePrice'] / 2 }})</p>
+                                        <p class="fare-details mb-1">{{ price['PassengerBreakup']['ADT']['PassengerCount'] }} Adult (1 x {{ price['PassengerBreakup']['ADT']['BasePrice'] /  price['PassengerBreakup']['ADT']['PassengerCount']  }})</p>
                                         <p class="fare-details mb-1">₹ <span class="base-price">{{ price['PassengerBreakup']['ADT']['BasePrice'] }}</span> </p>
                                     {% endif %}
                                 </div>
