@@ -12,6 +12,7 @@
         "doctrine/orm": "^2.16",
         "easycorp/easyadmin-bundle": "^4.7",
         "friendsofsymfony/ckeditor-bundle": "^2.4",
+        "gedmo/doctrine-extensions": "*",
         "guzzlehttp/guzzle": "^7.8",
         "hwi/oauth-bundle": "^2.0",
         "knpuniversity/oauth2-client-bundle": "^2.15",

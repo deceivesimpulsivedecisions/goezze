@@ -3,7 +3,7 @@ $secondary: #a87953;
 @import "~bootstrap/scss/bootstrap";
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Ysabeau+Infant:ital,wght@0,1;0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;0,1000;1,1;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900;1,1000&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Merienda:wght@300..900&display=swap');
 body{
   font-family: 'Poppins', sans-serif;
   background: #fbf4f0;
@@ -24,7 +24,20 @@ body{
 }
 
 .hero-img{
-  height: 640px;
+  height: 550px;
+}
+.hero-image-text{
+  letter-spacing: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  top: 36%;
+  color: #ffffffb3;
+  h2{
+    font-size: 50px;
+    font-family: "Merienda", cursive;
+  }
 }
 
 .tablist{
@@ -43,6 +56,9 @@ body{
   font-size: 16px !important;
 }
 
+.font-12{
+  font-size: 12px;
+}
 .max-230{
   max-width: 230px;
 }
@@ -696,5 +712,7 @@ ol {
     scale: 1.5;
   }
 }
-
+.footer-bottom{
+  background: #013593;
+}
 
