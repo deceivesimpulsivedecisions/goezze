@@ -609,29 +609,29 @@ $(document).ready(function() {
     })
 
     if($('.package-details-wrapper').length){
-        $('#packageEnquiryForm').submit(function (e) {
-            e.preventDefault(); // Prevent the form from submitting in the traditional way
-
-            var formData = $(this).serialize(); // Serialize the form data
-
-            $.ajax({
-                type: 'POST',
-                url: $(this).attr('action'), // Use the form's action attribute as the URL
-                data: formData,
-                success: function (data) {
-                    // Handle the success response
-                    $('.success-data').removeClass('d-none');
-                    $('.enquiry-form').addClass('d-none');
-                    // You can update the page or perform additional actions here
-                },
-                error: function (data) {
-                    // Handle the error response
-                    $('.error-data').removeClass('d-none');
-                    $('.enquiry-form').addClass('d-none');
-                    // You can display error messages or perform additional error handling here
-                }
-            });
-        });
+        // $('#packageEnquiryForm').submit(function (e) {
+        //     e.preventDefault(); // Prevent the form from submitting in the traditional way
+        //
+        //     var formData = $(this).serialize(); // Serialize the form data
+        //
+        //     $.ajax({
+        //         type: 'POST',
+        //         url: $(this).attr('action'), // Use the form's action attribute as the URL
+        //         data: formData,
+        //         success: function (data) {
+        //             // Handle the success response
+        //             $('.success-data').removeClass('d-none');
+        //             $('.enquiry-form').addClass('d-none');
+        //             // You can update the page or perform additional actions here
+        //         },
+        //         error: function (data) {
+        //             // Handle the error response
+        //             $('.error-data').removeClass('d-none');
+        //             $('.enquiry-form').addClass('d-none');
+        //             // You can display error messages or perform additional error handling here
+        //         }
+        //     });
+        // });
 
         $('#package_enquiry_childrens, #package_enquiry_adults').on('input', function () {
             updateAmount();

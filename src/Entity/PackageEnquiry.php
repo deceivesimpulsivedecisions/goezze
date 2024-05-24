@@ -37,8 +37,9 @@ class PackageEnquiry
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $email = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $phoneNo = null;
+    #[ORM\Column(type: Types::BIGINT, nullable: true)]
+    private ?string $phoneNo = null;
+
 
     public function getId(): ?int
     {
@@ -129,15 +130,16 @@ class PackageEnquiry
         return $this;
     }
 
-    public function getPhoneNo(): ?int
+    public function getPhoneNo(): ?string
     {
         return $this->phoneNo;
     }
 
-    public function setPhoneNo(?int $phoneNo): static
+    public function setPhoneNo(?string $phoneNo): static
     {
         $this->phoneNo = $phoneNo;
 
         return $this;
     }
+
 }

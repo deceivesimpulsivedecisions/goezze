@@ -138,10 +138,10 @@
         <section class="about-us-section my-3">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-6 col-md-12">
-                        <img src="{{ asset('images/about-us.png') }}" alt="about-us"/>
+                    <div class="col-lg-6 col-md-6 col-sm-12">
+                        <img class="w-100" src="{{ asset('images/about-us.png') }}" alt="about-us"/>
                     </div>
-                    <div class="col-lg-6 col-md-12">
+                    <div class="col-lg-6 col-md-6 col-sm-12">
                         <div class="d-flex flex-column justify-content-center align-items-start h-100">
                             <h5 class="my-3 text-secondary">GET ABOUT US</h5>
                             <h3 class="my-3 text-primary">We create the trips you love.</h3>
@@ -241,7 +241,7 @@
                 </div>
             </div>
 
-            <div class="d-flex justify-content-center gap-3">
+            <div class="d-flex justify-content-center gap-3 flex-wrap">
                 {% for package in packages %}
                     {#                        <a class="destination-wrapper swiper-slide position-relative" href="{{ path('app_packages') }}?destination={{ destination.name | lower }}">#}
                     <div class="package-wrapper border-radius-6 overflow-hidden shadow">
@@ -281,7 +281,7 @@
 
             </div>
 
-            <div class="sponsor__container container d-flex justify-content-between gap-3 align-items-center">
+            <div class="sponsor__container container d-flex justify-content-md-between gap-3 align-items-center flex-wrap justify-content-center">
                 <div class="sponsor__content" data-sr-id="15" style="visibility: visible; opacity: 1; transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transition: opacity 2.8s cubic-bezier(0.5, 0, 0, 1) 0s, transform 2.8s cubic-bezier(0.5, 0, 0, 1) 0s;">
                     <img src="https://www.goezeetravels.com/assets/img/biochem.png" alt="" class="sponsor__img">
                 </div>

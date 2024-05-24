@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5d2b2e41e9fe0805628032becac20aa3",
+    "content-hash": "affbf1f81c91dd20bb0b8e6b8bbdf32e",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -2697,6 +2697,20 @@
                 "source": "https://github.com/paragonie/random_compat"
             },
             "time": "2020-10-15T08:29:30+00:00"
+        },
+        {
+            "name": "phonepe/phonepe-pg-php-sdk",
+            "version": "1.0.0",
+            "dist": {
+                "type": "zip",
+                "url": "https://phonepe.mycloudrepo.io/public/repositories/phonepe-pg-php-sdk/phonepe-pg-php-sdk.zip"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "/"
+                ]
+            }
         },
         {
             "name": "phpdocumentor/reflection-common",

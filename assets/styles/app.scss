@@ -22,6 +22,9 @@ body{
 .border-radius-6{
   border-radius: 6px;
 }
+.border-radius-10{
+  border-radius: 10px;
+}
 
 .hero-img{
   height: 550px;
@@ -32,10 +35,10 @@ body{
   align-items: center;
   justify-content: center;
   width: 100%;
-  top: 36%;
+  top: calc(25vh - 50px);
   color: #ffffffb3;
   h2{
-    font-size: 50px;
+    font-size: calc(3vw + 30px);
     font-family: "Merienda", cursive;
   }
 }
@@ -435,7 +438,7 @@ ol {
   animation-name: rubberBand;
 }
 
-.all-packages-wrapper, .package-details-wrapper{
+.all-packages-wrapper, .package-details-wrapper, .package-redirect-wrapper{
   .hero-image{
     img{
       height: 250px;
@@ -716,3 +719,18 @@ ol {
   background: #013593;
 }
 
+.package-redirect-wrapper{
+  .booking-status-wrapper{
+    .SUCCESS{
+      background: #73b145;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+    }
+    .booking-details{
+      background: #679f3c;
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+    }
+  }
+
+}
