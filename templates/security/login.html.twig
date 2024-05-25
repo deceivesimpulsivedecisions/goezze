@@ -3,30 +3,41 @@
 {% block title %}Log in!{% endblock %}
 
 {% block body %}
-<form method="post">
-    {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
+    <div class="d-flex align-items-center justify-content-center h-100 mt-5">
+        <form method="post">
+            {% if error %}
+                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
+            <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+            <label for="inputEmail">Email</label>
+            <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
+            <label for="inputPassword">Password</label>
+            <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
 
+            <input type="hidden" name="_csrf_token"
+                   value="{{ csrf_token('authenticate') }}"
+            >
 
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="inputEmail">Email</label>
-    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-    <label for="inputPassword">Password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+            <div class="d-flex flex-column mt-2 gap-2">
+                <div>
+                    <button class="btn btn-lg btn-primary" type="submit">
+                        Sign in
+                    </button>
+                    <a href="{{ path('hwi_oauth_service_redirect', {'service': 'google' }) }}" class="btn btn-lg btn-danger">
+                        Sign in with Google
+                    </a>
+                </div>
+                <hr/>
+                <div>
+                    <div class="d-flex flex-column text-center gap-1">
+                        <span>Don't have an account yet?</span>
+                        <a href="{{ url('app_register') }}" class="btn btn-lg btn-secondary text-white" type="button">
+                            Sign up
+                        </a>
+                    </div>
+                </div>
+            </div>
 
-    <input type="hidden" name="_csrf_token"
-           value="{{ csrf_token('authenticate') }}"
-    >
-
-    <button class="btn btn-lg btn-primary" type="submit">
-        Sign in
-    </button>
-
-    <div class="container">
-        <a href="{{ path('hwi_oauth_service_redirect', {'service': 'google' }) }}">
-            <span>Login with Google</span>
-        </a>
+        </form>
     </div>
-</form>
 {% endblock %}
