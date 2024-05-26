@@ -12,11 +12,13 @@
         "doctrine/orm": "^2.16",
         "easycorp/easyadmin-bundle": "^4.7",
         "friendsofsymfony/ckeditor-bundle": "^2.4",
+        "gedmo/doctrine-extensions": "*",
         "guzzlehttp/guzzle": "^7.8",
         "hwi/oauth-bundle": "^2.0",
         "knpuniversity/oauth2-client-bundle": "^2.15",
         "league/oauth2-facebook": "^2.2",
         "league/oauth2-google": "^4.0",
+        "phonepe/phonepe-pg-php-sdk": "^1.0",
         "phpdocumentor/reflection-docblock": "^5.3",
         "phpstan/phpdoc-parser": "^1.24",
         "select2/select2": "^4.0",
@@ -114,5 +116,23 @@
         "symfony/phpunit-bridge": "^6.3",
         "symfony/stopwatch": "6.3.*",
         "symfony/web-profiler-bundle": "6.3.*"
-    }
+    },
+    "repositories": [
+        {
+            "type": "package",
+            "package": [
+                {
+                    "dist": {
+                        "type": "zip",
+                        "url": "https://phonepe.mycloudrepo.io/public/repositories/phonepe-pg-php-sdk/phonepe-pg-php-sdk.zip"
+                    },
+                    "name": "phonepe/phonepe-pg-php-sdk",
+                    "version": "1.0.0",
+                    "autoload": {
+                        "classmap": ["/"]
+                    }
+                }
+            ]
+        }
+    ]
 }

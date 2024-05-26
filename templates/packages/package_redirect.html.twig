@@ -1,0 +1,123 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Package Details{% endblock %}
+
+{% block body %}
+    <div class="package-redirect-wrapper">
+        <div class="hero-image position-relative">
+            <img src="{{ asset('images/all-package-hero-image.jpg') }}" alt="all-categories" />
+            <h2 class="text-white position-absolute">Booking Details</h2>
+        </div>
+
+        <div class="container my-3">
+            <div class="row">
+                <div class="col-lg-4 col-md-6 col-sm-12">
+                    <div class="booking-status-wrapper">
+                        {% if status == 'SUCCESS' %}
+                            <div class="{{ status }} p-4 shadow">
+                                <div class="status-icon text-center">
+                                    <i class="fas fa-check-circle fa-4x text-white"></i>
+                                </div>
+                                <div class="text-center text-white">
+                                    <h3 class="m-0">Booking Successful!</h3>
+                                </div>
+                                <div class="text-center text-white-50">
+                                    <p class="m-0">Congratulations, your booking for the package is done.</p>
+                                </div>
+                            </div>
+                            <div class="booking-details">
+                                <div class="p-2 text-white text-center">
+                                    <p class="m-0">Booked on: {{ booking.createdAt | date('jS F Y') }}</p>
+                                </div>
+                                <hr class="m-0 text-white" />
+                                <div class="p-2 text-white text-center">
+                                    <p class="m-0 text-truncate">Booking reference no <br /> {{ booking.merchantTransactionId }}</p>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-lg-8 col-md-6 col-sm-12">
+                    <div class="d-flex flex-column gap-2 h-100 justify-content-center greetings-wrapper">
+                        <div class="greetings">
+                            <h3>Dear XYZ ABC,</h3>
+                            <p>Your booking for {{ packageEnquiry.package.title }} is confirmed.</p>
+                        </div>
+                        <small>Team Goezze wishes you a happy travelling</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="my-3">
+                <div class="shadow border-radius-10 bg-white">
+                    <div class="row">
+                        <div class="col-lg-8 col-md-6 col-sm-12">
+                            <div class="package-details p-3">
+                                <div class="package-header">
+                                    <h6 class="my-2">Package Details</h6>
+                                </div>
+                                <hr class="m-0 text-black-50" />
+                                <div class="package-traveller-details">
+                                    <h6 class="my-2">{{ packageEnquiry.package.title }}</h6>
+                                    <small>Travellers: {{ packageEnquiry.adults }} Adult(s) | {{ packageEnquiry.childrens }} Children(s) | {{ packageEnquiry.infants }} infant(s)</small>
+
+                                    <div class="mt-3">
+                                        <div class="d-flex justify-content-between">
+                                            <div>
+                                                <small>From</small>
+                                                <p>{{ packageEnquiry.fromDate | date('jS F Y') }}</p>
+                                            </div>
+                                            <div>
+                                                <small>To</small>
+                                                <p>{{ packageEnquiry.fromDate|date_modify('+' ~ packageEnquiry.package.packageItinerary|length ~ ' days')|date('jS F Y') }}</p>
+                                            </div>
+                                            <div>
+                                                <small>Nights</small>
+                                                <p>{{ packageEnquiry.package.packageItinerary|length }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-sm-12">
+                            <div class="package-details p-3">
+                                <div class="package-header">
+                                    <h6 class="my-2">Traveller Details</h6>
+                                </div>
+                                <hr class="m-0 text-black-50" />
+                                <div class="package-traveller-details">
+                                    <h6 class="my-2 mb-4">XYZ ABC</h6>
+                                    <p><i class="fas fa-envelope"></i> : {{ packageEnquiry.email }}</p>
+                                    <p><i class="fas fa-phone-alt"></i> : {{ packageEnquiry.phoneNo }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <div class="package-amount-wrapper shadow border-radius-10 bg-white p-3">
+                    <div class="package-header">
+                        <h6 class="my-2">Amount Paid</h6>
+                    </div>
+                    <hr class="m-0 text-black-50" />
+                    <div class="d-flex justify-content-between mt-2">
+                        <p class="m-0">Total Amount</p>
+                        <p class="m-0">₹{{ packageEnquiry.amount }}</p>
+                    </div>
+                    <div class="d-flex justify-content-between mt-1">
+                        <p class="m-0">Discount</p>
+                        <p class="m-0">₹0</p>
+                    </div>
+                    <div class="d-flex justify-content-end align-items-center mt-2">
+                        <h4>Grand Total - <span class="text-primary">₹{{ booking.amount / 100 }}</span></h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+{% endblock %}

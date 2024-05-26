@@ -9,6 +9,7 @@ use App\Entity\PackageCategory;
 use App\Entity\PackageEnquiry;
 use App\Entity\PackageItenary;
 use App\Entity\PackageType;
+use App\Entity\Pages;
 use App\Entity\User;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
@@ -78,6 +79,7 @@ class DashboardController extends AbstractDashboardController
                 MenuItem::linkToCrud('Type', 'fa fa-table-cells', PackageType::class),
                 MenuItem::linkToCrud('Enquiry', 'fa fa-table-cells', PackageEnquiry::class),
             ]),
+            MenuItem::linkToCrud('Pages', 'fa fa-page', Pages::class),
             MenuItem::linkToRoute('Portal', 'fa fa-earth', 'homepage'),
 
             MenuItem::linkToLogout('Logout', 'fa fa-sign-out'),

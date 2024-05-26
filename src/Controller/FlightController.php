@@ -153,6 +153,7 @@ class FlightController extends AbstractController
         $res = $client->sendAsync($request)->wait();
         $result = json_decode($res->getBody(), true);
 
+        dd($result);
         $groupedFlights = [];
         // Iterate through the flights and group them by FlightNumber
         foreach ($result['Search']['FlightDataList']['JourneyList'][0] as $flight) {
