@@ -40,16 +40,16 @@ security:
         main:
             lazy: true
             provider: app_user_provider
-            # custom_authenticator:
-            #     - App\Security\UserAuthenticator
-            oauth:
-                resource_owners:
-                    google: /auth/connect/google/check
-                login_path: /google/login
-                use_forward: false
-                failure_path: /login
-                oauth_user_provider:
-                    service: App\Security\Provider\OAuthServiceProvider
+            custom_authenticator:
+                - App\Security\UserAuthenticator
+#            oauth:
+#                resource_owners:
+#                    google: /auth/connect/google/check
+#                login_path: /google/login
+#                use_forward: false
+#                failure_path: /login
+#                oauth_user_provider:
+#                    service: App\Security\Provider\OAuthServiceProvider
                 
             logout:
                 path: app_logout
