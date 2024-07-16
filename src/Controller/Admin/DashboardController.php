@@ -57,7 +57,7 @@ class DashboardController extends AbstractDashboardController
         return Dashboard::new()
             ->setTitle('<div class="d-flex align-items-center gap-3">
                                 <img width="30" src="/images/logo.png" alt="Logo">
-                                        <h5 class="m-0">GoEzze</h5>
+                                        <h5 class="m-0">GoEzee</h5>
                                 </div>'
             );
     }
