@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\AirportsRepository;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -32,21 +33,14 @@ class FlightController extends AbstractController
         return $data['token_type'] .' ' . $data['access_token'];
     }
     #[Route('/airport/list', name: 'search_airport')]
-    public function searchAirport(HttpRequest $httpRequest){
+    public function searchAirport(HttpRequest $httpRequest, AirportsRepository $airportsRepository){
         $place = $httpRequest->query->get('term');
-        $token = $this->generateToken();
-        $client = new Client();
-        $headers = [
-            'Authorization' => $token
-        ];
-        $request = new Request('GET', 'https://test.api.amadeus.com/v1/reference-data/locations?subType=AIRPORT&keyword=' . $place .'&page%5Blimit%5D=10&page%5Boffset%5D=0&sort=analytics.travelers.score&view=FULL', $headers);
-        $res = $client->sendAsync($request)->wait();
-        $airports = json_decode($res->getBody(), true);
 
+        $airports = $airportsRepository->findAirports($place);
         $iataCode = [];
 
-        foreach ($airports['data'] as $airport){
-            $iataCode[] = ['id' => $airport['address']['cityCode'], 'text' => $airport['address']['cityName'] . ' - ' . $airport['address']['cityCode']];
+        foreach ($airports as $airport){
+            $iataCode[] = ['id' => $airport->getAirportCode(), 'text' => $airport->getAirportCode() . ' - ' . $airport->getAirportName()];
         }
 
         return new JsonResponse($iataCode);
@@ -114,7 +108,8 @@ class FlightController extends AbstractController
     public function searchFlightsResult(HttpRequest $request){
         $from = $request->query->get('flight-from');
         $to = $request->query->get('flight-to');
-        $date = $request->query->get('from-date');
+        $fromDate = $request->query->get('from-date');
+        $toDate = $request->query->get('to-date');
         $adult = $request->query->get('adult');
         $children = $request->query->get('children');
         $infant = $request->query->get('infant');
@@ -133,30 +128,45 @@ class FlightController extends AbstractController
 
 
         $body = '{
-                      "AdultCount": "'.$adult.'",
-                      "ChildCount": "'.$children.'",
-                      "InfantCount": "'.$infant.'",
-                      "JourneyType": "OneWay",
-                      "PreferredAirlines": [
-                        "I5", "AI"
-                      ],
-                      "CabinClass": "Economy",
-                      "Segments": [
-                        {
-                          "Origin": "' . $from .'",
-                          "Destination": "' . $to .'",
-                          "DepartureDate": "' . $date .'T00:00:00"
-                        }
-                      ]
-                    }';
+                    "AdultCount": "'.$adult.'",
+                    "ChildCount": "'.$children.'",
+                    "InfantCount": "'.$infant.'",
+                    "JourneyType": "'.$tripStatus.'",
+                    "PreferredAirlines": [
+                    ""
+                    ],
+                    "CabinClass": "Economy",
+                    "Segments": [
+                    {
+                    "Origin": "'.$from.'",
+                    "Destination": "'.$to.'",
+                    "DepartureDate": "'.$fromDate.'T00:00:00",
+                    "ReturnDate": "'.$toDate.'T00:00:00"
+                    }
+                    ]
+                }';
+
         $request = new Request('POST', 'http://test.services.travelomatix.com/webservices/index.php/flight/service/Search', $headers, $body);
         $res = $client->sendAsync($request)->wait();
         $result = json_decode($res->getBody(), true);
-
-        dd($result);
         $groupedFlights = [];
-        // Iterate through the flights and group them by FlightNumber
-        foreach ($result['Search']['FlightDataList']['JourneyList'][0] as $flight) {
+        if($result['Status'] == 1) {
+            $flightDetails = $result['Search']['FlightDataList']['JourneyList'];
+
+
+            $groupedFlights['oneway'][] = $this->groupAndSortFlights($flightDetails[0]);
+            if (isset($flightDetails[1])) {
+                $groupedFlights['return'][] = $this->groupAndSortFlights($flightDetails[1]);
+            }
+        }
+        return $this->render('flight/list_flights.html.twig', [
+            'groupedFlights' => $groupedFlights
+        ]);
+    }
+
+    public function groupAndSortFlights($flights)
+    {
+        foreach ($flights as $flight) {
             $flightNumbers = [];
             if(count($flight['FlightDetails']['Details'][0]) > 1){
                 foreach ($flight['FlightDetails']['Details'][0] as $detail){
@@ -189,10 +199,7 @@ class FlightController extends AbstractController
             });
         }
 
-        return $this->render('flight/list_flights.html.twig', [
-            'flights' => $result['Search']['FlightDataList']['JourneyList'][0],
-            'groupedFlights' => $groupedFlights
-        ]);
+        return $groupedFlights;
     }
 
     #[Route('/commit-booking', name: 'commitBooking')]

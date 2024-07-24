@@ -112,7 +112,7 @@ $(document).ready(function() {
             selectedOption = $("input[name='tripStatus']:checked").val();
             console.log("Selected option on change: " + selectedOption);
 
-            if(selectedOption === 'round-trip'){
+            if(selectedOption === 'Return'){
                 console.log('aaaa', body.find('#to-date'));
                 body.find('#to-date').prop("disabled", false);
             } else {
@@ -364,7 +364,9 @@ $(document).ready(function() {
             },
             error: function(xhr, status, error) {
                 // On error, display the error details
-                $('#result').text('Error: ' + error);
+                if(xhr.status === 500) {
+                    $('#result').text('Error: ' + 'An error occurred please try again later');
+                }
             }
         });
 
