@@ -18,7 +18,7 @@
                 {#                <li class="nav-item {{ route == 'colors' ? 'active' }} px-2"><a class="nav-link" href="{{ path('colors') }}">Colors</a></li>#}
                 {#                <li class="nav-item {{ route == 'brands' ? 'active' }} px-2"><a class="nav-link" href="{{ path('brands') }}">Brands</a></li>#}
                 {#                <li class="nav-item {{ route == 'articles' ? 'active' }} px-2"><a class="nav-link" href="{{ path('articles') }}">Articles</a></li>#}
-                <li class="nav-item px-2 contact-us d-none d-lg-block"><a class="nav-link contact-btn-secondary py-2">Contact Us</a></li>
+                <li class="nav-item px-2 contact-us d-none d-lg-block"><a class="nav-link contact-btn-secondary py-2" href="{{ path('contactUs') }}">Contact Us</a></li>
             </ul>
             <ul class="navbar-nav">
                 {% if route != "homepage" %}

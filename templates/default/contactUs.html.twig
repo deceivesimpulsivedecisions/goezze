@@ -1,0 +1,109 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contact Us{% endblock %}
+
+{% block body %}
+
+<div class="contact-us-wrapper">
+    <div class="hero-image position-relative">
+        <img src="{{ asset('images/all-package-hero-image.jpg') }}" alt="all-categories" />
+        <h2 class="text-white position-absolute">Contact Us</h2>
+    </div>
+
+    <div class="bg-white my-3">
+        <div class="more-info reservation-info">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="info-item">
+                            <div class="icon">
+                                <i class="fa fa-phone"></i>
+                            </div>
+                            <h4>Make a Phone Call</h4>
+                            <a href="#">+91 76880 02255</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="info-item">
+
+                            <div class="icon">
+                            <i class="fa fa-envelope"></i>
+                            </div>
+                            <h4>Contact Us via Email</h4>
+                            <a href="#">contact@goezee.com</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="info-item">
+
+                            <div class="icon">
+                            <i class="fa fa-map-marker"></i>
+                            </div>
+                            <h4>Visit Our Offices</h4>
+                            <a href="#">24th Street North Avenue London, UK</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <h3 class="text-center">Reach out to us</h3>
+            {% if app.flashes('success') is not empty %}
+                <div class="alert alert-success">
+                    {{ app.flashes('success') }}
+                </div>
+            {% endif %}
+            {{ form_start(form, {'attr': {'class': 'needs-validation'}}) }}
+
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">{{ form_label(form.name) }}</label>
+                        {{ form_widget(form.name, {'attr': {'class': 'form-control', 'id': 'firstname', 'required': true}}) }}
+                        {{ form_errors(form.name) }}
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">{{ form_label(form.email) }}</label>
+                        {{ form_widget(form.email, {'attr': {'class': 'form-control', 'id': 'email', 'type': 'email', 'required': true}}) }}
+                        {{ form_errors(form.email, {'attr': {'class': 'text-danger'}}) }}
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="mb-3">
+                        <label for="phoneNo" class="form-label">{{ form_label(form.phoneNo) }}</label>
+                        {{ form_widget(form.phoneNo, {'attr': {'class': 'form-control', 'id': 'phone', 'required': true}}) }}
+                        {{ form_errors(form.phoneNo) }}
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="mb-3">
+                        <label for="subject" class="form-label">{{ form_label(form.subject) }}</label>
+                        {{ form_widget(form.subject, {'attr': {'class': 'form-control', 'id': 'phone', 'required': true}}) }}
+                        {{ form_errors(form.subject) }}
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12">
+                    <div class="mb-3">
+                        <label for="message" class="form-label">{{ form_label(form.message) }}</label>
+                        {{ form_widget(form.message, {'attr': {'class': 'form-control', 'id': 'requirement', 'required': true}}) }}
+                        {{ form_errors(form.message) }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+
+
+    </div>
+</div>
+    {% endblock %}
