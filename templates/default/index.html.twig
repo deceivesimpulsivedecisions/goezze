@@ -1,314 +1,316 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Home
+{% endblock %}
 
 {% block body %}
 
-    <div class="">
-        <div class="position-relative pos">
-{#            <img class="" src="{{ asset('images/hero.jpg') }}" width="100%" alt="flight-bg">#}
-            <img class="hero-img object-fit-cover" src="{{ asset('images/background.png') }}" width="100%" alt="hotel-bg">
-            <div class="position-absolute hero-image-text">
-                <h2>We're here to take you there!</h2>
-            </div>
-{#            <div class="tablist position-absolute container">#}
-{#                <div class="nav nav-tabs justify-content-center" id="nav-tab" role="tablist">#}
-{#                    <button class="nav-link active text-white" id="nav-flight-tab" data-bs-toggle="tab" data-bs-target="#nav-flight" type="button" role="tab" aria-controls="nav-flight" aria-selected="true">#}
-{#                        <i class="fa-solid fa-plane-departure my-3"></i>Flight#}
-{#                    </button>#}
-{#                    <button class="nav-link text-white" id="nav-hotel-tab" data-bs-toggle="tab" data-bs-target="#nav-hotel" type="button" role="tab" aria-controls="nav-hotel" aria-selected="false">#}
-{#                        Hotels#}
-{#                    </button>#}
-{#                    <button class="nav-link text-white" id="nav-package-tab" data-bs-toggle="tab" data-bs-target="#nav-package" type="button" role="tab" aria-controls="nav-package" aria-selected="false">#}
-{#                        Package#}
-{#                    </button>#}
-{#                </div>#}
+	<div class="">
+		<div
+			class="position-relative pos">
+			{#            <img class="" src="{{ asset('images/hero.jpg') }}" width="100%" alt="flight-bg">#}
+			<img class="hero-img object-fit-cover" src="{{ asset('images/background.png') }}" width="100%" alt="hotel-bg">
+			<div class="position-absolute hero-image-text">
+				<h2>We're here to take you there!</h2>
+			</div>
+			{# <div class="tablist position-absolute container">
+															                <div class="nav nav-tabs justify-content-center" id="nav-tab" role="tablist">
+															                    <button class="nav-link active text-white" id="nav-flight-tab" data-bs-toggle="tab" data-bs-target="#nav-flight" type="button" role="tab" aria-controls="nav-flight" aria-selected="true">
+															                        <i class="fa-solid fa-plane-departure my-3"></i>Flight
+															                    </button>
+															                    <button class="nav-link text-white" id="nav-hotel-tab" data-bs-toggle="tab" data-bs-target="#nav-hotel" type="button" role="tab" aria-controls="nav-hotel" aria-selected="false">
+															                        Hotels
+															                    </button>
+															                    <button class="nav-link text-white" id="nav-package-tab" data-bs-toggle="tab" data-bs-target="#nav-package" type="button" role="tab" aria-controls="nav-package" aria-selected="false">
+															                        Package
+															                    </button>
+															                </div>
+															
+															                <div class="tab-content py-4" id="nav-tabContent">
+															                    <div class="tab-pane fade show active" id="nav-flight" role="tabpanel" aria-labelledby="nav-flight-tab" tabindex="0">
+															                        <form class="search-flight container" data-fetch-airport-url="{{ path('flight_search_airport') }}" action="{{ path('flight_search_flights') }}">
+															
+															                            <div class="d-flex justify-content-center gap-3 py-3">
+															                                <div class="form-check">
+															                                    <input class="form-check-input" type="radio" name="tripStatus" id="one-way" value="OneWay" checked>
+															                                    <label class="form-check-label text-white" for="one-way">
+															                                        One way
+															                                    </label>
+															                                </div>
+															                                <div class="form-check">
+															                                    <input class="form-check-input" type="radio" name="tripStatus" id="round-trip" value="Return">
+															                                    <label class="form-check-label text-white" for="round-trip">
+															                                        Round Trip
+															                                    </label>
+															                                </div>
+															                            </div>
+															
+															                            <div class="row justify-content-center p-3">
+															                                <div class="col-lg-2 col-md-4 col-sm-12 my-2">
+															                                    <select class="flight-from" name="flight-from" id="flight-from"  required>
+															                                        <option disabled>From</option>
+															                                    </select>
+															                                </div>
+															
+															                                <div class="col-lg-2 col-md-4 col-sm-12 my-2">
+															                                    <select class="flight-to" name="flight-to" id="flight-to" required>
+															                                        <option disabled>To</option>
+															                                    </select>
+															                                </div>
+															
+															
+															                                <div class="col-lg-2 col-md-4 col-sm-12 my-2">
+															                                    <input class="w-100 from-date" type="date" id="from-date" name="from-date" required>
+															                                </div>
+															
+															
+															                                <div class="col-lg-2 col-md-4 col-sm-12 my-2">
+															                                    <input class="w-100 to-date" type="date" id="to-date" name="to-date" disabled required>
+															                                </div>
+															
+															
+															                                <div class="col-lg-2 col-md-4 col-sm-12 my-2">
+															                                    <div class="accordion w-100" id="passengerAccordion">
+															                                        <div class="accordion-item">
+															                                            <h2 class="accordion-header">
+															                                                <button class="accordion-button collapsed p-2" type="button" data-bs-toggle="collapse" data-bs-target="#passenger" aria-expanded="false" aria-controls="passenger">
+															                                                    Passenger (<span class="passenger-count fw-bold">1</span>)
+															                                                </button>
+															                                            </h2>
+															                                            <div id="passenger" class="accordion-collapse collapse" data-bs-parent="#passengerAccordion">
+															                                                <div class="accordion-body">
+															                                                    <div class="mb-3">
+															                                                        <label for="exampleFormControlInput1" class="form-label">Adult <small>12+</small></label>
+															                                                        <select class="form-select" name="adult" id="exampleFormControlInput1" aria-label="Default select example">
+															                                                            {% for i in 1..9 %}
+															                                                                <option value="{{ i }}">{{ i }}</option>
+															                                                            {% endfor %}
+															                                                        </select>
+															                                                    </div>
+															                                                    <div class="mb-3">
+															                                                        <label for="exampleFormControlInput1" class="form-label">Children <small>2-11</small></label>
+															                                                        <select class="form-select" name="children" id="exampleFormControlInput1" aria-label="Default select example">
+															                                                            {% for i in 0..8 %}
+															                                                                <option value="{{ i }}">{{ i }}</option>
+															                                                            {% endfor %}
+															                                                        </select>
+															                                                    </div>
+															                                                    <div class="mb-3">
+															                                                        <label for="exampleFormControlInput1" class="form-label">Infants <small>less than 2</small></label>
+															                                                        <select class="form-select" name="infant" id="exampleFormControlInput1" aria-label="Default select example">
+															                                                            {% for i in 0..1 %}
+															                                                                <option value="{{ i }}">{{ i }}</option>
+															                                                            {% endfor %}
+															                                                        </select>
+															                                                    </div>
+															                                                </div>
+															                                            </div>
+															                                        </div>
+															
+															                                    </div>
+															                                </div>
+															
+															
+															                            </div>
+															                            <div class="d-flex justify-content-center">
+															                                <button class="btn btn-primary px-5" type="submit">Go</button>
+															                            </div>
+															
+															                        </form>
+															
+															
+															                    </div>
+															                    <div class="tab-pane fade" id="nav-hotel" role="tabpanel" aria-labelledby="nav-hotel-tab" tabindex="0">...</div>
+															                    <div class="tab-pane fade" id="nav-package" role="tabpanel" aria-labelledby="nav-package-tab" tabindex="0">
+															                        <form class="search-package container" data-fetch-airport-url="{{ path('flight_search_airport') }}" action="{{ path('flight_search_flights') }}">
+															                            <select class="destinations" name="destination" id="destinations"  required>
+															                                <option disabled>Destination</option>
+															                                {% for destination in destinations %}
+															                                    <option value="{{ destination.name | lower }}">{{ destination.name }}</option>
+															                                {% endfor %}
+															                            </select>
+															                        </form>
+															
+															                    </div>
+															                </div>
+															            </div> #}
 
-{#                <div class="tab-content py-4" id="nav-tabContent">#}
-{#                    <div class="tab-pane fade show active" id="nav-flight" role="tabpanel" aria-labelledby="nav-flight-tab" tabindex="0">#}
-{#                        <form class="search-flight container" data-fetch-airport-url="{{ path('flight_search_airport') }}" action="{{ path('flight_search_flights') }}">#}
+		</div>
 
-{#                            <div class="d-flex justify-content-center gap-3 py-3">#}
-{#                                <div class="form-check">#}
-{#                                    <input class="form-check-input" type="radio" name="tripStatus" id="one-way" value="OneWay" checked>#}
-{#                                    <label class="form-check-label text-white" for="one-way">#}
-{#                                        One way#}
-{#                                    </label>#}
-{#                                </div>#}
-{#                                <div class="form-check">#}
-{#                                    <input class="form-check-input" type="radio" name="tripStatus" id="round-trip" value="Return">#}
-{#                                    <label class="form-check-label text-white" for="round-trip">#}
-{#                                        Round Trip#}
-{#                                    </label>#}
-{#                                </div>#}
-{#                            </div>#}
+		<section class="about-us-section my-3">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-6 col-md-6 col-sm-12">
+						<img class="w-100" src="{{ asset('images/about-us.png') }}" alt="about-us"/>
+					</div>
+					<div class="col-lg-6 col-md-6 col-sm-12">
+						<div class="d-flex flex-column justify-content-center align-items-start h-100">
+							<h5 class="my-3 text-secondary">GET ABOUT US</h5>
+							<h3 class="my-3 text-primary">We create the trips you love.</h3>
+							<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section class="container destination-section my-5">
+			<div class="pb-3">
+				<div class="">
+					<div class="middle-line text-center">
+						<div class="d-flex justify-content-center align-items-center">
+							<h2 class="text-primary discover-text px-3 mb-0">Discover The Most Attractive Places</h2>
+						</div>
 
-{#                            <div class="row justify-content-center p-3">#}
-{#                                <div class="col-lg-2 col-md-4 col-sm-12 my-2">#}
-{#                                    <select class="flight-from" name="flight-from" id="flight-from"  required>#}
-{#                                        <option disabled>From</option>#}
-{#                                    </select>#}
-{#                                </div>#}
+					</div>
+				</div>
+			</div>
 
-{#                                <div class="col-lg-2 col-md-4 col-sm-12 my-2">#}
-{#                                    <select class="flight-to" name="flight-to" id="flight-to" required>#}
-{#                                        <option disabled>To</option>#}
-{#                                    </select>#}
-{#                                </div>#}
+			<div class="swiper mySwiper">
+				<div class="swiper-wrapper align-items-center">
+					{% for destination in destinations %}
+						<a class="destination-wrapper swiper-slide position-relative" href="{{ path('app_packages') }}?destination={{ destination.name | lower }}">
+							<img src="{{ asset('uploads/destinations/') }}{{ destination.destinationImage }}" class="destination-image shadow" alt="{{ destination.destinationImage }}">
+							<h4 class="position-absolute destination-name d-flex justify-content-center">{{ destination.name }}</h4>
+						</a>
 
-
-{#                                <div class="col-lg-2 col-md-4 col-sm-12 my-2">#}
-{#                                    <input class="w-100 from-date" type="date" id="from-date" name="from-date" required>#}
-{#                                </div>#}
-
-
-{#                                <div class="col-lg-2 col-md-4 col-sm-12 my-2">#}
-{#                                    <input class="w-100 to-date" type="date" id="to-date" name="to-date" disabled required>#}
-{#                                </div>#}
-
-
-{#                                <div class="col-lg-2 col-md-4 col-sm-12 my-2">#}
-{#                                    <div class="accordion w-100" id="passengerAccordion">#}
-{#                                        <div class="accordion-item">#}
-{#                                            <h2 class="accordion-header">#}
-{#                                                <button class="accordion-button collapsed p-2" type="button" data-bs-toggle="collapse" data-bs-target="#passenger" aria-expanded="false" aria-controls="passenger">#}
-{#                                                    Passenger (<span class="passenger-count fw-bold">1</span>)#}
-{#                                                </button>#}
-{#                                            </h2>#}
-{#                                            <div id="passenger" class="accordion-collapse collapse" data-bs-parent="#passengerAccordion">#}
-{#                                                <div class="accordion-body">#}
-{#                                                    <div class="mb-3">#}
-{#                                                        <label for="exampleFormControlInput1" class="form-label">Adult <small>12+</small></label>#}
-{#                                                        <select class="form-select" name="adult" id="exampleFormControlInput1" aria-label="Default select example">#}
-{#                                                            {% for i in 1..9 %}#}
-{#                                                                <option value="{{ i }}">{{ i }}</option>#}
-{#                                                            {% endfor %}#}
-{#                                                        </select>#}
-{#                                                    </div>#}
-{#                                                    <div class="mb-3">#}
-{#                                                        <label for="exampleFormControlInput1" class="form-label">Children <small>2-11</small></label>#}
-{#                                                        <select class="form-select" name="children" id="exampleFormControlInput1" aria-label="Default select example">#}
-{#                                                            {% for i in 0..8 %}#}
-{#                                                                <option value="{{ i }}">{{ i }}</option>#}
-{#                                                            {% endfor %}#}
-{#                                                        </select>#}
-{#                                                    </div>#}
-{#                                                    <div class="mb-3">#}
-{#                                                        <label for="exampleFormControlInput1" class="form-label">Infants <small>less than 2</small></label>#}
-{#                                                        <select class="form-select" name="infant" id="exampleFormControlInput1" aria-label="Default select example">#}
-{#                                                            {% for i in 0..1 %}#}
-{#                                                                <option value="{{ i }}">{{ i }}</option>#}
-{#                                                            {% endfor %}#}
-{#                                                        </select>#}
-{#                                                    </div>#}
-{#                                                </div>#}
-{#                                            </div>#}
-{#                                        </div>#}
-
-{#                                    </div>#}
-{#                                </div>#}
-
-
-{#                            </div>#}
-{#                            <div class="d-flex justify-content-center">#}
-{#                                <button class="btn btn-primary px-5" type="submit">Go</button>#}
-{#                            </div>#}
-
-{#                        </form>#}
-
-
-{#                    </div>#}
-{#                    <div class="tab-pane fade" id="nav-hotel" role="tabpanel" aria-labelledby="nav-hotel-tab" tabindex="0">...</div>#}
-{#                    <div class="tab-pane fade" id="nav-package" role="tabpanel" aria-labelledby="nav-package-tab" tabindex="0">#}
-{#                        <form class="search-package container" data-fetch-airport-url="{{ path('flight_search_airport') }}" action="{{ path('flight_search_flights') }}">#}
-{#                            <select class="destinations" name="destination" id="destinations"  required>#}
-{#                                <option disabled>Destination</option>#}
-{#                                {% for destination in destinations %}#}
-{#                                    <option value="{{ destination.name | lower }}">{{ destination.name }}</option>#}
-{#                                {% endfor %}#}
-{#                            </select>#}
-{#                        </form>#}
-
-{#                    </div>#}
-{#                </div>#}
-{#            </div>#}
-
-        </div>
-
-        <section class="about-us-section my-3">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-6 col-md-6 col-sm-12">
-                        <img class="w-100" src="{{ asset('images/about-us.png') }}" alt="about-us"/>
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-12">
-                        <div class="d-flex flex-column justify-content-center align-items-start h-100">
-                            <h5 class="my-3 text-secondary">GET ABOUT US</h5>
-                            <h3 class="my-3 text-primary">We create the trips you love.</h3>
-                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <section class="container destination-section my-5">
-            <div class="pb-3">
-                <div class="">
-                    <div class="middle-line text-center">
-                        <div class="d-flex justify-content-center align-items-center">
-                            <h2 class="text-primary discover-text px-3 mb-0">Discover The Most Attractive Places</h2>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
-            <div class="swiper mySwiper">
-                <div class="swiper-wrapper align-items-center">
-                    {% for destination in destinations %}
-                        <a class="destination-wrapper swiper-slide position-relative" href="{{ path('app_packages') }}?destination={{ destination.name | lower }}">
-                            <img src="{{ asset('uploads/destinations/') }}{{ destination.destinationImage }}" class="destination-image shadow" alt="{{ destination.destinationImage }}">
-                            <h4 class="position-absolute destination-name d-flex justify-content-center">{{ destination.name }}</h4>
-                        </a>
-
-                    {% endfor %}
-                </div>
-                <div class="swiper-pagination"></div>
-            </div>
-        </section>
-
-
-        <section class="services my-5 py-5">
-            <div class="pb-5 container">
-                <div class="">
-                    <div class="middle-line text-center">
-                        <div class="d-flex justify-content-center align-items-center">
-                            <h2 class="text-primary discover-text px-3 mb-0">Why Choose Us?</h2>
-                        </div>
-                    </div>
-                </div>
-                <p class="text-center text-secondary my-3">
-                    Loreal Ipsum Dolor Sit Amet, Consectetur Adipiscing Elit. Sed Do Eiusmod Tempor Incididunt Ut Labore Et Dolore Magna Aliqua.
-                </p>
-            </div>
-
-            <div class="container">
-                <div class="d-flex flex-lg-nowrap flex-wrap justify-content-center align-items-center gap-5 px-5 mx-3">
-                    <div class="best-price d-flex gap-3 align-items-center">
-                        <div class="description">
-                            <div class="d-flex justify-content-start align-items-center gap-3 my-2">
-                                <i class="fas fa-tags text-secondary"></i>
-                                <h4 class="text-primary m-0">Best Price Guarenteed</h4>
-                            </div>
-
-                            <p class="text-secondary">Best Price Guarenteed Best Price Guarenteed Best Price Guarenteed Best Price Guarenteed Best Price Guarenteed</p>
-                        </div>
-                    </div>
-                    <div class="quick-booking d-flex gap-3 align-items-center">
-                        <div class="description">
-                            <div class="d-flex justify-content-start align-items-center gap-3 my-2">
-                                <i class="fas fa-calendar text-secondary"></i>
-                                <h4 class="text-primary m-0">Easy & Quick booking</h4>
-                            </div>
-
-                            <p class="text-secondary">Best Price Guarenteed Best Price Guarenteed Best Price Guarenteed Best Price Guarenteed Best Price Guarenteed</p>
-                        </div>
-                    </div>
-                    <div class="customer-care  d-flex gap-3 align-items-center">
-                        <div class="description">
-                            <div class="d-flex justify-content-start align-items-center gap-3 my-2">
-                                <i class="fas fa-headset text-secondary"></i>
-                                <h4 class="text-primary m-0">Customer service 24/7</h4>
-                            </div>
-
-                            <p class="text-secondary">Best Price Guarenteed Best Price Guarenteed Best Price Guarenteed Best Price Guarenteed Best Price Guarenteed</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </section>
-
-        <section class="container package-section my-5">
-            <div class="pb-5">
-                <div class="">
-                    <div class="middle-line text-center">
-                        <div class="d-flex justify-content-center align-items-center">
-                            <h2 class="text-primary discover-text px-3 mb-0">Trending Packages</h2>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
-            <div class="d-flex justify-content-center gap-3 flex-wrap">
-                {% for package in packages %}
-                    {#                        <a class="destination-wrapper swiper-slide position-relative" href="{{ path('app_packages') }}?destination={{ destination.name | lower }}">#}
-                    <div class="package-wrapper border-radius-6 overflow-hidden shadow">
-                        <div class="position-relative">
-                            <img src="{{ asset('uploads/packages/') }}{{ package.packageMedia[0].image }}" class="destination-image border-radius-6 shadow" alt="{{ package.packageMedia[0].image }}">
-                            <div class="position-absolute package-name">{{ package.destination }}</div>
-                        </div>
-
-                        <div  class="d-flex justify-content-center align-items-center px-3">
-                            <p class="py-2 m-0 package-title text-center text-primary text-truncate">{{ package.title }}</p>
-                        </div>
-
-                        <div class="d-flex justify-content-between align-items-center p-3">
-                            <div class="d-flex gap-3 align-items-center text-secondary">
-                                <i class="fas fa-calendar"></i> <p class="m-0 fw-semibold">{{ package.packageItinerary | length }} Days</p>
-                            </div>
-                            <div>
-                                <h5 class="package-price text-truncate text-primary fw-bold">₹ {{ package.amount / 100 | number_format }}</h5>
-                            </div>
-                        </div>
-
-                    </div>
+					{% endfor %}
+				</div>
+				<div class="swiper-pagination"></div>
+			</div>
+		</section>
 
 
-                    {#                        </a>#}
+		<section class="services my-5 py-5">
+			<div class="pb-5 container">
+				<div class="">
+					<div class="middle-line text-center">
+						<div class="d-flex justify-content-center align-items-center">
+							<h2 class="text-primary discover-text px-3 mb-0">Why Choose Us?</h2>
+						</div>
+					</div>
+				</div>
+				<p class="text-center text-secondary my-3">
+					Planning a trip should be exciting, not stressful! We offer the best deals, seamless booking, and 24/7 support to ensure a hassle-free travel experience. Let us handle the details while you focus on making memories. 🌍✈️
 
-                {% endfor %}
-            </div>
+				</p>
+			</div>
 
-        </section>
+			<div class="container">
+				<div class="d-flex flex-lg-nowrap flex-wrap justify-content-center align-items-center gap-5 px-5 mx-3">
+					<div class="best-price d-flex gap-3 align-items-center">
+						<div class="description">
+							<div class="d-flex justify-content-start align-items-center gap-3 my-2">
+								<i class="fas fa-tags text-secondary"></i>
+								<h4 class="text-primary m-0">Best Price Guarenteed</h4>
+							</div>
 
-        <section class="sponsor-section my-5 container">
-            <div class="middle-line text-center my-4">
-                <div class="d-flex justify-content-center align-items-center">
-                    <h2 class="text-primary discover-text px-3 mb-0">Our clients</h2>
-                </div>
+							<p class="text-secondary">Enjoy unbeatable prices on flights, hotels, and tour packages. We ensure you get the best value for your money.</p>
 
-            </div>
+						</div>
+					</div>
+					<div class="quick-booking d-flex gap-3 align-items-center">
+						<div class="description">
+							<div class="d-flex justify-content-start align-items-center gap-3 my-2">
+								<i class="fas fa-calendar text-secondary"></i>
+								<h4 class="text-primary m-0">Easy & Quick booking</h4>
+							</div>
 
-            <div class="sponsor__container container d-flex justify-content-md-between gap-3 align-items-center flex-wrap justify-content-center">
-                <div class="sponsor__content" data-sr-id="15" style="visibility: visible; opacity: 1; transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transition: opacity 2.8s cubic-bezier(0.5, 0, 0, 1) 0s, transform 2.8s cubic-bezier(0.5, 0, 0, 1) 0s;">
-                    <img src="https://www.goezeetravels.com/assets/img/biochem.png" alt="" class="sponsor__img">
-                </div>
-                <div class="sponsor__content" data-sr-id="16" style="visibility: visible; opacity: 1; transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transition: opacity 2.8s cubic-bezier(0.5, 0, 0, 1) 0s, transform 2.8s cubic-bezier(0.5, 0, 0, 1) 0s;">
-                    <img src="https://www.goezeetravels.com/assets/img/oshka.png" alt="" class="sponsor__img">
-                </div>
-                <div class="sponsor__content" data-sr-id="17" style="visibility: visible; opacity: 1; transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transition: opacity 2.8s cubic-bezier(0.5, 0, 0, 1) 0s, transform 2.8s cubic-bezier(0.5, 0, 0, 1) 0s;">
-                    <img src="https://www.goezeetravels.com/assets/img/mangalanand.png" alt="" class="sponsor__img">
-                </div>
-                <div class="sponsor__content" data-sr-id="18" style="visibility: visible; opacity: 1; transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transition: opacity 2.8s cubic-bezier(0.5, 0, 0, 1) 0s, transform 2.8s cubic-bezier(0.5, 0, 0, 1) 0s;">
-                    <img src="https://www.goezeetravels.com/assets/img/beauna.png" alt="" class="sponsor__img">
-                </div>
-                <div class="sponsor__content" data-sr-id="19" style="visibility: visible; opacity: 1; transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transition: opacity 2.8s cubic-bezier(0.5, 0, 0, 1) 0s, transform 2.8s cubic-bezier(0.5, 0, 0, 1) 0s;">
-                    <img src="https://www.goezeetravels.com/assets/img/uzyt.png" alt="" class="sponsor__img">
-                </div>
-            </div>
-        </section>
+							<p class="text-secondary">Our seamless booking process lets you plan your trips effortlessly, with instant confirmations and secure payments.</p>
+
+						</div>
+					</div>
+					<div class="customer-care  d-flex gap-3 align-items-center">
+						<div class="description">
+							<div class="d-flex justify-content-start align-items-center gap-3 my-2">
+								<i class="fas fa-headset text-secondary"></i>
+								<h4 class="text-primary m-0">Customer service 24/7</h4>
+							</div>
+
+							<p class="text-secondary">Travel with peace of mind knowing our dedicated support team is available round the clock to assist you.</p>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</section>
+
+		<section class="container package-section my-5">
+			<div class="pb-5">
+				<div class="">
+					<div class="middle-line text-center">
+						<div class="d-flex justify-content-center align-items-center">
+							<h2 class="text-primary discover-text px-3 mb-0">Trending Packages</h2>
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+			<div class="d-flex justify-content-center gap-3 flex-wrap">
+				{% for package in packages %}
+					{#                        <a class="destination-wrapper swiper-slide position-relative" href="{{ path('app_packages') }}?destination={{ destination.name | lower }}">#}
+					<div class="package-wrapper border-radius-6 overflow-hidden shadow">
+						<div class="position-relative">
+							<img src="{{ asset('uploads/packages/') }}{{ package.packageMedia[0].image }}" class="destination-image border-radius-6 shadow" alt="{{ package.packageMedia[0].image }}">
+							<div class="position-absolute package-name">{{ package.destination }}</div>
+						</div>
+
+						<div class="d-flex justify-content-center align-items-center px-3">
+							<p class="py-2 m-0 package-title text-center text-primary text-truncate">{{ package.title }}</p>
+						</div>
+
+						<div class="d-flex justify-content-between align-items-center p-3">
+							<div class="d-flex gap-3 align-items-center text-secondary">
+								<i class="fas fa-calendar"></i>
+								<p class="m-0 fw-semibold">{{ package.packageItinerary | length }}
+									Days</p>
+							</div>
+							<div>
+								<h5 class="package-price text-truncate text-primary fw-bold">₹
+									{{ package.amount / 100 | number_format }}</h5>
+							</div>
+						</div>
+
+					</div>
 
 
+					{#                        </a>#}
 
-    </div>
+				{% endfor %}
+			</div>
+
+		</section>
+
+		<section class="sponsor-section my-5 container">
+			<div class="middle-line text-center my-4">
+				<div class="d-flex justify-content-center align-items-center">
+					<h2 class="text-primary discover-text px-3 mb-0">Our clients</h2>
+				</div>
+
+			</div>
+
+			<div class="sponsor__container container d-flex justify-content-md-between gap-3 align-items-center flex-wrap justify-content-center">
+				<div class="sponsor__content" data-sr-id="15" style="visibility: visible; opacity: 1; transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transition: opacity 2.8s cubic-bezier(0.5, 0, 0, 1) 0s, transform 2.8s cubic-bezier(0.5, 0, 0, 1) 0s;">
+					<img src="https://www.goezeetravels.com/assets/img/biochem.png" alt="" class="sponsor__img">
+				</div>
+				<div class="sponsor__content" data-sr-id="16" style="visibility: visible; opacity: 1; transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transition: opacity 2.8s cubic-bezier(0.5, 0, 0, 1) 0s, transform 2.8s cubic-bezier(0.5, 0, 0, 1) 0s;">
+					<img src="https://www.goezeetravels.com/assets/img/oshka.png" alt="" class="sponsor__img">
+				</div>
+				<div class="sponsor__content" data-sr-id="17" style="visibility: visible; opacity: 1; transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transition: opacity 2.8s cubic-bezier(0.5, 0, 0, 1) 0s, transform 2.8s cubic-bezier(0.5, 0, 0, 1) 0s;">
+					<img src="https://www.goezeetravels.com/assets/img/mangalanand.png" alt="" class="sponsor__img">
+				</div>
+				<div class="sponsor__content" data-sr-id="18" style="visibility: visible; opacity: 1; transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transition: opacity 2.8s cubic-bezier(0.5, 0, 0, 1) 0s, transform 2.8s cubic-bezier(0.5, 0, 0, 1) 0s;">
+					<img src="https://www.goezeetravels.com/assets/img/beauna.png" alt="" class="sponsor__img">
+				</div>
+				<div class="sponsor__content" data-sr-id="19" style="visibility: visible; opacity: 1; transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transition: opacity 2.8s cubic-bezier(0.5, 0, 0, 1) 0s, transform 2.8s cubic-bezier(0.5, 0, 0, 1) 0s;">
+					<img src="https://www.goezeetravels.com/assets/img/uzyt.png" alt="" class="sponsor__img">
+				</div>
+			</div>
+		</section>
 
 
-
-
-
-
+	</div>
 
 
 {% endblock %}
